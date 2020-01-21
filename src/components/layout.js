@@ -6,13 +6,23 @@ import Header from "./header"
 // import "./layout.css"
 import { createGlobalStyle } from "styled-components"
 const GlobalStyle = createGlobalStyle`
- body {
-   background-color: black;
-   color: white;
+ // body {
+ //   background-color: black;
+ //   color: white;
+ //   margin: 0;
+ //   padding: 0;
+ //   box-sizing: border-box;
+ //  }
+	html, body {
+		box-sizing: border-box;
    margin: 0;
    padding: 0;
-   box-sizing: border-box;
-  }
+		color: white;
+		background-color: black
+	}
+	*, *::after. *::before {
+		box-sizing: inherit
+	}
 `
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`

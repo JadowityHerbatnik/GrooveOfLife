@@ -1,18 +1,18 @@
 import React from "react"
 import Buttons from "./Buttons.js"
-import Canvas from "./Canvas.js"
+import Board from "./Board.js"
 import styled from "styled-components"
-const BoardWrapper = styled.div`
+const GameWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `
-const Board = () => {
+const Game = () => {
   return (
-    <BoardWrapper>
+    <GameWrapper>
       <Buttons />
-      <Canvas />
-    </BoardWrapper>
+      <Board />
+    </GameWrapper>
   )
 }
 
-export default Board
+export default Game
