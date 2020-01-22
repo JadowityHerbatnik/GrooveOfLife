@@ -24,7 +24,8 @@
     "tone": "^13.8.25"
   },
   "devDependencies": {
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "surge": "^0.21.3"
   },
   "keywords": [
     "gatsby"
