@@ -7,8 +7,6 @@ const BoardWrapper = styled.div`
   width: ${sizes.boardWidth};
   height: 70vh;
   margin: 0 ${sizes.boardMargin} 0 ${sizes.boardMargin};
-  // width: 100vh;
-  // margin: 0;
 `
 const StyledTable = styled.table`
   width: 100%;
@@ -17,7 +15,6 @@ const StyledTable = styled.table`
   border-collapse: collapse;
   border-spacing: 0px;
 `
-const StyledTr = styled.tr``
 const StyledTd = styled.td`
   border: 1px solid purple;
   width: ${props => `${96 / props.numberOfColumns}vw`};
@@ -29,9 +26,9 @@ const GenerateRows = props => {
   let rows = []
   for (let i = 0; i < numberOfRows; i++) {
     rows.push(
-      <StyledTr key={i}>
+      <tr key={i}>
         <GenerateColumns rowkey={i} columns={props.columns} />
-      </StyledTr>
+      </tr>
     )
   }
   return rows
@@ -58,14 +55,15 @@ const Table = props => {
     </StyledTable>
   )
 }
-function getBoardSize({ width, height }, bottomlimit, upperlimit) {
-  let numberOfCols = Math.ceil(width / upperlimit)
-  let numberOfRows = Math.ceil(height / upperlimit)
-  return { cols: numberOfCols, rows: numberOfRows }
-}
+// function getBoardSize({ width, height }, preferredCellSize) {
+//   let numberOfCols = Math.ceil(width / preferredCellSize)
+//   let numberOfRows = Math.ceil(height / preferredCellSize)
+//   return { cols: numberOfCols, rows: numberOfRows }
+// }
 class Board extends React.Component {
   render() {
-    let { cols, rows } = getBoardSize(this.props.size, 40, 50)
+    // let { cols, rows } = getBoardSize(this.props.size, 45)
+    let { cols, rows } = this.props.getBoardSize(this.props.size, 45)
     const { width, height } = this.props.size
     return (
       <BoardWrapper>
