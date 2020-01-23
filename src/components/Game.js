@@ -2,25 +2,46 @@ import React, { useState } from "react"
 import Buttons from "./Buttons.js"
 import Board from "./Board.js"
 import styled from "styled-components"
+import { sizes } from "../utils/sizes.js"
 const GameWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `
 function Game() {
   const [dimensions, setDimensions] = useState({ cols: 0, rows: 0 })
+  const [board, setBoard] = useState([])
+  const [play, setPlay] = useStat(false)
 
-  function getBoardSize({ width, height }, preferredCellSize) {
+  function clickCell(i, j) {
+    let boardcopy = Array.from(board)
+    boardcopy[i][j] = !boardcopy[i][j]
+    setBoard(prevState => boardcopy)
+  }
+
+  function setupBoard({ width, height }, preferredCellSize) {
     const numberOfCols = Math.ceil(width / preferredCellSize)
     const numberOfRows = Math.ceil(height / preferredCellSize)
+    setBoard(() =>
+      new Array(numberOfRows)
+        .fill(false)
+        .map(() => new Array(numberOfCols).fill(false))
+    )
     setDimensions({ cols: numberOfCols, rows: numberOfRows })
   }
+
   const onSize = size => {
-    getBoardSize(size, 45)
+    setupBoard(size, sizes.preferredCellSize)
   }
+
   return (
     <GameWrapper>
       <Buttons />
-      <Board onSize={onSize} dimensions={dimensions} />
+      <Board
+        onSize={onSize}
+        dimensions={dimensions}
+        clickCell={(i, j) => clickCell(i, j)}
+        board={board}
+      />
     </GameWrapper>
   )
 }

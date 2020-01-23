@@ -5,7 +5,7 @@ import { sizes } from "../utils/sizes.js"
 
 const BoardWrapper = styled.div`
   width: ${sizes.boardWidth};
-  height: 70vh;
+  height: 30vh;
   margin: 0 ${sizes.boardMargin} 0 ${sizes.boardMargin};
 `
 const StyledTable = styled.table`
@@ -17,49 +17,40 @@ const StyledTable = styled.table`
 `
 const StyledTd = styled.td`
   border: 1px solid purple;
-  width: ${props => `${96 / props.numberOfColumns}vw`};
-  height: ${props => `${96 / props.numberOfColumns}vw`};
+  width: ${props => `${96 / props.cols}vw`};
+  height: ${props => `${96 / props.cols}vw`};
   box-sizing: border-box;
+  background-color: ${props => (props.active ? "purple" : "black")};
 `
-const GenerateRows = props => {
-  const numberOfRows = props.dimensions.rows
-  let rows = []
-  for (let i = 0; i < numberOfRows; i++) {
-    rows.push(
-      <tr key={i}>
-        <GenerateColumns rowkey={i} cols={props.dimensions.cols} />
-      </tr>
-    )
-  }
-  return rows
-}
-const GenerateColumns = props => {
-  const numberOfColumns = props.cols
-  let columns = []
-  for (let i = 0; i < numberOfColumns; i++) {
-    columns.push(
-      <StyledTd
-        key={`row${props.rowkey}col${i}`}
-        numberOfColumns={numberOfColumns}
-      />
-    )
-  }
-  return columns
-}
-const Table = props => {
-  return (
-    <StyledTable>
-      <tbody>
-        <GenerateRows dimensions={props.dimensions} />
-      </tbody>
-    </StyledTable>
-  )
-}
 class Board extends React.Component {
   render() {
+    const numberOfRows = this.props.dimensions.rows
+    const numberOfCols = this.props.dimensions.cols
+
+    const GenerateRows = () =>
+      [...Array(numberOfRows).keys()].map(value => (
+        <tr key={value}>
+          <GenerateColumns rowkey={value} />
+        </tr>
+      ))
+
+    const GenerateColumns = props =>
+      [...Array(numberOfCols).keys()].map(value => (
+        <StyledTd
+          key={`${props.rowkey}x${value}`}
+          cols={numberOfCols}
+          onClick={() => this.props.clickCell(props.rowkey, value)}
+          active={this.props.board[props.rowkey][value] ? true : false}
+        />
+      ))
+
     return (
       <BoardWrapper>
-        <Table dimensions={this.props.dimensions} />
+        <StyledTable>
+          <tbody>
+            <GenerateRows />
+          </tbody>
+        </StyledTable>
       </BoardWrapper>
     )
   }
