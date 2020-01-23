@@ -9,13 +9,17 @@ const GameWrapper = styled.div`
 `
 function Game() {
   const [dimensions, setDimensions] = useState({ cols: 0, rows: 0 })
+  const [mousedown, setMouseDown] = useState(false)
   const [board, setBoard] = useState([])
-  const [play, setPlay] = useStat(false)
+  // const [play, setPlay] = useState(false)
 
   function clickCell(i, j) {
     let boardcopy = Array.from(board)
     boardcopy[i][j] = !boardcopy[i][j]
     setBoard(prevState => boardcopy)
+  }
+  function handleClick() {
+    setMouseDown(prevState => !prevState)
   }
 
   function setupBoard({ width, height }, preferredCellSize) {
@@ -41,6 +45,8 @@ function Game() {
         dimensions={dimensions}
         clickCell={(i, j) => clickCell(i, j)}
         board={board}
+        handleClick={event => handleClick(event)}
+        mousedown={mousedown}
       />
     </GameWrapper>
   )

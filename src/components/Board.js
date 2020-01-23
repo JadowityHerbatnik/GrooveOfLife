@@ -5,7 +5,7 @@ import { sizes } from "../utils/sizes.js"
 
 const BoardWrapper = styled.div`
   width: ${sizes.boardWidth};
-  height: 30vh;
+  height: 75vh;
   margin: 0 ${sizes.boardMargin} 0 ${sizes.boardMargin};
 `
 const StyledTable = styled.table`
@@ -39,7 +39,16 @@ class Board extends React.Component {
         <StyledTd
           key={`${props.rowkey}x${value}`}
           cols={numberOfCols}
-          onClick={() => this.props.clickCell(props.rowkey, value)}
+          onMouseDown={() => {
+            this.props.handleClick()
+            this.props.clickCell(props.rowkey, value)
+          }}
+          onMouseUp={() => this.props.handleClick()}
+          onMouseEnter={() => {
+            if (this.props.mousedown) {
+              this.props.clickCell(props.rowkey, value)
+            }
+          }}
           active={this.props.board[props.rowkey][value] ? true : false}
         />
       ))
