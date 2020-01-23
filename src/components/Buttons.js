@@ -18,8 +18,8 @@ const Buttons = () => {
   return (
     <ButtonWrapper>
       <Button>Play</Button>
+      <Button>Step</Button>
       <Button>Reset</Button>
-      <Button>Help</Button>
     </ButtonWrapper>
   )
 }
