@@ -3,6 +3,7 @@ import styled from "styled-components"
 
 const Button = styled.button`
   background-color: transparent;
+  font-size: 3vh;
   border: none;
   color: white;
   &:hover {
@@ -17,7 +18,7 @@ const ButtonWrapper = styled.div`
 const Buttons = props => {
   return (
     <ButtonWrapper>
-      <Button>Play</Button>
+      <Button onClick={props.play}>Play/Pause</Button>
       <Button onClick={() => props.changeBoardState("randomize")}>
         Random
       </Button>

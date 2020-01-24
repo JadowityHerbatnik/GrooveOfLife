@@ -3,6 +3,7 @@ import Buttons from "./Buttons.js"
 import Board from "./Board.js"
 import styled from "styled-components"
 import { sizes } from "../utils/sizes.js"
+import makeStep from "../helpers/makestep.js"
 const GameWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -10,27 +11,37 @@ const GameWrapper = styled.div`
 function Game() {
   const [mousedown, setMouseDown] = useState(false)
   const [board, setBoard] = useState([[]])
+  const [playGame, setPlayGame] = useState(false)
 
   function changeBoardState(whatToDo) {
+    if (playGame) {
+      return
+    }
     const newBoard = board.map(value =>
       value.map(() => {
         if (whatToDo === "clear") {
           return false
         } else if (whatToDo === "randomize") {
-          return Math.random() >= 0.65 //At 0.5 there's too many alive cells also add this one to settings parameter
+          return Math.random() >= 0.5 //At 0.5 there's too many alive cells also add this one to settings parameter
         }
       })
     )
     setBoard(prevState => newBoard)
   }
-
+  function play() {
+    setPlayGame(prevState => !prevState)
+  }
   function step() {
-    alert("asd")
+    const newBoard = makeStep(board)
+    setBoard(pewvState => newBoard)
   }
   function clickCell(i, j) {
+    if (playGame) {
+      return
+    }
     let boardcopy = Array.from(board)
     boardcopy[i][j] = !boardcopy[i][j]
-    setBoard(prevState => boardcopy)
+    setBoard(boardcopy)
   }
   function handleClick() {
     setMouseDown(prevState => !prevState)
@@ -51,11 +62,15 @@ function Game() {
   const onSize = size => {
     setupBoard(size, sizes.preferredCellSize)
   }
+  if (playGame) {
+    setTimeout(() => step(), 1000)
+  }
 
   return (
     <GameWrapper>
       <Buttons
         step={() => step()}
+        play={() => play()}
         changeBoardState={whatToDo => changeBoardState(whatToDo)}
       />
       <Board
