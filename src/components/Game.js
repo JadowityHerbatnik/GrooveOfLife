@@ -8,11 +8,25 @@ const GameWrapper = styled.div`
   flex-direction: column;
 `
 function Game() {
-  const [dimensions, setDimensions] = useState({ cols: 0, rows: 0 })
   const [mousedown, setMouseDown] = useState(false)
-  const [board, setBoard] = useState([])
-  // const [play, setPlay] = useState(false)
+  const [board, setBoard] = useState([[]])
 
+  function changeBoardState(whatToDo) {
+    const newBoard = board.map(value =>
+      value.map(() => {
+        if (whatToDo === "clear") {
+          return false
+        } else if (whatToDo === "randomize") {
+          return Math.random() >= 0.65 //At 0.5 there's too many alive cells also add this one to settings parameter
+        }
+      })
+    )
+    setBoard(prevState => newBoard)
+  }
+
+  function step() {
+    alert("asd")
+  }
   function clickCell(i, j) {
     let boardcopy = Array.from(board)
     boardcopy[i][j] = !boardcopy[i][j]
@@ -23,14 +37,15 @@ function Game() {
   }
 
   function setupBoard({ width, height }, preferredCellSize) {
-    const numberOfCols = Math.ceil(width / preferredCellSize)
-    const numberOfRows = Math.ceil(height / preferredCellSize)
-    setBoard(() =>
-      new Array(numberOfRows)
-        .fill(false)
-        .map(() => new Array(numberOfCols).fill(false))
-    )
-    setDimensions({ cols: numberOfCols, rows: numberOfRows })
+    if (width !== 0 && height !== 0) {
+      const numberOfCols = Math.ceil(width / preferredCellSize)
+      const numberOfRows = Math.ceil(height / preferredCellSize)
+      setBoard(prevState =>
+        new Array(numberOfRows)
+          .fill(false)
+          .map(() => new Array(numberOfCols).fill(false))
+      )
+    }
   }
 
   const onSize = size => {
@@ -39,10 +54,12 @@ function Game() {
 
   return (
     <GameWrapper>
-      <Buttons />
+      <Buttons
+        step={() => step()}
+        changeBoardState={whatToDo => changeBoardState(whatToDo)}
+      />
       <Board
         onSize={onSize}
-        dimensions={dimensions}
         clickCell={(i, j) => clickCell(i, j)}
         board={board}
         handleClick={event => handleClick(event)}

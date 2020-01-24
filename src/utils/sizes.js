@@ -1,5 +1,5 @@
 export const sizes = {
   boardWidth: "96%",
   boardMargin: "2%",
-  preferredCellSize: 55,
+  preferredCellSize: 60,
 }

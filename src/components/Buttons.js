@@ -14,12 +14,15 @@ const ButtonWrapper = styled.div`
   flex-direction: row;
   justify-content: space-around;
 `
-const Buttons = () => {
+const Buttons = props => {
   return (
     <ButtonWrapper>
       <Button>Play</Button>
-      <Button>Step</Button>
-      <Button>Reset</Button>
+      <Button onClick={() => props.changeBoardState("randomize")}>
+        Random
+      </Button>
+      <Button onClick={props.step}>Step</Button>
+      <Button onClick={() => props.changeBoardState("clear")}>Clear</Button>
     </ButtonWrapper>
   )
 }
