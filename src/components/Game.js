@@ -16,9 +16,29 @@ function Game() {
   const [speed, setSpeed] = useState(500)
   const [aliveCells, setAliveCells] = useState([])
 
+  function handleKeyPress(event) {
+    switch (event.key) {
+      case "c":
+        changeBoardState("clear")
+        break
+      case "r":
+        changeBoardState("randomize")
+        break
+      case " ":
+        setPlayGame(prevState => !playGame)
+        break
+      case "s":
+        step()
+        break
+    }
+  }
+
   function changeBoardState(whatToDo) {
     if (playGame) {
       setPlayGame(prevState => !prevState)
+    }
+    if (whatToDo === "clear") {
+      setAliveCells(prevState => [])
     }
     const newBoard = board.map(value =>
       value.map(() => {
@@ -46,17 +66,27 @@ function Game() {
     setSpeed(prevState => value)
   }
   function clickCell(i, j) {
-    function toggle(prevState) {
+    setBoard(prevState => updateBoard(prevState))
+    setAliveCells(prevState => updateAlive(prevState))
+
+    function updateBoard(prevState) {
       let boardcopy = Array.from(prevState)
       boardcopy[i][j] = !boardcopy[i][j]
       return boardcopy
     }
-    setBoard(prevState => toggle(prevState))
+    function updateAlive(prevState) {
+      if (!board[i][j]) {
+        const removedAliveCell = prevState.filter(
+          value => value[0] !== i || value[1] !== j
+        )
+        return removedAliveCell
+      } else {
+        prevState.push([i, j])
+        return prevState
+      }
+    }
   }
   function handleClick(direction) {
-    // if (playGame) {
-    //   setPlayGame(prevState => false)
-    // }
     setMouseDown(prevState => (direction === "up" ? false : true))
   }
 
@@ -77,14 +107,22 @@ function Game() {
     setupBoard(size, sizes.preferredCellSize)
   }
   useEffect(() => {
-    if (playGame) {
-      const interval = 1050 - speed
-      var ID = setInterval(() => {
+    window.addEventListener("keypress", handleKeyPress)
+    return () => window.removeEventListener("keypress", handleKeyPress)
+  })
+  useEffect(() => {
+    const interval = 1050 - speed
+    // if (playGame) {
+    var ID = setInterval(() => {
+      if (playGame) {
         step()
-        sound(aliveCells, board.length, board[0].length, interval)
-      }, interval)
-      return () => clearInterval(ID)
-    }
+      }
+      sound(aliveCells, board.length, board[0].length, interval)
+    }, interval)
+    // } else {
+    //   sound(aliveCells, board.length, board[0].length, interval)
+    // }
+    return () => clearInterval(ID)
   })
 
   return (
