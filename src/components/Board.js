@@ -41,10 +41,10 @@ class Board extends React.Component {
           cols={numberOfCols}
           active={this.props.board[props.rowkey][value] ? true : false}
           onMouseDown={() => {
-            this.props.handleClick()
+            this.props.handleClick("down")
             this.props.clickCell(props.rowkey, value)
           }}
-          onMouseUp={() => this.props.handleClick()}
+          onMouseUp={() => this.props.handleClick("up")}
           onMouseEnter={() => {
             if (this.props.mousedown) {
               this.props.clickCell(props.rowkey, value)

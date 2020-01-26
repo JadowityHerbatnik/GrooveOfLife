@@ -1,9 +1,10 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Buttons from "./Buttons.js"
 import Board from "./Board.js"
 import styled from "styled-components"
 import { sizes } from "../utils/sizes.js"
 import makeStep from "../helpers/makestep.js"
+import sound from "../helpers/sound.js"
 const GameWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -12,10 +13,12 @@ function Game() {
   const [mousedown, setMouseDown] = useState(false)
   const [board, setBoard] = useState([[]])
   const [playGame, setPlayGame] = useState(false)
+  const [speed, setSpeed] = useState(500)
+  const [aliveCells, setAliveCells] = useState([])
 
   function changeBoardState(whatToDo) {
     if (playGame) {
-      return
+      setPlayGame(prevState => !prevState)
     }
     const newBoard = board.map(value =>
       value.map(() => {
@@ -26,25 +29,35 @@ function Game() {
         }
       })
     )
-    setBoard(prevState => newBoard)
+    setTimeout(() => setBoard(prevState => newBoard), 100)
   }
   function play() {
     setPlayGame(prevState => !prevState)
   }
   function step() {
-    const newBoard = makeStep(board)
-    setBoard(pewvState => newBoard)
+    const [newBoard, newAliveCells] = makeStep(board)
+
+    // sound(aliveCells, board.length, board[0].length)
+    setAliveCells(prevState => newAliveCells)
+    setBoard(prevState => newBoard)
+  }
+  function sliderChange(event) {
+    const value = parseInt(event.target.value)
+    setSpeed(prevState => value)
   }
   function clickCell(i, j) {
-    if (playGame) {
-      return
+    function toggle(prevState) {
+      let boardcopy = Array.from(prevState)
+      boardcopy[i][j] = !boardcopy[i][j]
+      return boardcopy
     }
-    let boardcopy = Array.from(board)
-    boardcopy[i][j] = !boardcopy[i][j]
-    setBoard(boardcopy)
+    setBoard(prevState => toggle(prevState))
   }
-  function handleClick() {
-    setMouseDown(prevState => !prevState)
+  function handleClick(direction) {
+    // if (playGame) {
+    //   setPlayGame(prevState => false)
+    // }
+    setMouseDown(prevState => (direction === "up" ? false : true))
   }
 
   function setupBoard({ width, height }, preferredCellSize) {
@@ -60,11 +73,19 @@ function Game() {
   }
 
   const onSize = size => {
+    setPlayGame(prevState => false)
     setupBoard(size, sizes.preferredCellSize)
   }
-  if (playGame) {
-    setTimeout(() => step(), 1000)
-  }
+  useEffect(() => {
+    if (playGame) {
+      const interval = 1050 - speed
+      var ID = setInterval(() => {
+        step()
+        sound(aliveCells, board.length, board[0].length, interval)
+      }, interval)
+      return () => clearInterval(ID)
+    }
+  })
 
   return (
     <GameWrapper>
@@ -72,12 +93,15 @@ function Game() {
         step={() => step()}
         play={() => play()}
         changeBoardState={whatToDo => changeBoardState(whatToDo)}
+        playGame={playGame}
+        speed={speed}
+        sliderChange={event => sliderChange(event)}
       />
       <Board
         onSize={onSize}
         clickCell={(i, j) => clickCell(i, j)}
         board={board}
-        handleClick={event => handleClick(event)}
+        handleClick={direction => handleClick(direction)}
         mousedown={mousedown}
       />
     </GameWrapper>

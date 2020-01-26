@@ -1,6 +1,7 @@
 function makeStep(board) {
   const numberOfRows = board.length
   const numberOfCols = board[0].length
+  let aliveCells = []
   let newBoard = new Array(numberOfRows)
     .fill(false)
     .map(() => new Array(numberOfCols).fill(false))
@@ -45,16 +46,21 @@ function makeStep(board) {
           wrappedJ = j
         }
         // console.log(`j${j}`)
-        if (board[wrappedI][wrappedJ]) {
-          counter++
+        if (counter > 4) {
+          break
+        } else {
+          if (board[wrappedI][wrappedJ]) {
+            counter++
+          }
         }
       }
     }
     if (board[row][col]) {
       counter--
+      aliveCells.push([row, col])
     }
     return counter
   }
-  return newBoard
+  return [newBoard, aliveCells]
 }
 export default makeStep
