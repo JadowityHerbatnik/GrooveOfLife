@@ -5,22 +5,31 @@ import { sizes } from "../utils/sizes.js"
 
 const BoardWrapper = styled.div`
   width: ${sizes.boardWidth};
-  height: 70vh;
+  height: 55vh;
+  @media screen and (orientation: landscape) {
+    height: 69vh;
+  }
+
   margin: 0 ${sizes.boardMargin} 0 ${sizes.boardMargin};
 `
 const StyledTable = styled.table`
   width: 100%;
-  background-color: black;
-  border: 1px solid purple;
+  opacity: 0.6;
+  background-color: transparent;
+  // border: 1px solid purple;
   border-collapse: collapse;
   border-spacing: 0px;
 `
 const StyledTd = styled.td`
-  border: 1px solid purple;
+  border: 1px solid black;
   width: ${props => `${96 / props.cols}vw`};
   height: ${props => `${96 / props.cols}vw`};
   box-sizing: border-box;
-  background-color: ${props => (props.active ? "purple" : "black")};
+  transition: 0.3s;
+  background-color: ${props => (props.active ? "rgba(0,0,0,0)" : "black")};
+  &:hover {
+    opacity: 0.5;
+  }
 `
 class Board extends React.Component {
   render() {

@@ -8,6 +8,11 @@ import sound from "../helpers/sound.js"
 const GameWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  @media screen and (orientation: landscape) {
+    height: 85vh;
+  }
 `
 function Game() {
   const [mousedown, setMouseDown] = useState(false)
@@ -117,11 +122,8 @@ function Game() {
       if (playGame) {
         step()
       }
-      sound(aliveCells, board.length, board[0].length, interval)
+      // sound(aliveCells, board.length, board[0].length, interval)
     }, interval)
-    // } else {
-    //   sound(aliveCells, board.length, board[0].length, interval)
-    // }
     return () => clearInterval(ID)
   })
 

@@ -1,50 +1,82 @@
 import React from "react"
 import styled from "styled-components"
+import "../styles/fontello/css/fontello.css"
 
 const Button = styled.button`
   background-color: transparent;
-  font-size: 2.5vh;
   padding: 0;
   border: none;
   color: white;
+  outline: none;
+  transition: 0.5s;
   &:hover {
-    background-color: purple;
+    background-color: rgba(0, 0, 0, 0.1);
   }
 `
 const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
+  flex-wrap: wrap;
 `
-const StyledSlider = styled.input`
-  width: 30%;
-  margin: auto;
-  // appearance: none;
-  background: transparent;
-  outline: none;
+const Icon = styled.i`
+  font-size: 4.5vh;
+  margin: 0 2vw 0 2vw;
+`
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .slider {
+    opacity: 0.3;
+    width: 50vmin;
+    appearance: none;
+    margin: 1vh 0 1vh 0;
+    background: black;
+    outline: none;
+    transition: 0.5s;
+    &:hover {
+      opacity: 0.5;
+    }
+    &::-webkit-slider-thumb {
+      transition: 0.3s;
+      webkit-appearance: none;
+      appearance: none;
+      width: 5vh;
+      height: 2vh;
+      background: white;
+      border-radius: 3px;
+      border: none;
+    }
+  }
 `
 const Buttons = props => {
   return (
-    <>
+    <Container>
       <ButtonWrapper>
-        <Button onClick={props.play} play={props.playGame}>
-          Play/Pause
+        <Button value="Play" onClick={props.play} play={props.playGame}>
+          <Icon className={props.playGame ? "icon-pause" : "icon-play"}></Icon>
+        </Button>
+        <Button onClick={props.step}>
+          <Icon className="icon-forward-1"></Icon>
         </Button>
         <Button onClick={() => props.changeBoardState("randomize")}>
-          Random
+          <Icon className="icon-shuffle"></Icon>
         </Button>
-        <Button onClick={props.step}>Step</Button>
-        <Button onClick={() => props.changeBoardState("clear")}>Clear</Button>
+        <Button onClick={() => props.changeBoardState("clear")}>
+          <Icon className="icon-cancel"></Icon>
+        </Button>
       </ButtonWrapper>
-      <StyledSlider
+      <input
+        className="slider"
         type="range"
         min="50"
         max="1000"
-        step="25"
+        step="5"
         value={props.speed}
         onChange={event => props.sliderChange(event)}
       />
-    </>
+    </Container>
   )
 }
 export default Buttons

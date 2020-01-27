@@ -18,7 +18,8 @@ const GlobalStyle = createGlobalStyle`
    margin: 0;
    padding: 0;
 		color: white;
-		background-color: black
+		background-image: linear-gradient(to bottom right, purple, yellow);
+		height: 100%;
 	}
 	*, *::after. *::before {
 		box-sizing: inherit
