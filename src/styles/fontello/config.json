@@ -47,6 +47,18 @@
       "css": "forward-1",
       "code": 59399,
       "src": "typicons"
+    },
+    {
+      "uid": "8489d61496923b1159b01d8a0a7b2df0",
+      "css": "volume-off",
+      "code": 59398,
+      "src": "elusive"
+    },
+    {
+      "uid": "012ff5762ccb18c16bdfdd6baf187406",
+      "css": "volume-up",
+      "code": 59400,
+      "src": "elusive"
     }
   ]
 }

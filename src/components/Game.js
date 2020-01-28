@@ -5,6 +5,7 @@ import styled from "styled-components"
 import { sizes } from "../utils/sizes.js"
 import makeStep from "../helpers/makestep.js"
 import sound from "../helpers/sound.js"
+import alivecells from "../helpers/alivecells.js"
 const GameWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -18,8 +19,12 @@ function Game() {
   const [mousedown, setMouseDown] = useState(false)
   const [board, setBoard] = useState([[]])
   const [playGame, setPlayGame] = useState(false)
-  const [speed, setSpeed] = useState(500)
+  const [speed, setSpeed] = useState(1)
   const [aliveCells, setAliveCells] = useState([])
+  const [mute, setMute] = useState(true)
+  function toggleMute() {
+    setMute(prevState => !prevState)
+  }
 
   function handleKeyPress(event) {
     switch (event.key) {
@@ -33,7 +38,10 @@ function Game() {
         setPlayGame(prevState => !playGame)
         break
       case "s":
-        step()
+        step(1000 / speed)
+        break
+      case "m":
+        toggleMute()
         break
     }
   }
@@ -59,12 +67,18 @@ function Game() {
   function play() {
     setPlayGame(prevState => !prevState)
   }
-  function step() {
-    // const [newBoard, newAliveCells] = makeStep(board)
-
+  function step(interval) {
     // sound(aliveCells, board.length, board[0].length)
-    // setAliveCells(prevState => newAliveCells)
-    setBoard(prevState => makeStep(prevState))
+    setBoard(prevBoard => {
+      const newBoard = makeStep(prevBoard)
+      const newAliveCells = alivecells(newBoard)
+      setAliveCells(newAliveCells)
+      if (mute) {
+        sound(newAliveCells, newBoard, interval)
+      }
+      return newBoard
+    })
+    // setAliveCells(prevState => alivecells(board))
   }
   function sliderChange(event) {
     const value = parseInt(event.target.value)
@@ -116,11 +130,11 @@ function Game() {
     return () => window.removeEventListener("keypress", handleKeyPress)
   })
   useEffect(() => {
-    const interval = 1050 - speed
+    const interval = 1000 / speed
     // if (playGame) {
     var ID = setInterval(() => {
       if (playGame) {
-        step()
+        step(interval)
       }
       // sound(aliveCells, board.length, board[0].length, interval)
     }, interval)
@@ -128,13 +142,15 @@ function Game() {
       console.log("cleared")
       clearInterval(ID)
     }
-  }, [speed, playGame])
+  }, [speed, playGame, mute])
 
   return (
     <GameWrapper>
       <Buttons
         step={() => step()}
         play={() => play()}
+        togglemute={() => toggleMute()}
+        mute={mute}
         changeBoardState={whatToDo => changeBoardState(whatToDo)}
         playGame={playGame}
         speed={speed}

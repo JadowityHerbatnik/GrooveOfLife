@@ -5,7 +5,7 @@ import { sizes } from "../utils/sizes.js"
 
 const BoardWrapper = styled.div`
   width: ${sizes.boardWidth};
-  height: 55vh;
+  height: 60vh;
   @media screen and (orientation: landscape) {
     height: 69vh;
   }

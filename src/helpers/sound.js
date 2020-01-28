@@ -1,23 +1,26 @@
 import Tone from "tone"
 
-export default function sound(aliveCells, rows, cols, interval) {
+export default function sound(aliveCells, board, speed) {
+  const cols = board[0].length
   const numberOfAliveCells = aliveCells.length
   let chord = []
 
   for (let i = 0; i < numberOfAliveCells; i++) {
-    const freq = (aliveCells[i][0] + 1) * 100 + aliveCells[i][1] * 100
+    const freq =
+      (aliveCells[i][0] + 1) * 100 + ((aliveCells[i][1] + 1) / cols) * 100
     chord.push(freq)
   }
-  // console.log(chord)
-  const synth = new Tone.PolySynth(numberOfAliveCells + 1, Tone.Synth, {
+  const synth = new Tone.PolySynth(5, Tone.Synth, {
     oscillator: {
-      type: "triangle",
+      type: "sine",
     },
   }).toMaster()
-  console.log(chord)
+  // console.log(chord)
 
-  synth.triggerAttackRelease(chord, `${interval / 800}`)
-  // if (interal !== 0) {
+  // const synth = new Tone.Synth().toMaster()
+  const time = (speed / 1000) * 0.5
+  synth.triggerAttackRelease(chord, `${time}`)
+  // if (interval !== 0) {
   //   synth.triggerAttackRelease(chord, `${interval / 1000}`)
   // } else {
   //   synth.triggerAttackRelease(chord, `${interval / 1000}`)

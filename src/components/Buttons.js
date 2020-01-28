@@ -66,13 +66,18 @@ const Buttons = props => {
         <Button onClick={() => props.changeBoardState("clear")}>
           <Icon className="icon-cancel"></Icon>
         </Button>
+        <Button onClick={props.togglemute}>
+          <Icon
+            className={props.mute ? "icon-volume-up" : "icon-volume-off"}
+          ></Icon>
+        </Button>
       </ButtonWrapper>
       <input
         className="slider"
         type="range"
-        min="50"
-        max="1000"
-        step="5"
+        min="1"
+        max="10"
+        step="0.5"
         value={props.speed}
         onChange={event => props.sliderChange(event)}
       />

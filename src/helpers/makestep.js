@@ -1,7 +1,7 @@
 function makeStep(board) {
   const numberOfRows = board.length
   const numberOfCols = board[0].length
-  let aliveCells = []
+  // let aliveCells = []
   let newBoard = new Array(numberOfRows)
     .fill(false)
     .map(() => new Array(numberOfCols).fill(false))
@@ -57,10 +57,11 @@ function makeStep(board) {
     }
     if (board[row][col]) {
       counter--
-      aliveCells.push([row, col])
+      // aliveCells.push([row, col])
     }
     return counter
   }
-  return [newBoard, aliveCells]
+  // return [newBoard, aliveCells]
+  return newBoard
 }
 export default makeStep
