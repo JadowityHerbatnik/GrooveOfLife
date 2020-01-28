@@ -60,11 +60,11 @@ function Game() {
     setPlayGame(prevState => !prevState)
   }
   function step() {
-    const [newBoard, newAliveCells] = makeStep(board)
+    // const [newBoard, newAliveCells] = makeStep(board)
 
     // sound(aliveCells, board.length, board[0].length)
-    setAliveCells(prevState => newAliveCells)
-    setBoard(prevState => newBoard)
+    // setAliveCells(prevState => newAliveCells)
+    setBoard(prevState => makeStep(prevState))
   }
   function sliderChange(event) {
     const value = parseInt(event.target.value)
@@ -124,8 +124,11 @@ function Game() {
       }
       // sound(aliveCells, board.length, board[0].length, interval)
     }, interval)
-    return () => clearInterval(ID)
-  })
+    return () => {
+      console.log("cleared")
+      clearInterval(ID)
+    }
+  }, [speed, playGame])
 
   return (
     <GameWrapper>

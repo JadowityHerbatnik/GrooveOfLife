@@ -18,7 +18,8 @@ const GlobalStyle = createGlobalStyle`
    margin: 0;
    padding: 0;
 		color: white;
-		background-image: linear-gradient(to bottom right, purple, yellow);
+		background-image: linear-gradient(to right, purple, yellow);
+		// background: linear-gradient(to right, rgba(254, 203, 111, 1) 0%, rgba(252, 155, 112, 1) 15%, rgba(237, 106, 111, 1) 30%, rgba(203, 78, 108, 1) 48%, rgba(140, 65, 104, 1) 65%, rgba(81, 60, 99, 1) 82%, rgba(57, 59, 98, 1) 100%);
 		height: 100%;
 	}
 	*, *::after. *::before {
