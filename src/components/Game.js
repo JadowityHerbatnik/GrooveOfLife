@@ -16,14 +16,22 @@ const GameWrapper = styled.div`
   }
 `
 function Game() {
-  const [mousedown, setMouseDown] = useState(false)
   const [board, setBoard] = useState([[]])
-  const [playGame, setPlayGame] = useState(false)
+  const [isMouseDown, setIsMouseDown] = useState(false)
+  const [isGameRunning, setIsGameRunning] = useState(false)
   const [speed, setSpeed] = useState(1)
   const [aliveCells, setAliveCells] = useState([])
-  const [mute, setMute] = useState(true)
-  function toggleMute() {
-    setMute(prevState => !prevState)
+  const [mute, setMute] = useState(false)
+
+  function toggle(state) {
+    switch (state) {
+      case "mute":
+        setMute(prevState => !prevState)
+        break
+      case "play":
+        setIsGameRunning(prevState => !prevState)
+        break
+    }
   }
 
   function handleKeyPress(event) {
@@ -35,20 +43,20 @@ function Game() {
         changeBoardState("randomize")
         break
       case " ":
-        setPlayGame(prevState => !playGame)
+        toggle("play")
         break
       case "s":
         step(1000 / speed)
         break
       case "m":
-        toggleMute()
+        toggle("mute")
         break
     }
   }
 
   function changeBoardState(whatToDo) {
-    if (playGame) {
-      setPlayGame(prevState => !prevState)
+    if (isGameRunning) {
+      toggle("play")
     }
     if (whatToDo === "clear") {
       setAliveCells(prevState => [])
@@ -58,27 +66,22 @@ function Game() {
         if (whatToDo === "clear") {
           return false
         } else if (whatToDo === "randomize") {
-          return Math.random() >= 0.5 //At 0.5 there's too many alive cells also add this one to settings parameter
+          return Math.random() >= 0.6 //At 0.5 there's too many alive cells also add this one to settings parameter
         }
       })
     )
     setTimeout(() => setBoard(prevState => newBoard), 100)
   }
-  function play() {
-    setPlayGame(prevState => !prevState)
-  }
   function step(interval) {
-    // sound(aliveCells, board.length, board[0].length)
     setBoard(prevBoard => {
       const newBoard = makeStep(prevBoard)
       const newAliveCells = alivecells(newBoard)
       setAliveCells(newAliveCells)
-      if (mute) {
+      if (!mute) {
         sound(newAliveCells, newBoard, interval)
       }
       return newBoard
     })
-    // setAliveCells(prevState => alivecells(board))
   }
   function sliderChange(event) {
     const value = parseInt(event.target.value)
@@ -106,7 +109,7 @@ function Game() {
     }
   }
   function handleClick(direction) {
-    setMouseDown(prevState => (direction === "up" ? false : true))
+    setIsMouseDown(prevState => (direction === "up" ? false : true))
   }
 
   function setupBoard({ width, height }, preferredCellSize) {
@@ -122,7 +125,7 @@ function Game() {
   }
 
   const onSize = size => {
-    setPlayGame(prevState => false)
+    setIsGameRunning(prevState => false)
     setupBoard(size, sizes.preferredCellSize)
   }
   useEffect(() => {
@@ -131,9 +134,9 @@ function Game() {
   })
   useEffect(() => {
     const interval = 1000 / speed
-    // if (playGame) {
+    // if (isGameRunning) {
     var ID = setInterval(() => {
-      if (playGame) {
+      if (isGameRunning) {
         step(interval)
       }
       // sound(aliveCells, board.length, board[0].length, interval)
@@ -142,17 +145,16 @@ function Game() {
       console.log("cleared")
       clearInterval(ID)
     }
-  }, [speed, playGame, mute])
+  }, [speed, isGameRunning, mute])
 
   return (
     <GameWrapper>
       <Buttons
         step={() => step()}
-        play={() => play()}
-        togglemute={() => toggleMute()}
+        toggle={state => toggle(state)}
         mute={mute}
         changeBoardState={whatToDo => changeBoardState(whatToDo)}
-        playGame={playGame}
+        isGameRunning={isGameRunning}
         speed={speed}
         sliderChange={event => sliderChange(event)}
       />
@@ -161,7 +163,7 @@ function Game() {
         clickCell={(i, j) => clickCell(i, j)}
         board={board}
         handleClick={direction => handleClick(direction)}
-        mousedown={mousedown}
+        mousedown={isMouseDown}
       />
     </GameWrapper>
   )

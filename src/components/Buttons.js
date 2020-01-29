@@ -54,8 +54,10 @@ const Buttons = props => {
   return (
     <Container>
       <ButtonWrapper>
-        <Button value="Play" onClick={props.play} play={props.playGame}>
-          <Icon className={props.playGame ? "icon-pause" : "icon-play"}></Icon>
+        <Button onClick={() => props.toggle("play")}>
+          <Icon
+            className={props.isGameRunning ? "icon-pause" : "icon-play"}
+          ></Icon>
         </Button>
         <Button onClick={props.step}>
           <Icon className="icon-forward-1"></Icon>
@@ -66,9 +68,9 @@ const Buttons = props => {
         <Button onClick={() => props.changeBoardState("clear")}>
           <Icon className="icon-cancel"></Icon>
         </Button>
-        <Button onClick={props.togglemute}>
+        <Button onClick={() => props.toggle("mute")}>
           <Icon
-            className={props.mute ? "icon-volume-up" : "icon-volume-off"}
+            className={props.mute ? "icon-volume-off" : "icon-volume-up"}
           ></Icon>
         </Button>
       </ButtonWrapper>

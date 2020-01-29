@@ -25,7 +25,6 @@ const StyledTd = styled.td`
   width: ${props => `${96 / props.cols}vw`};
   height: ${props => `${96 / props.cols}vw`};
   box-sizing: border-box;
-  transition: 0.3s;
   background-color: ${props => (props.active ? "rgba(0,0,0,0)" : "black")};
   &:hover {
     opacity: 0.5;
