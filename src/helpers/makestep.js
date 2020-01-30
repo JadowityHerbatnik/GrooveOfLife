@@ -1,7 +1,7 @@
 function makeStep(board) {
   const numberOfRows = board.length
   const numberOfCols = board[0].length
-  // let aliveCells = []
+  let aliveCells = []
   let newBoard = new Array(numberOfRows)
     .fill(false)
     .map(() => new Array(numberOfCols).fill(false))
@@ -21,7 +21,6 @@ function makeStep(board) {
           newBoard[i][j] = false
         }
       }
-      // console.log(neighbours)
     }
   }
   function countNeighbours(row, col) {
@@ -36,7 +35,6 @@ function makeStep(board) {
         } else {
           wrappedI = i
         }
-        // console.log(`i${i}`)
         let wrappedJ
         if (j < 0) {
           wrappedJ = numberOfCols - 1
@@ -45,7 +43,6 @@ function makeStep(board) {
         } else {
           wrappedJ = j
         }
-        // console.log(`j${j}`)
         if (counter > 4) {
           break
         } else {
@@ -57,11 +54,10 @@ function makeStep(board) {
     }
     if (board[row][col]) {
       counter--
-      // aliveCells.push([row, col])
+      aliveCells.push([row, col])
     }
     return counter
   }
-  // return [newBoard, aliveCells]
-  return newBoard
+  return [newBoard, aliveCells]
 }
 export default makeStep
