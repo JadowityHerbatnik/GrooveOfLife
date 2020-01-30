@@ -3,9 +3,9 @@ import Buttons from "./Buttons.js"
 import Board from "./Board.js"
 import styled from "styled-components"
 import { sizes } from "../utils/sizes.js"
-import makeStep from "../helpers/makestep.js"
+import calculateNextBoard from "../helpers/makestep.js"
 import sound from "../helpers/sound.js"
-import alivecells from "../helpers/alivecells.js"
+
 const GameWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -15,13 +15,30 @@ const GameWrapper = styled.div`
     height: 85vh;
   }
 `
-function Game() {
+export default function Game() {
   const [board, setBoard] = useState([[]])
   const [isMouseDown, setIsMouseDown] = useState(false)
   const [isGameRunning, setIsGameRunning] = useState(false)
   const [speed, setSpeed] = useState(1)
   const [aliveCells, setAliveCells] = useState([])
   const [mute, setMute] = useState(false)
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyPress)
+    return () => window.removeEventListener("keydown", handleKeyPress)
+  })
+  useEffect(() => {
+    const interval = 1000 / speed
+    var ID = setInterval(() => {
+      if (isGameRunning) {
+        step(interval)
+      }
+      // sound(aliveCells, board.length, board[0].length, interval)
+    }, interval)
+    return () => {
+      clearInterval(ID)
+    }
+  }, [speed, isGameRunning, mute])
 
   function toggle(state) {
     switch (state) {
@@ -51,6 +68,18 @@ function Game() {
       case "m":
         toggle("mute")
         break
+      case "ArrowUp":
+        setSpeed(prevState => (speed < 10 ? prevState + 1 : prevState))
+        break
+      case "ArrowRight":
+        setSpeed(prevState => (speed < 10 ? prevState + 1 : prevState))
+        break
+      case "ArrowDown":
+        setSpeed(prevState => (speed > 1 ? prevState - 1 : prevState))
+        break
+      case "ArrowLeft":
+        setSpeed(prevState => (speed > 1 ? prevState - 1 : prevState))
+        break
     }
   }
 
@@ -59,7 +88,7 @@ function Game() {
       toggle("play")
     }
     if (whatToDo === "clear") {
-      setAliveCells(prevState => [])
+      setAliveCells([])
     }
     const newBoard = board.map(value =>
       value.map(() => {
@@ -74,8 +103,7 @@ function Game() {
   }
   function step(interval) {
     setBoard(prevBoard => {
-      const newBoard = makeStep(prevBoard)
-      const newAliveCells = alivecells(newBoard)
+      const [newBoard, newAliveCells] = calculateNextBoard(prevBoard)
       setAliveCells(newAliveCells)
       if (!mute) {
         sound(newAliveCells, newBoard, interval)
@@ -128,24 +156,6 @@ function Game() {
     setIsGameRunning(prevState => false)
     setupBoard(size, sizes.preferredCellSize)
   }
-  useEffect(() => {
-    window.addEventListener("keypress", handleKeyPress)
-    return () => window.removeEventListener("keypress", handleKeyPress)
-  })
-  useEffect(() => {
-    const interval = 1000 / speed
-    // if (isGameRunning) {
-    var ID = setInterval(() => {
-      if (isGameRunning) {
-        step(interval)
-      }
-      // sound(aliveCells, board.length, board[0].length, interval)
-    }, interval)
-    return () => {
-      console.log("cleared")
-      clearInterval(ID)
-    }
-  }, [speed, isGameRunning, mute])
 
   return (
     <GameWrapper>
@@ -168,5 +178,3 @@ function Game() {
     </GameWrapper>
   )
 }
-
-export default Game
