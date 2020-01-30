@@ -36,26 +36,26 @@ class Board extends React.Component {
     const numberOfCols = this.props.board[0].length
 
     const GenerateRows = () =>
-      [...Array(numberOfRows).keys()].map(value => (
-        <tr key={value}>
-          <GenerateColumns rowkey={value} />
+      [...Array(numberOfRows).keys()].map(rowIndex => (
+        <tr key={rowIndex}>
+          <GenerateColumns rowkey={rowIndex} />
         </tr>
       ))
 
     const GenerateColumns = props =>
-      [...Array(numberOfCols).keys()].map(value => (
+      [...Array(numberOfCols).keys()].map(columnIndex => (
         <StyledTd
-          key={`${props.rowkey}x${value}`}
+          key={`${props.rowkey}x${columnIndex}`}
           cols={numberOfCols}
-          active={this.props.board[props.rowkey][value] ? true : false}
+          active={this.props.board[props.rowkey][columnIndex] ? true : false}
           onMouseDown={() => {
             this.props.handleClick("down")
-            this.props.clickCell(props.rowkey, value)
+            this.props.clickCell(props.rowkey, columnIndex)
           }}
           onMouseUp={() => this.props.handleClick("up")}
           onMouseEnter={() => {
             if (this.props.mousedown) {
-              this.props.clickCell(props.rowkey, value)
+              this.props.clickCell(props.rowkey, columnIndex)
             }
           }}
         />
