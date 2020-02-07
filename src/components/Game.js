@@ -118,7 +118,6 @@ export default function Game() {
   function clickCell(i, j) {
     setBoard(prevState => updateBoard(prevState))
     setAliveCells(prevState => updateAlive(prevState))
-
     function updateBoard(prevState) {
       let boardcopy = Array.from(prevState)
       boardcopy[i][j] = !boardcopy[i][j]
@@ -137,7 +136,7 @@ export default function Game() {
     }
   }
   function handleClick(direction) {
-    setIsMouseDown(prevState => (direction === "up" ? false : true))
+    setIsMouseDown(direction === "up" ? false : true)
   }
 
   function setupBoard({ width, height }, preferredCellSize) {
