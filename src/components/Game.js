@@ -143,16 +143,25 @@ export default function Game() {
     if (width !== 0 && height !== 0) {
       const numberOfCols = Math.ceil(width / preferredCellSize)
       const numberOfRows = Math.ceil(height / preferredCellSize)
-      setBoard(prevState =>
-        new Array(numberOfRows)
+      setBoard(prevBoard => {
+        const newBoard = new Array(numberOfRows)
           .fill(false)
           .map(() => new Array(numberOfCols).fill(false))
-      )
+        const oldNumberOfRows = prevBoard.length
+        const oldNumberOfCols = prevBoard[0].length
+        const numberOfRowsToCopy = Math.min(numberOfRows, oldNumberOfRows)
+        const numberOfColsToCopy = Math.min(numberOfCols, oldNumberOfCols)
+        for (let i = 0; i < numberOfRowsToCopy; i++) {
+          for (let j = 0; j < numberOfColsToCopy; j++) {
+            newBoard[i][j] = prevBoard[i][j]
+          }
+        }
+        return newBoard
+      })
     }
   }
 
   const onSize = size => {
-    setIsGameRunning(prevState => false)
     setupBoard(size, sizes.preferredCellSize)
   }
 
