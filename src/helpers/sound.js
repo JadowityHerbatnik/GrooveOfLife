@@ -1,9 +1,6 @@
 import Tone from "tone"
 
 export default function sound(aliveCells, board, speed) {
-  if (!numberOfAliveCells) {
-    return
-  }
   const cols = board[0].length
   const numberOfAliveCells = aliveCells.length
   const time = (speed / 1000) * 0.7

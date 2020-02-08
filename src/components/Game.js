@@ -105,7 +105,7 @@ export default function Game() {
     setBoard(prevBoard => {
       const [newBoard, newAliveCells] = calculateNextBoard(prevBoard)
       setAliveCells(newAliveCells)
-      if (!mute) {
+      if (!mute && newAliveCells.length !== 0) {
         sound(newAliveCells, newBoard, interval)
       }
       return newBoard
