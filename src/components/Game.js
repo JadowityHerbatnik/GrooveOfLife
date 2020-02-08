@@ -33,7 +33,6 @@ export default function Game() {
       if (isGameRunning) {
         step(interval)
       }
-      // sound(aliveCells, board.length, board[0].length, interval)
     }, interval)
     return () => {
       clearInterval(ID)
@@ -92,14 +91,17 @@ export default function Game() {
     }
     const newBoard = board.map(value =>
       value.map(() => {
-        if (whatToDo === "clear") {
-          return false
-        } else if (whatToDo === "randomize") {
-          return Math.random() >= 0.6 //At 0.5 there's too many alive cells also add this one to settings parameter
+        switch (whatToDo) {
+          case "clear":
+            return false
+            break
+          case "randomize":
+            return Math.random() >= 0.6 //At 0.5 there's too many alive cells also add this one to settings parameter
+            break
         }
       })
     )
-    setTimeout(() => setBoard(prevState => newBoard), 100)
+    setTimeout(() => setBoard(newBoard), 100)
   }
   function step(interval) {
     setBoard(prevBoard => {
@@ -112,8 +114,8 @@ export default function Game() {
     })
   }
   function sliderChange(event) {
-    const value = parseInt(event.target.value)
-    setSpeed(prevState => value)
+    const newSpeed = parseInt(event.target.value)
+    setSpeed(newSpeed)
   }
   function clickCell(i, j) {
     setBoard(prevState => updateBoard(prevState))
