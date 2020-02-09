@@ -20,7 +20,6 @@ export default function Game() {
   const [isMouseDown, setIsMouseDown] = useState(false)
   const [isGameRunning, setIsGameRunning] = useState(false)
   const [speed, setSpeed] = useState(1)
-  const [aliveCells, setAliveCells] = useState([])
   const [mute, setMute] = useState(false)
 
   useEffect(() => {
@@ -86,18 +85,13 @@ export default function Game() {
     if (isGameRunning) {
       toggle("play")
     }
-    if (whatToDo === "clear") {
-      setAliveCells([])
-    }
     const newBoard = board.map(value =>
       value.map(() => {
         switch (whatToDo) {
           case "clear":
             return false
-            break
           case "randomize":
             return Math.random() >= 0.6 //At 0.5 there's too many alive cells also add this one to settings parameter
-            break
         }
       })
     )
@@ -106,7 +100,6 @@ export default function Game() {
   function step(interval) {
     setBoard(prevBoard => {
       const [newBoard, newAliveCells] = calculateNextBoard(prevBoard)
-      setAliveCells(newAliveCells)
       if (!mute && newAliveCells.length !== 0) {
         sound(newAliveCells, newBoard, interval)
       }
@@ -119,22 +112,10 @@ export default function Game() {
   }
   function clickCell(i, j) {
     setBoard(prevState => updateBoard(prevState))
-    setAliveCells(prevState => updateAlive(prevState))
     function updateBoard(prevState) {
       let boardcopy = Array.from(prevState)
       boardcopy[i][j] = !boardcopy[i][j]
       return boardcopy
-    }
-    function updateAlive(prevState) {
-      if (!board[i][j]) {
-        const removedAliveCell = prevState.filter(
-          value => value[0] !== i || value[1] !== j
-        )
-        return removedAliveCell
-      } else {
-        prevState.push([i, j])
-        return prevState
-      }
     }
   }
   function handleClick(direction) {
