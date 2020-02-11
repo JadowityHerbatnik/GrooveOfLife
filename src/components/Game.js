@@ -19,8 +19,9 @@ export default function Game() {
   const [board, setBoard] = useState([[]])
   const [isMouseDown, setIsMouseDown] = useState(false)
   const [isGameRunning, setIsGameRunning] = useState(false)
-  const [speed, setSpeed] = useState(1)
   const [mute, setMute] = useState(false)
+  const [speed, setSpeed] = useState(4)
+  const maxSpeed = 7
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress)
@@ -67,10 +68,10 @@ export default function Game() {
         toggle("mute")
         break
       case "ArrowUp":
-        setSpeed(prevState => (speed < 10 ? prevState + 1 : prevState))
+        setSpeed(prevState => (speed < maxSpeed ? prevState + 1 : prevState))
         break
       case "ArrowRight":
-        setSpeed(prevState => (speed < 10 ? prevState + 1 : prevState))
+        setSpeed(prevState => (speed < maxSpeed ? prevState + 1 : prevState))
         break
       case "ArrowDown":
         setSpeed(prevState => (speed > 1 ? prevState - 1 : prevState))
@@ -91,7 +92,7 @@ export default function Game() {
           case "clear":
             return false
           case "randomize":
-            return Math.random() >= 0.6 //At 0.5 there's too many alive cells also add this one to settings parameter
+            return Math.random() >= 0.8 //At 0.5 there's too many alive cells also add this one to settings parameter
         }
       })
     )
@@ -151,12 +152,13 @@ export default function Game() {
   return (
     <GameWrapper>
       <Buttons
-        step={() => step()}
+        step={speed => step(speed)}
         toggle={state => toggle(state)}
         mute={mute}
         changeBoardState={whatToDo => changeBoardState(whatToDo)}
         isGameRunning={isGameRunning}
         speed={speed}
+        maxSpeed={maxSpeed}
         sliderChange={event => sliderChange(event)}
       />
       <Board

@@ -59,7 +59,7 @@ const Buttons = props => {
             className={props.isGameRunning ? "icon-pause" : "icon-play"}
           ></Icon>
         </Button>
-        <Button onClick={props.step}>
+        <Button onClick={() => props.step(1000 / props.speed)}>
           <Icon className="icon-forward-1"></Icon>
         </Button>
         <Button onClick={() => props.changeBoardState("randomize")}>
@@ -78,7 +78,7 @@ const Buttons = props => {
         className="slider"
         type="range"
         min="1"
-        max="10"
+        max={props.maxSpeed}
         step="1"
         value={props.speed}
         onChange={event => props.sliderChange(event)}
