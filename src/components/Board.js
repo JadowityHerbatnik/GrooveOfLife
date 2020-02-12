@@ -4,26 +4,26 @@ import sizeMe from "react-sizeme"
 import { sizes } from "../utils/sizes.js"
 
 const BoardWrapper = styled.div`
-  width: ${sizes.boardWidth};
+  width: 100%;
   height: 60vh;
   @media screen and (orientation: landscape) {
     height: 69vh;
   }
 
-  margin: 0 ${sizes.boardMargin} 0 ${sizes.boardMargin};
+  margin: 0 auto 0 auto;
 `
 const StyledTable = styled.table`
-  width: 100%;
-  opacity: 0.6;
+  margin: auto;
+  width: ${props => `${props.boardWidth}%`};
+  opacity: 0.5;
   background-color: transparent;
-  // border: 1px solid purple;
   border-collapse: collapse;
   border-spacing: 0px;
 `
 const StyledTd = styled.td`
   border: 1px solid black;
-  width: ${props => `${96 / props.cols}vw`};
-  height: ${props => `${96 / props.cols}vw`};
+  width: ${props => `${props.boardWidth / props.cols}vw`};
+  height: ${props => `${props.boardWidth / props.cols}vw`};
   box-sizing: border-box;
   background-color: ${props => (props.active ? "rgba(0,0,0,0)" : "black")};
   &:hover {
@@ -45,6 +45,7 @@ class Board extends React.Component {
     const GenerateColumns = props =>
       [...Array(numberOfCols).keys()].map(columnIndex => (
         <StyledTd
+          boardWidth={this.props.boardWidth}
           key={`${props.rowkey}x${columnIndex}`}
           cols={numberOfCols}
           active={this.props.board[props.rowkey][columnIndex] ? true : false}
@@ -63,7 +64,7 @@ class Board extends React.Component {
 
     return (
       <BoardWrapper>
-        <StyledTable>
+        <StyledTable boardWidth={this.props.boardWidth}>
           <tbody>
             <GenerateRows />
           </tbody>

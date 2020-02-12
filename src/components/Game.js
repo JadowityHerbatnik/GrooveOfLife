@@ -21,6 +21,7 @@ export default function Game() {
   const [isGameRunning, setIsGameRunning] = useState(false)
   const [mute, setMute] = useState(false)
   const [speed, setSpeed] = useState(4)
+  const [boardWidth, setBoardWidth] = useState(0)
   const maxSpeed = 7
 
   useEffect(() => {
@@ -96,7 +97,7 @@ export default function Game() {
         }
       })
     )
-    setTimeout(() => setBoard(newBoard), 100)
+    setBoard(newBoard)
   }
   function step(interval) {
     setBoard(prevBoard => {
@@ -125,7 +126,12 @@ export default function Game() {
 
   function setupBoard({ width, height }, preferredCellSize) {
     if (width !== 0 && height !== 0) {
-      const numberOfCols = Math.ceil(width / preferredCellSize)
+      // 100vw board doesn't look good on wide screens
+      const boardWidthPercent = width / height >= 2 ? 75 : 94
+      setBoardWidth(boardWidthPercent)
+      const numberOfCols = Math.ceil(
+        ((boardWidthPercent / 100) * width) / preferredCellSize
+      )
       const numberOfRows = Math.ceil(height / preferredCellSize)
       setBoard(prevBoard => {
         const newBoard = new Array(numberOfRows)
@@ -162,6 +168,7 @@ export default function Game() {
         sliderChange={event => sliderChange(event)}
       />
       <Board
+        boardWidth={boardWidth}
         onSize={onSize}
         clickCell={(i, j) => clickCell(i, j)}
         board={board}
