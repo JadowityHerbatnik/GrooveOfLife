@@ -1,6 +1,6 @@
-import React from "react"
-import styled from "styled-components"
-import "../styles/fontello/css/fontello.css"
+import React from "react";
+import styled from "styled-components";
+import "../styles/fontello/css/fontello.css";
 
 const Button = styled.button`
   background-color: transparent;
@@ -12,17 +12,17 @@ const Button = styled.button`
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
   }
-`
+`;
 const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
-`
+`;
 const Icon = styled.i`
   font-size: 4.5vh;
   margin: 0 2vw 0 2vw;
-`
+`;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -49,7 +49,7 @@ const Container = styled.div`
       border: none;
     }
   }
-`
+`;
 const Buttons = props => {
   return (
     <Container>
@@ -84,6 +84,6 @@ const Buttons = props => {
         onChange={event => props.sliderChange(event)}
       />
     </Container>
-  )
-}
-export default Buttons
+  );
+};
+export default Buttons;

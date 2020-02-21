@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react"
-import Buttons from "./Buttons.js"
-import Board from "./Board.js"
-import styled from "styled-components"
-import { sizes } from "../utils/sizes.js"
-import calculateNextBoard from "../helpers/makestep.js"
-import sound from "../helpers/sound.js"
+import React, { useState, useEffect } from "react";
+import Buttons from "./Buttons.js";
+import Board from "./Board.js";
+import styled from "styled-components";
+import { sizes } from "../utils/sizes.js";
+import calculateNextBoard from "../helpers/makestep.js";
+import sound from "../helpers/sound.js";
 
 const GameWrapper = styled.div`
   display: flex;
@@ -14,146 +14,146 @@ const GameWrapper = styled.div`
   @media screen and (orientation: landscape) {
     height: 85vh;
   }
-`
+`;
 export default function Game() {
-  const [board, setBoard] = useState([[]])
-  const [isMouseDown, setIsMouseDown] = useState(false)
-  const [isGameRunning, setIsGameRunning] = useState(false)
-  const [mute, setMute] = useState(false)
-  const [speed, setSpeed] = useState(4)
-  const [boardWidth, setBoardWidth] = useState(0)
-  const maxSpeed = 7
+  const [board, setBoard] = useState([[]]);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [isGameRunning, setIsGameRunning] = useState(false);
+  const [mute, setMute] = useState(false);
+  const [speed, setSpeed] = useState(4);
+  const [boardWidth, setBoardWidth] = useState(0);
+  const maxSpeed = 7;
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyPress)
-    return () => window.removeEventListener("keydown", handleKeyPress)
-  })
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  });
   useEffect(() => {
-    const interval = 1000 / speed
+    const interval = 1000 / speed;
     var ID = setInterval(() => {
       if (isGameRunning) {
-        step(interval)
+        step(interval);
       }
-    }, interval)
+    }, interval);
     return () => {
-      clearInterval(ID)
-    }
-  }, [speed, isGameRunning, mute])
+      clearInterval(ID);
+    };
+  }, [speed, isGameRunning, mute]);
 
   function toggle(state) {
     switch (state) {
       case "mute":
-        setMute(prevState => !prevState)
-        break
+        setMute(prevState => !prevState);
+        break;
       case "play":
-        setIsGameRunning(prevState => !prevState)
-        break
+        setIsGameRunning(prevState => !prevState);
+        break;
     }
   }
 
   function handleKeyPress(event) {
     switch (event.key) {
       case "c":
-        changeBoardState("clear")
-        break
+        changeBoardState("clear");
+        break;
       case "r":
-        changeBoardState("randomize")
-        break
+        changeBoardState("randomize");
+        break;
       case " ":
-        toggle("play")
-        break
+        toggle("play");
+        break;
       case "s":
-        step(1000 / speed)
-        break
+        step(1000 / speed);
+        break;
       case "m":
-        toggle("mute")
-        break
+        toggle("mute");
+        break;
       case "ArrowUp":
-        setSpeed(prevState => (speed < maxSpeed ? prevState + 1 : prevState))
-        break
+        setSpeed(prevState => (speed < maxSpeed ? prevState + 1 : prevState));
+        break;
       case "ArrowRight":
-        setSpeed(prevState => (speed < maxSpeed ? prevState + 1 : prevState))
-        break
+        setSpeed(prevState => (speed < maxSpeed ? prevState + 1 : prevState));
+        break;
       case "ArrowDown":
-        setSpeed(prevState => (speed > 1 ? prevState - 1 : prevState))
-        break
+        setSpeed(prevState => (speed > 1 ? prevState - 1 : prevState));
+        break;
       case "ArrowLeft":
-        setSpeed(prevState => (speed > 1 ? prevState - 1 : prevState))
-        break
+        setSpeed(prevState => (speed > 1 ? prevState - 1 : prevState));
+        break;
     }
   }
 
   function changeBoardState(whatToDo) {
     if (isGameRunning) {
-      toggle("play")
+      toggle("play");
     }
     const newBoard = board.map(value =>
       value.map(() => {
         switch (whatToDo) {
           case "clear":
-            return false
+            return false;
           case "randomize":
-            return Math.random() >= 0.8 //At 0.5 there's too many alive cells also add this one to settings parameter
+            return Math.random() >= 0.8; //At 0.5 there's too many alive cells also add this one to settings parameter
         }
-      })
-    )
-    setBoard(newBoard)
+      }),
+    );
+    setBoard(newBoard);
   }
   function step(interval) {
     setBoard(prevBoard => {
-      const [newBoard, newAliveCells] = calculateNextBoard(prevBoard)
+      const [newBoard, newAliveCells] = calculateNextBoard(prevBoard);
       if (!mute && newAliveCells.length !== 0) {
-        sound(newAliveCells, newBoard, interval)
+        sound(newAliveCells, newBoard, interval);
       }
-      return newBoard
-    })
+      return newBoard;
+    });
   }
   function sliderChange(event) {
-    const newSpeed = parseInt(event.target.value)
-    setSpeed(newSpeed)
+    const newSpeed = parseInt(event.target.value);
+    setSpeed(newSpeed);
   }
   function clickCell(i, j) {
-    setBoard(prevState => updateBoard(prevState))
+    setBoard(prevState => updateBoard(prevState));
     function updateBoard(prevState) {
-      let boardcopy = Array.from(prevState)
-      boardcopy[i][j] = !boardcopy[i][j]
-      return boardcopy
+      let boardcopy = Array.from(prevState);
+      boardcopy[i][j] = !boardcopy[i][j];
+      return boardcopy;
     }
   }
   function handleClick(direction) {
-    setIsMouseDown(direction === "up" ? false : true)
+    setIsMouseDown(direction === "up" ? false : true);
   }
 
   function setupBoard({ width, height }, preferredCellSize) {
     if (width !== 0 && height !== 0) {
       // 100vw board doesn't look good on wide screens
-      const boardWidthPercent = width / height >= 2 ? 75 : 94
-      setBoardWidth(boardWidthPercent)
+      const boardWidthPercent = width / height >= 2 ? 75 : 94;
+      setBoardWidth(boardWidthPercent);
       const numberOfCols = Math.ceil(
-        ((boardWidthPercent / 100) * width) / preferredCellSize
-      )
-      const numberOfRows = Math.ceil(height / preferredCellSize)
+        ((boardWidthPercent / 100) * width) / preferredCellSize,
+      );
+      const numberOfRows = Math.ceil(height / preferredCellSize);
       setBoard(prevBoard => {
         const newBoard = new Array(numberOfRows)
           .fill(false)
-          .map(() => new Array(numberOfCols).fill(false))
-        const oldNumberOfRows = prevBoard.length
-        const oldNumberOfCols = prevBoard[0].length
-        const numberOfRowsToCopy = Math.min(numberOfRows, oldNumberOfRows)
-        const numberOfColsToCopy = Math.min(numberOfCols, oldNumberOfCols)
+          .map(() => new Array(numberOfCols).fill(false));
+        const oldNumberOfRows = prevBoard.length;
+        const oldNumberOfCols = prevBoard[0].length;
+        const numberOfRowsToCopy = Math.min(numberOfRows, oldNumberOfRows);
+        const numberOfColsToCopy = Math.min(numberOfCols, oldNumberOfCols);
         for (let i = 0; i < numberOfRowsToCopy; i++) {
           for (let j = 0; j < numberOfColsToCopy; j++) {
-            newBoard[i][j] = prevBoard[i][j]
+            newBoard[i][j] = prevBoard[i][j];
           }
         }
-        return newBoard
-      })
+        return newBoard;
+      });
     }
   }
 
   const onSize = size => {
-    setupBoard(size, sizes.preferredCellSize)
-  }
+    setupBoard(size, sizes.preferredCellSize);
+  };
 
   return (
     <GameWrapper>
@@ -176,5 +176,5 @@ export default function Game() {
         mousedown={isMouseDown}
       />
     </GameWrapper>
-  )
+  );
 }

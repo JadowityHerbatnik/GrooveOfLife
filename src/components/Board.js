@@ -1,7 +1,7 @@
-import React from "react"
-import styled from "styled-components"
-import sizeMe from "react-sizeme"
-import { sizes } from "../utils/sizes.js"
+import React from "react";
+import styled from "styled-components";
+import sizeMe from "react-sizeme";
+import { sizes } from "../utils/sizes.js";
 
 const BoardWrapper = styled.div`
   width: 100%;
@@ -11,7 +11,7 @@ const BoardWrapper = styled.div`
   }
 
   margin: 0 auto 0 auto;
-`
+`;
 const StyledTable = styled.table`
   margin: auto;
   width: ${props => `${props.boardWidth}%`};
@@ -19,7 +19,7 @@ const StyledTable = styled.table`
   background-color: transparent;
   border-collapse: collapse;
   border-spacing: 0px;
-`
+`;
 const StyledTd = styled.td`
   border: 1px solid black;
   width: ${props => `${props.boardWidth / props.cols}vw`};
@@ -29,18 +29,18 @@ const StyledTd = styled.td`
   &:hover {
     opacity: 0.5;
   }
-`
+`;
 class Board extends React.Component {
   render() {
-    const numberOfRows = this.props.board.length
-    const numberOfCols = this.props.board[0].length
+    const numberOfRows = this.props.board.length;
+    const numberOfCols = this.props.board[0].length;
 
     const GenerateRows = () =>
       [...Array(numberOfRows).keys()].map(rowIndex => (
         <tr key={rowIndex}>
           <GenerateColumns rowkey={rowIndex} />
         </tr>
-      ))
+      ));
 
     const GenerateColumns = props =>
       [...Array(numberOfCols).keys()].map(columnIndex => (
@@ -50,17 +50,17 @@ class Board extends React.Component {
           cols={numberOfCols}
           active={this.props.board[props.rowkey][columnIndex] ? true : false}
           onMouseDown={() => {
-            this.props.handleClick("down")
-            this.props.clickCell(props.rowkey, columnIndex)
+            this.props.handleClick("down");
+            this.props.clickCell(props.rowkey, columnIndex);
           }}
           onMouseUp={() => this.props.handleClick("up")}
           onMouseEnter={() => {
             if (this.props.mousedown) {
-              this.props.clickCell(props.rowkey, columnIndex)
+              this.props.clickCell(props.rowkey, columnIndex);
             }
           }}
         />
-      ))
+      ));
 
     return (
       <BoardWrapper>
@@ -70,7 +70,7 @@ class Board extends React.Component {
           </tbody>
         </StyledTable>
       </BoardWrapper>
-    )
+    );
   }
 }
-export default sizeMe({ monitorHeight: true })(Board)
+export default sizeMe({ monitorHeight: true })(Board);
