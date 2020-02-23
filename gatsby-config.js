@@ -18,7 +18,7 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-fonts`,
       options: {
-        fonts: [`Bangers`, `cursive\:400`],
+        fonts: [`Geo`, `400`],
         display: "swap",
       },
     },
@@ -39,4 +39,4 @@ module.exports = {
     // To learn more, visit: https://gatsby.dev/offline
     `gatsby-plugin-offline`,
   ],
-}
+};
