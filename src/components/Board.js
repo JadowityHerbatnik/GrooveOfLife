@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import sizeMe from "react-sizeme";
-import { sizes } from "../utils/sizes.js";
 
 const BoardWrapper = styled.div`
   width: 100%;
@@ -16,7 +15,6 @@ const StyledTable = styled.table`
   margin: auto;
   width: ${props => `${props.boardWidth}%`};
   opacity: 0.5;
-  background-color: transparent;
   border-collapse: collapse;
   border-spacing: 0px;
 `;
@@ -25,6 +23,7 @@ const StyledTd = styled.td`
   width: ${props => `${props.boardWidth / props.cols}vw`};
   height: ${props => `${props.boardWidth / props.cols}vw`};
   box-sizing: border-box;
+  opacity: ${props => (props.column === props.highlightedColumn ? "0.5" : "1")};
   background-color: ${props => (props.active ? "rgba(0,0,0,0)" : "black")};
   &:hover {
     opacity: 0.5;
@@ -37,7 +36,7 @@ class Board extends React.Component {
 
     const GenerateRows = () =>
       [...Array(numberOfRows).keys()].map(rowIndex => (
-        <tr key={rowIndex}>
+        <tr key={rowIndex} row={rowIndex}>
           <GenerateColumns rowkey={rowIndex} />
         </tr>
       ));
@@ -48,7 +47,9 @@ class Board extends React.Component {
           boardWidth={this.props.boardWidth}
           key={`${props.rowkey}x${columnIndex}`}
           cols={numberOfCols}
+          column={columnIndex}
           active={this.props.board[props.rowkey][columnIndex] ? true : false}
+          highlightedColumn={this.props.highlightedColumn}
           onMouseDown={() => {
             this.props.handleClick("down");
             this.props.clickCell(props.rowkey, columnIndex);

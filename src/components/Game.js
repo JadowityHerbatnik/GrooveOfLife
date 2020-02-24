@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import Buttons from "./Buttons.js";
 import Board from "./Board.js";
 import styled from "styled-components";
-import { sizes } from "../utils/sizes.js";
+import { sizes } from "../utils/constants.js";
 import calculateNextBoard from "../helpers/makestep.js";
-import sound from "../helpers/sound.js";
+import { playSelectedColumn, playEntireBoard } from "../helpers/sound.js";
 
 const GameWrapper = styled.div`
   display: flex;
@@ -17,11 +17,13 @@ const GameWrapper = styled.div`
 `;
 export default function Game() {
   const [board, setBoard] = useState([[]]);
+  const [boardWidth, setBoardWidth] = useState(0);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [isGameRunning, setIsGameRunning] = useState(false);
   const [mute, setMute] = useState(false);
   const [speed, setSpeed] = useState(4);
-  const [boardWidth, setBoardWidth] = useState(0);
+  const [gameMode, setGameMode] = useState("harmonic");
+  const [highlightedColumn, setHighlightedColumn] = useState(null);
   const maxSpeed = 7;
 
   useEffect(() => {
@@ -30,7 +32,7 @@ export default function Game() {
   });
   useEffect(() => {
     const interval = 1000 / speed;
-    var ID = setInterval(() => {
+    const ID = setInterval(() => {
       if (isGameRunning) {
         step(interval);
       }
@@ -49,6 +51,10 @@ export default function Game() {
         setIsGameRunning(prevState => !prevState);
         break;
     }
+  }
+
+  function sliderChange(event) {
+    setSpeed(parseInt(event.target.value));
   }
 
   function handleKeyPress(event) {
@@ -100,17 +106,34 @@ export default function Game() {
     setBoard(newBoard);
   }
   function step(interval) {
-    setBoard(prevBoard => {
-      const [newBoard, newAliveCells] = calculateNextBoard(prevBoard);
-      if (!mute && newAliveCells.length !== 0) {
-        sound(newAliveCells, newBoard, interval);
-      }
-      return newBoard;
-    });
-  }
-  function sliderChange(event) {
-    const newSpeed = parseInt(event.target.value);
-    setSpeed(newSpeed);
+    switch (gameMode) {
+      case "harmonic":
+        setHighlightedColumn(null);
+        setBoard(prevBoard => {
+          const [newBoard, newAliveCells] = calculateNextBoard(prevBoard);
+          if (!mute && newAliveCells.length !== 0) {
+            playEntireBoard(newAliveCells, newBoard, interval);
+          }
+          return newBoard;
+        });
+        break;
+      case "iterative":
+        setHighlightedColumn(currentHighlight => {
+          const nextColumn =
+            currentHighlight + 1 >= board[0].length ? 0 : currentHighlight + 1;
+          setBoard(prevBoard => {
+            const [newBoard, newAliveCells] = calculateNextBoard(prevBoard);
+            if (!mute && newAliveCells.length !== 0) {
+              playSelectedColumn(newAliveCells, nextColumn, interval, newBoard);
+            }
+            return currentHighlight === board[0].length - 1
+              ? newBoard
+              : prevBoard;
+          });
+          return nextColumn;
+        });
+        break;
+    }
   }
   function clickCell(i, j) {
     setBoard(prevState => updateBoard(prevState));
@@ -127,7 +150,7 @@ export default function Game() {
   function setupBoard({ width, height }, preferredCellSize) {
     if (width !== 0 && height !== 0) {
       // 100vw board doesn't look good on wide screens
-      const boardWidthPercent = width / height >= 2 ? 75 : 94;
+      const boardWidthPercent = width / height >= 2 ? 60 : 94;
       setBoardWidth(boardWidthPercent);
       const numberOfCols = Math.ceil(
         ((boardWidthPercent / 100) * width) / preferredCellSize,
@@ -151,8 +174,8 @@ export default function Game() {
     }
   }
 
-  const onSize = size => {
-    setupBoard(size, sizes.preferredCellSize);
+  const onSize = boardDimensions => {
+    setupBoard(boardDimensions, sizes.preferredCellSize);
   };
 
   return (
@@ -174,6 +197,7 @@ export default function Game() {
         board={board}
         handleClick={direction => handleClick(direction)}
         mousedown={isMouseDown}
+        highlightedColumn={highlightedColumn}
       />
     </GameWrapper>
   );
