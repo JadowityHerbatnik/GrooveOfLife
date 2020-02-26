@@ -100,17 +100,18 @@ export default function Game() {
     if (isGameRunning) {
       toggle("play");
     }
-    const newBoard = board.map(value =>
-      value.map(() => {
-        switch (whatToDo) {
-          case "clear":
-            return false;
-          case "randomize":
-            return Math.random() >= 0.8; //At 0.5 there's too many alive cells also add this one to settings parameter
-        }
-      }),
+    setBoard(previousBoard =>
+      board.map(value =>
+        value.map(() => {
+          switch (whatToDo) {
+            case "clear":
+              return false;
+            case "randomize":
+              return Math.random() >= 0.8; //At 0.5 there's too many alive cells also add this one to settings parameter
+          }
+        }),
+      ),
     );
-    setBoard(newBoard);
   }
   function step(interval) {
     switch (gameMode) {
@@ -125,15 +126,17 @@ export default function Game() {
         });
         break;
       case "iterative":
-        setHighlightedColumn(currentHighlight => {
+        setHighlightedColumn(currentlyHighlighted => {
           const nextColumn =
-            currentHighlight + 1 >= board[0].length ? 0 : currentHighlight + 1;
+            currentlyHighlighted + 1 >= board[0].length
+              ? 0
+              : currentlyHighlighted + 1;
           setBoard(prevBoard => {
             const [newBoard, newAliveCells] = calculateNextBoard(prevBoard);
             if (!mute && newAliveCells.length !== 0) {
               playSelectedColumn(newAliveCells, nextColumn, interval, newBoard);
             }
-            return currentHighlight === board[0].length - 1
+            return currentlyHighlighted === board[0].length - 1
               ? newBoard
               : prevBoard;
           });
@@ -143,12 +146,10 @@ export default function Game() {
     }
   }
   function clickCell(i, j) {
-    setBoard(prevState => updateBoard(prevState));
-    function updateBoard(prevState) {
-      let boardcopy = Array.from(prevState);
-      boardcopy[i][j] = !boardcopy[i][j];
-      return boardcopy;
-    }
+    setBoard(prevBoard => {
+      prevBoard[i][j] = !prevBoard[i][j];
+      return prevBoard;
+    });
   }
   function handleClick(direction) {
     setIsMouseDown(direction === "up" ? false : true);
