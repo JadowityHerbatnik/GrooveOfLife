@@ -43,9 +43,6 @@ export default function Game() {
       clearInterval(ID);
     };
   }, [speed, isGameRunning, mute, gameMode]);
-  function changeGameMode(mode) {
-    setGameMode(mode);
-  }
 
   function toggle(state) {
     switch (state) {
@@ -58,10 +55,6 @@ export default function Game() {
       case "settings":
         setShowSettings(prevState => !prevState);
     }
-  }
-
-  function sliderChange(event) {
-    setSpeed(parseInt(event.target.value));
   }
 
   function handleKeyPress(event) {
@@ -146,13 +139,9 @@ export default function Game() {
     }
   }
   function clickCell(i, j) {
-    setBoard(prevBoard => {
-      prevBoard[i][j] = !prevBoard[i][j];
-      return prevBoard;
-    });
-  }
-  function handleClick(direction) {
-    setIsMouseDown(direction === "up" ? false : true);
+    const newBoard = Array.from(board);
+    newBoard[i][j] = !newBoard[i][j];
+    setBoard(newBoard);
   }
 
   function setupBoard({ width, height }, preferredCellSize) {
@@ -196,21 +185,23 @@ export default function Game() {
         isGameRunning={isGameRunning}
         speed={speed}
         maxSpeed={maxSpeed}
-        sliderChange={event => sliderChange(event)}
+        sliderChange={event => setSpeed(parseInt(event.target.value))}
       />
       <Board
         boardWidth={boardWidth}
         onSize={onSize}
         clickCell={(i, j) => clickCell(i, j)}
         board={board}
-        handleClick={direction => handleClick(direction)}
+        handleClick={direction =>
+          setIsMouseDown(direction === "down" ? true : false)
+        }
         mousedown={isMouseDown}
         highlightedColumn={highlightedColumn}
       />
       <Settings
         showSettings={showSettings}
         toggle={state => toggle(state)}
-        changeGameMode={mode => changeGameMode(mode)}
+        changeGameMode={mode => setGameMode(mode)}
         currentGameMode={gameMode}
       />
     </GameWrapper>
