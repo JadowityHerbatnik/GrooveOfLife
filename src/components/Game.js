@@ -42,7 +42,7 @@ export default function Game() {
     return () => {
       clearInterval(ID);
     };
-  }, [speed, isGameRunning, mute]);
+  }, [speed, isGameRunning, mute, gameMode]);
   function changeGameMode(mode) {
     setGameMode(mode);
   }
