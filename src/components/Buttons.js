@@ -73,6 +73,9 @@ const Buttons = props => {
             className={props.mute ? "icon-volume-off" : "icon-volume-up"}
           ></Icon>
         </Button>
+        <Button onClick={() => props.toggle("settings")}>
+          <Icon className="icon-cog"></Icon>
+        </Button>
       </ButtonWrapper>
       <input
         className="slider"

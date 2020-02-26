@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Buttons from "./Buttons.js";
 import Board from "./Board.js";
+import Settings from "./Settings.js";
 import styled from "styled-components";
 import { sizes } from "../utils/constants.js";
 import calculateNextBoard from "../helpers/makestep.js";
@@ -24,6 +25,7 @@ export default function Game() {
   const [speed, setSpeed] = useState(4);
   const [gameMode, setGameMode] = useState("harmonic");
   const [highlightedColumn, setHighlightedColumn] = useState(null);
+  const [showSettings, setShowSettings] = useState(false);
   const maxSpeed = 7;
 
   useEffect(() => {
@@ -41,6 +43,9 @@ export default function Game() {
       clearInterval(ID);
     };
   }, [speed, isGameRunning, mute]);
+  function changeGameMode(mode) {
+    setGameMode(mode);
+  }
 
   function toggle(state) {
     switch (state) {
@@ -50,6 +55,8 @@ export default function Game() {
       case "play":
         setIsGameRunning(prevState => !prevState);
         break;
+      case "settings":
+        setShowSettings(prevState => !prevState);
     }
   }
 
@@ -198,6 +205,12 @@ export default function Game() {
         handleClick={direction => handleClick(direction)}
         mousedown={isMouseDown}
         highlightedColumn={highlightedColumn}
+      />
+      <Settings
+        showSettings={showSettings}
+        toggle={state => toggle(state)}
+        changeGameMode={mode => changeGameMode(mode)}
+        currentGameMode={gameMode}
       />
     </GameWrapper>
   );
