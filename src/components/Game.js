@@ -18,7 +18,6 @@ const GameWrapper = styled.div`
 `;
 export default function Game() {
   const [board, setBoard] = useState([[]]);
-  const [boardWidth, setBoardWidth] = useState(0);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [isGameRunning, setIsGameRunning] = useState(false);
   const [mute, setMute] = useState(false);
@@ -146,9 +145,7 @@ export default function Game() {
 
   function setupBoard({ width, height }, preferredCellSize) {
     if (width !== 0 && height !== 0) {
-      // 100vw board doesn't look good on wide screens
-      const boardWidthPercent = width / height >= 2 ? 60 : 94;
-      setBoardWidth(boardWidthPercent);
+      const boardWidthPercent = 90;
       const numberOfCols = Math.ceil(
         ((boardWidthPercent / 100) * width) / preferredCellSize,
       );
@@ -188,21 +185,20 @@ export default function Game() {
         sliderChange={event => setSpeed(parseInt(event.target.value))}
       />
       <Board
-        boardWidth={boardWidth}
         onSize={onSize}
         clickCell={(i, j) => clickCell(i, j)}
         board={board}
-        handleClick={direction =>
-          setIsMouseDown(direction === "down" ? true : false)
-        }
+        handleClick={direction => setIsMouseDown(direction === "down" ? true : false)}
         mousedown={isMouseDown}
         highlightedColumn={highlightedColumn}
       />
       <Settings
         showSettings={showSettings}
+        chromaticScale={chromaticScale}
         toggle={state => toggle(state)}
         changeGameMode={mode => setGameMode(mode)}
         currentGameMode={gameMode}
+        toggleNote={keyIndex => toggleNote(keyIndex)}
       />
     </GameWrapper>
   );

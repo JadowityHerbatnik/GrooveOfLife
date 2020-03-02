@@ -1,27 +1,29 @@
 import React from "react";
 import styled from "styled-components";
 import sizeMe from "react-sizeme";
+import { sizes } from "../utils/constants.js";
 
 const BoardWrapper = styled.div`
-  width: 100%;
-  height: 60vh;
-  @media screen and (orientation: landscape) {
-    height: 69vh;
+  height: 72vh;
+  width: 80vw;
+  @media screen and (orientation: portrait) {
+    // Decreased height on mobile devices to avoid scrollbar and weird interactions with bars
+    height: 60vh;
+    width: 100vw;
   }
-
   margin: 0 auto 0 auto;
 `;
 const StyledTable = styled.table`
   margin: auto;
-  width: ${({ boardWidth }) => `${boardWidth}%`};
+  height: 100%;
   opacity: 0.5;
   border-collapse: collapse;
   border-spacing: 0px;
 `;
 const StyledTd = styled.td`
   border: 1px solid black;
-  width: ${({ boardWidth, cols }) => `${boardWidth / cols}vw`};
-  height: ${({ boardWidth, cols }) => `${boardWidth / cols}vw`};
+  width: ${({ cellSize }) => `${cellSize}px`};
+  height: ${({ cellSize }) => `${cellSize}px`};
   box-sizing: border-box;
   opacity: ${({ column, highlightedColumn }) =>
     column === highlightedColumn ? "0.5" : "1"};
@@ -45,7 +47,7 @@ class Board extends React.Component {
     const GenerateColumns = props =>
       [...Array(numberOfCols).keys()].map(columnIndex => (
         <StyledTd
-          boardWidth={this.props.boardWidth}
+          cellSize={sizes.preferredCellSize}
           key={`${props.rowkey}x${columnIndex}`}
           cols={numberOfCols}
           column={columnIndex}
@@ -66,7 +68,7 @@ class Board extends React.Component {
 
     return (
       <BoardWrapper>
-        <StyledTable boardWidth={this.props.boardWidth}>
+        <StyledTable>
           <tbody>
             <GenerateRows />
           </tbody>
