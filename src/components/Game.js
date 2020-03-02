@@ -25,6 +25,11 @@ export default function Game() {
   const [gameMode, setGameMode] = useState("harmonic");
   const [highlightedColumn, setHighlightedColumn] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [notesToUse, setNotesToUse] = useState(["C", "D#", "F", "G#", "A#"]);
+  // prettier-ignore
+  const [chromaticScale, setChromaticScale] = useState([ true, false, false, true, false, true, false, false, true, false, true, false, ]);
+  // prettier-ignore
+  const [chromaticScaleNames, setChromaticScaleNames] = useState([ "C", "D#", "F", "G#", "A#", ]);
   const maxSpeed = 7;
 
   useEffect(() => {

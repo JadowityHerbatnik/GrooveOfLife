@@ -55,9 +55,7 @@ const Buttons = props => {
     <Container>
       <ButtonWrapper>
         <Button onClick={() => props.toggle("play")}>
-          <Icon
-            className={props.isGameRunning ? "icon-pause" : "icon-play"}
-          ></Icon>
+          <Icon className={props.isGameRunning ? "icon-pause" : "icon-play"}></Icon>
         </Button>
         <Button onClick={() => props.step(1000 / props.speed)}>
           <Icon className="icon-forward-1"></Icon>
@@ -69,9 +67,7 @@ const Buttons = props => {
           <Icon className="icon-cancel"></Icon>
         </Button>
         <Button onClick={() => props.toggle("mute")}>
-          <Icon
-            className={props.mute ? "icon-volume-off" : "icon-volume-up"}
-          ></Icon>
+          <Icon className={props.mute ? "icon-volume-off" : "icon-volume-up"}></Icon>
         </Button>
         <Button onClick={() => props.toggle("settings")}>
           <Icon className="icon-cog"></Icon>
