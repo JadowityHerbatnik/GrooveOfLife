@@ -24,8 +24,8 @@ const BlurredBackground = styled.div`
   backdrop-filter: blur(10px);
 `;
 const ModeButton = styled.button`
-  background-color: ${props =>
-    props.currentGameMode === props.buttonType ? "purple" : "transparent"};
+  background-color: ${({ currentGameMode, buttonType }) =>
+    currentGameMode === buttonType ? "purple" : "transparent"};
   border: 2px solid purple;
   color: white;
   font-size: 1em;
@@ -65,14 +65,14 @@ function isBlack(keyIndex) {
 }
 const NoteButtons = styled.div`
   box-sizing: border-box;
-  height: ${props => (props.isBlack ? blackHeight : whiteHeight)};
-  width: ${props => (props.isBlack ? blackWidth : whiteWidth)};
-  margin-left: ${props => (props.isBlack ? `calc(${blackWidth}/-2)` : `-${margin}`)};
-  margin-right: ${props => (props.isBlack ? `calc(${blackWidth}/-2)` : `-${margin}`)};
-  z-index: ${props => (props.isBlack ? 1 : 0)};
-  background-color: ${props =>
-    props.isNoteUsed ? "purple" : props.isBlack ? "black" : "grey"};
-  border: 1px solid black;
+  height: ${({ isBlack }) => (isBlack ? blackHeight : whiteHeight)};
+  width: ${({ isBlack }) => (isBlack ? blackWidth : whiteWidth)};
+  margin-left: ${({ isBlack }) => (isBlack ? `calc(${blackWidth}/-2)` : `-${margin}`)};
+  margin-right: ${({ isBlack }) => (isBlack ? `calc(${blackWidth}/-2)` : `-${margin}`)};
+  z-index: ${({ isBlack }) => (isBlack ? 1 : 0)};
+  background-color: ${({ isNoteUsed, isBlack }) =>
+    isNoteUsed ? "purple" : isBlack ? "black" : "grey"};
+  border: ${() => `${margin} solid black`};
 `;
 const Label = styled.p`
   font-family: Geo;

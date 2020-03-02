@@ -13,18 +13,19 @@ const BoardWrapper = styled.div`
 `;
 const StyledTable = styled.table`
   margin: auto;
-  width: ${props => `${props.boardWidth}%`};
+  width: ${({ boardWidth }) => `${boardWidth}%`};
   opacity: 0.5;
   border-collapse: collapse;
   border-spacing: 0px;
 `;
 const StyledTd = styled.td`
   border: 1px solid black;
-  width: ${props => `${props.boardWidth / props.cols}vw`};
-  height: ${props => `${props.boardWidth / props.cols}vw`};
+  width: ${({ boardWidth, cols }) => `${boardWidth / cols}vw`};
+  height: ${({ boardWidth, cols }) => `${boardWidth / cols}vw`};
   box-sizing: border-box;
-  opacity: ${props => (props.column === props.highlightedColumn ? "0.5" : "1")};
-  background-color: ${props => (props.active ? "rgba(0,0,0,0)" : "black")};
+  opacity: ${({ column, highlightedColumn }) =>
+    column === highlightedColumn ? "0.5" : "1"};
+  background-color: ${({ active }) => (active ? "rgba(0,0,0,0)" : "black")};
   &:hover {
     opacity: 0.5;
   }
