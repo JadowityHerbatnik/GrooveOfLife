@@ -90,6 +90,9 @@ export default function Game() {
       case "ArrowLeft":
         setSpeed(prevState => (speed > 1 ? prevState - 1 : prevState));
         break;
+      case "Escape":
+        setShowSettings(false);
+        break;
     }
   }
 
