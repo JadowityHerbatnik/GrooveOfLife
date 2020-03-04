@@ -200,14 +200,15 @@ export default function Game() {
         mousedown={isMouseDown}
         highlightedColumn={highlightedColumn}
       />
-      <Settings
-        showSettings={showSettings}
-        chromaticScale={chromaticScale}
-        toggle={state => toggle(state)}
-        changeGameMode={mode => setGameMode(mode)}
-        currentGameMode={gameMode}
-        toggleNote={keyIndex => toggleNote(keyIndex)}
-      />
+      {showSettings && (
+        <Settings
+          chromaticScale={chromaticScale}
+          toggle={state => toggle(state)}
+          changeGameMode={mode => setGameMode(mode)}
+          currentGameMode={gameMode}
+          toggleNote={keyIndex => toggleNote(keyIndex)}
+        />
+      )}
     </GameWrapper>
   );
 }

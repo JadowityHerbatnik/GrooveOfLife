@@ -73,15 +73,13 @@ const NoteButtons = styled.div`
   background-color: ${({ isNoteUsed, isBlack }) =>
     isNoteUsed ? "purple" : isBlack ? "black" : "grey"};
   border: ${() => `${margin} solid black`};
+  transition: background-color 0.2s;
 `;
 const Label = styled.p`
   font-family: Geo;
   font-size: 1.5em;
 `;
 const Settings = props => {
-  if (!props.showSettings) {
-    return null;
-  }
   return (
     <BlurredBackground>
       <SettingsContainer>
