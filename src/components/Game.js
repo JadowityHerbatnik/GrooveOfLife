@@ -79,29 +79,30 @@ export default function Game() {
         toggle("mute");
         break;
       case "ArrowUp":
-        setSpeed(prevState => (speed < maxSpeed ? prevState + 1 : prevState));
+        setSpeed(prevSpeed => (prevSpeed < maxSpeed ? prevSpeed + 1 : prevSpeed));
         break;
       case "ArrowRight":
-        setSpeed(prevState => (speed < maxSpeed ? prevState + 1 : prevState));
+        setSpeed(prevSpeed => (prevSpeed < maxSpeed ? prevSpeed + 1 : prevSpeed));
         break;
       case "ArrowDown":
-        setSpeed(prevState => (speed > 1 ? prevState - 1 : prevState));
+        setSpeed(prevSpeed => (prevSpeed > 1 ? prevSpeed - 1 : prevSpeed));
         break;
       case "ArrowLeft":
-        setSpeed(prevState => (speed > 1 ? prevState - 1 : prevState));
+        setSpeed(prevSpeed => (prevSpeed > 1 ? prevSpeed - 1 : prevSpeed));
         break;
       case "Escape":
         setShowSettings(false);
+        break;
+      case "S":
+        toggle("settings");
         break;
     }
   }
 
   function changeBoardState(whatToDo) {
-    if (isGameRunning) {
-      toggle("play");
-    }
-    setBoard(previousBoard =>
-      board.map(value =>
+    setIsGameRunning(false);
+    setBoard(prevBoard =>
+      prevBoard.map(value =>
         value.map(() => {
           switch (whatToDo) {
             case "clear":
