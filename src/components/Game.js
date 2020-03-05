@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Buttons from "./Buttons.js";
 import Board from "./Board.js";
 import Settings from "./Settings.js";
@@ -31,11 +31,12 @@ export default function Game() {
   // prettier-ignore
   const [chromaticScaleNames, setChromaticScaleNames] = useState([ "C", "D#", "F", "G#", "A#", ]);
   const maxSpeed = 7;
+  const boardRef = useRef(null);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  });
+  }, [speed]);
   useEffect(() => {
     const interval = 1000 / speed;
     const ID = setInterval(() => {
@@ -46,7 +47,16 @@ export default function Game() {
     return () => {
       clearInterval(ID);
     };
-  }, [speed, isGameRunning, mute, gameMode]);
+  }, [speed, isGameRunning, mute, chromaticScaleNames, gameMode]);
+  useEffect(() => {
+    function getBoardDimensions() {
+      const { width, height } = boardRef.current.getBoundingClientRect();
+      setupBoard(width, height, sizes.preferredCellSize);
+    }
+    window.addEventListener("resize", getBoardDimensions);
+    getBoardDimensions();
+    return () => window.removeEventListener("resize", getBoardDimensions);
+  }, []);
 
   function toggle(state) {
     switch (state) {
@@ -177,10 +187,6 @@ export default function Game() {
     }
   }
 
-  const onSize = boardDimensions => {
-    setupBoard(boardDimensions, sizes.preferredCellSize);
-  };
-
   return (
     <GameWrapper>
       <Buttons
@@ -194,7 +200,7 @@ export default function Game() {
         sliderChange={event => setSpeed(parseInt(event.target.value))}
       />
       <Board
-        onSize={onSize}
+        ref={boardRef}
         clickCell={(i, j) => clickCell(i, j)}
         board={board}
         handleClick={direction => setIsMouseDown(direction === "down" ? true : false)}

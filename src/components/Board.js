@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import sizeMe from "react-sizeme";
 import { sizes } from "../utils/constants.js";
 
 const BoardWrapper = styled.div`
@@ -32,49 +31,49 @@ const StyledTd = styled.td`
     opacity: 0.5;
   }
 `;
-class Board extends React.Component {
-  render() {
-    const numberOfRows = this.props.board.length;
-    const numberOfCols = this.props.board[0].length;
+const Board = React.forwardRef((props, ref) => {
+  const numberOfRows = props.board.length;
+  const numberOfCols = props.board[0].length;
 
-    const GenerateRows = () =>
-      [...Array(numberOfRows).keys()].map(rowIndex => (
-        <tr key={rowIndex} row={rowIndex}>
-          <GenerateColumns rowkey={rowIndex} />
-        </tr>
-      ));
+  const GenerateRows = () =>
+    [...Array(numberOfRows).keys()].map(rowIndex => (
+      <tr key={rowIndex} row={rowIndex}>
+        <GenerateColumns rowIndex={rowIndex} forwardedProps={props} />
+      </tr>
+    ));
 
-    const GenerateColumns = props =>
-      [...Array(numberOfCols).keys()].map(columnIndex => (
-        <StyledTd
-          cellSize={sizes.preferredCellSize}
-          key={`${props.rowkey}x${columnIndex}`}
-          cols={numberOfCols}
-          column={columnIndex}
-          active={this.props.board[props.rowkey][columnIndex] ? true : false}
-          highlightedColumn={this.props.highlightedColumn}
-          onMouseDown={() => {
-            this.props.handleClick("down");
-            this.props.clickCell(props.rowkey, columnIndex);
-          }}
-          onMouseUp={() => this.props.handleClick("up")}
-          onMouseEnter={() => {
-            if (this.props.mousedown) {
-              this.props.clickCell(props.rowkey, columnIndex);
-            }
-          }}
-        />
-      ));
+  const GenerateColumns = props =>
+    [...Array(numberOfCols).keys()].map(columnIndex => (
+      <StyledTd
+        cellSize={sizes.preferredCellSize}
+        key={`${props.rowIndex}x${columnIndex}`}
+        cols={numberOfCols}
+        column={columnIndex}
+        active={props.forwardedProps.board[props.rowIndex][columnIndex] ? true : false}
+        highlightedColumn={props.forwardedProps.highlightedColumn}
+        onMouseDown={() => {
+          props.forwardedProps.handleClick("down");
+          props.forwardedProps.clickCell(props.rowIndex, columnIndex);
+        }}
+        onMouseUp={() => props.forwardedProps.handleClick("up")}
+        onMouseEnter={() => {
+          if (props.forwardedProps.mousedown) {
+            props.forwardedProps.clickCell(props.rowIndex, columnIndex);
+          }
+        }}
+      />
+    ));
 
-    return (
-      <BoardWrapper>
-        <StyledTable>
-          <tbody>
-            <GenerateRows />
-          </tbody>
-        </StyledTable>
-      </BoardWrapper>
-    );
-  }
-}
-export default sizeMe({ monitorHeight: true })(Board);
+  return (
+    <BoardWrapper ref={ref}>
+      <StyledTable>
+        <tbody>
+          <GenerateRows />
+        </tbody>
+      </StyledTable>
+    </BoardWrapper>
+  );
+});
+
+// export default sizeMe({ monitorHeight: true })(Board);
+export default Board;
