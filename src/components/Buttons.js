@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import "../styles/fontello/css/fontello.css";
+import StyledIcon from "../components/generic/StyledIcon.js";
 
 const Button = styled.button`
   background-color: transparent;
@@ -19,10 +20,10 @@ const ButtonWrapper = styled.div`
   justify-content: center;
   flex-wrap: wrap;
 `;
-const Icon = styled.i`
-  font-size: 4.5vh;
-  margin: 0 2vw 0 2vw;
-`;
+// const StyledIcon = styled.i`
+//   font-size: 4.5vh;
+//   margin: 0 2vw 0 2vw;
+// `;
 const Container = styled.div`
   @keyframes slidefromleft {
     0% {
@@ -64,22 +65,22 @@ const Buttons = props => {
     <Container>
       <ButtonWrapper>
         <Button onClick={() => props.toggle("play")}>
-          <Icon className={props.isGameRunning ? "icon-pause" : "icon-play"}></Icon>
+          <StyledIcon className={props.isGameRunning ? "icon-pause" : "icon-play"} />
         </Button>
         <Button onClick={() => props.step(1000 / props.speed)}>
-          <Icon className="icon-forward-1"></Icon>
+          <StyledIcon className="icon-forward-1" />
         </Button>
         <Button onClick={() => props.changeBoardState("randomize")}>
-          <Icon className="icon-shuffle"></Icon>
+          <StyledIcon className="icon-shuffle" />
         </Button>
         <Button onClick={() => props.changeBoardState("clear")}>
-          <Icon className="icon-cancel"></Icon>
+          <StyledIcon className="icon-cancel" />
         </Button>
         <Button onClick={() => props.toggle("mute")}>
-          <Icon className={props.mute ? "icon-volume-off" : "icon-volume-up"}></Icon>
+          <StyledIcon className={props.mute ? "icon-volume-off" : "icon-volume-up"} />
         </Button>
         <Button onClick={() => props.toggle("settings")}>
-          <Icon className="icon-cog"></Icon>
+          <StyledIcon className="icon-cog" />
         </Button>
       </ButtonWrapper>
       <input

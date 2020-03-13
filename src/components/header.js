@@ -2,15 +2,9 @@ import { Link } from "gatsby";
 import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
-import { sizes } from "../utils/constants.js";
+import StyledIcon from "../components/generic/StyledIcon.js";
 
 const Wrapper = styled.header`
-  background-image: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.7),
-    rgba(0, 0, 0, 0)
-  );
-  // opacity: 0.8;
   @keyframes fadein {
     0% {
       opacity: 0;
@@ -38,7 +32,6 @@ const StyledLink = styled(Link)`
   color: white;
 `;
 const StyledButton = styled.button`
-  // border: 2px solid white;
   border: none;
   background: transparent;
   padding: 0.3em;
@@ -61,6 +54,9 @@ const Header = ({ siteTitle }) => (
       </StyledButton>
       <StyledButton>
         <StyledLink to="/faq">FAQ</StyledLink>
+        <StyledLink to="/about">
+          <StyledIcon className="icon-help" />
+        </StyledLink>
       </StyledButton>
     </ButtonBar>
     <H1>
