@@ -8,6 +8,7 @@ import calculateNextBoard from "../helpers/makestep.js";
 import { playSelectedColumn, playEntireBoard } from "../helpers/sound.js";
 
 const GameWrapper = styled.div`
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
