@@ -11,6 +11,16 @@ const Wrapper = styled.header`
     rgba(0, 0, 0, 0)
   );
   // opacity: 0.8;
+  @keyframes fadein {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  animation: ${({ animateHeader }) =>
+    animateHeader ? `2s ease 1s 1 both fadein` : "none"};
   text-align: center;
   height: 15vh;
   width: 100vw;

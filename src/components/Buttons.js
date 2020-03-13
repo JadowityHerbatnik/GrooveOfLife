@@ -24,9 +24,18 @@ const Icon = styled.i`
   margin: 0 2vw 0 2vw;
 `;
 const Container = styled.div`
+  @keyframes slidefromleft {
+    0% {
+      transform: translateX(-100vw);
+    }
+    100% {
+      transform: translateX(1);
+    }
+  }
   display: flex;
   flex-direction: column;
   align-items: center;
+  animation: 0.5s ease 1 both slidefromleft;
   .slider {
     opacity: 0.3;
     width: 50vmin;
