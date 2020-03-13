@@ -2,8 +2,9 @@ import React from "react";
 import SEO from "../components/seo";
 import Layout from "../components/layout.js";
 import Game from "../components/Game.js";
+
 const IndexPage = () => (
-  <Layout>
+  <Layout animateHeader>
     <SEO title="Home" />
     <Game />
   </Layout>

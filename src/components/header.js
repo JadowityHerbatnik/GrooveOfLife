@@ -15,16 +15,17 @@ const Wrapper = styled.header`
   }
   animation: ${({ animateHeader }) =>
     animateHeader ? `2s ease 1s 1 both fadein` : "none"};
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
   text-align: center;
   height: 15vh;
-  width: 100vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 `;
 const H1 = styled.h1`
   margin: 0;
-  font-size: 9vh;
+  font-size: 7vh;
   font-family: "Geo";
 `;
 const StyledLink = styled(Link)`
@@ -40,20 +41,15 @@ const StyledButton = styled.button`
 const ButtonBar = styled.div`
   display: flex;
   justify-content: flex-end;
-  // background-color: rgba(0, 0, 0, 0.2);
   margin: 0;
   position: fixed;
-  width: 100vw;
+  width: 100%;
   top: 0;
 `;
-const Header = ({ siteTitle }) => (
-  <Wrapper>
+const Header = ({ siteTitle, animateHeader }) => (
+  <Wrapper animateHeader={animateHeader}>
     <ButtonBar>
       <StyledButton>
-        <StyledLink to="/about">About</StyledLink>
-      </StyledButton>
-      <StyledButton>
-        <StyledLink to="/faq">FAQ</StyledLink>
         <StyledLink to="/about">
           <StyledIcon className="icon-help" />
         </StyledLink>

@@ -40,8 +40,11 @@ const Layout = ({ children }) => {
   return (
     <>
       <GlobalStyle />
-      <Header siteTitle={data.site.siteMetadata.title} />
-      <main>{children}</main>
+      <Header
+        siteTitle={data.site.siteMetadata.title}
+        animateHeader={props.animateHeader}
+      />
+      <main>{props.children}</main>
     </>
   );
 };
