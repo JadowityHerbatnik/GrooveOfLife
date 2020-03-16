@@ -4,7 +4,7 @@ import Board from "./Board.js";
 import Settings from "./Settings.js";
 import styled from "styled-components";
 import { sizes } from "../utils/constants.js";
-import calculateNextBoard from "../helpers/makestep.js";
+import { getAlive, calculateNextBoard } from "../helpers/makestep.js";
 import { playSelectedColumn, playEntireBoard } from "../helpers/sound.js";
 
 const GameWrapper = styled.div`
@@ -35,33 +35,64 @@ export default function Game() {
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [isGameRunning, setIsGameRunning] = useState(false);
   const [mute, setMute] = useState(false);
-  const [speed, setSpeed] = useState(4);
+  const [bps, setBps] = useState(4);
   const [gameMode, setGameMode] = useState("harmonic");
   const [highlightedColumn, setHighlightedColumn] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
-  const [notesToUse, setNotesToUse] = useState(["C", "D#", "F", "G#", "A#"]);
   // prettier-ignore
-  const [chromaticScale, setChromaticScale] = useState([ true, false, false, true, false, true, false, false, true, false, true, false, ]);
+  const [chromaticScale, setChromaticScale] = useState([true, false, false, true, false, true, false, false, true, false, true, false, ]);
   // prettier-ignore
-  const [chromaticScaleNames, setChromaticScaleNames] = useState([ "C", "D#", "F", "G#", "A#", ]);
+  const [scaleNames, setScaleNames] = useState(["C", "D#", "F", "G#", "A#", ]);
   const maxSpeed = 7;
+  const minSpeed = 1;
   const boardRef = useRef(null);
-
+  useEffect(() => {
+    const interval = 1000 / bps;
+    const aliveCells = getAlive(board);
+    switch (gameMode) {
+      case "harmonic":
+        if (!mute && aliveCells.length !== 0 && scaleNames.length !== 0) {
+          playEntireBoard(aliveCells, board, interval, scaleNames);
+        }
+        break;
+      case "iterative":
+        if (!mute && aliveCells.length !== 0 && scaleNames.length !== 0) {
+          playSelectedColumn(aliveCells, highlightedColumn, interval, board, scaleNames);
+        }
+        break;
+    }
+  }, [board]);
+  useEffect(() => {
+    const interval = 1000 / bps;
+    const aliveCells = getAlive(board);
+    switch (gameMode) {
+      case "iterative":
+        if (highlightedColumn === 0) {
+          setBoard(prevBoard => calculateNextBoard(prevBoard));
+          return;
+        }
+        if (!mute && aliveCells.length !== 0 && scaleNames.length !== 0) {
+          playSelectedColumn(aliveCells, highlightedColumn, interval, board, scaleNames);
+        }
+        break;
+    }
+  }, [highlightedColumn]);
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [speed]);
+  }, [bps, gameMode, scaleNames, highlightedColumn]);
   useEffect(() => {
-    const interval = 1000 / speed;
+    console.log("chuj");
+    const interval = 1000 / bps;
     const ID = setInterval(() => {
       if (isGameRunning) {
-        step(interval);
+        step();
       }
     }, interval);
     return () => {
       clearInterval(ID);
     };
-  }, [speed, isGameRunning, mute, chromaticScaleNames, gameMode]);
+  }, [bps, isGameRunning, mute, scaleNames, gameMode]);
   useEffect(() => {
     function getBoardDimensions() {
       const { width, height } = boardRef.current.getBoundingClientRect();
@@ -97,22 +128,22 @@ export default function Game() {
         toggle("play");
         break;
       case "s":
-        step(1000 / speed);
+        step();
         break;
       case "m":
         toggle("mute");
         break;
       case "ArrowUp":
-        setSpeed(prevSpeed => (prevSpeed < maxSpeed ? prevSpeed + 1 : prevSpeed));
+        setBps(prevSpeed => (prevSpeed === maxSpeed ? prevSpeed : prevSpeed + 1));
         break;
       case "ArrowRight":
-        setSpeed(prevSpeed => (prevSpeed < maxSpeed ? prevSpeed + 1 : prevSpeed));
+        setBps(prevSpeed => (prevSpeed === maxSpeed ? prevSpeed : prevSpeed + 1));
         break;
       case "ArrowDown":
-        setSpeed(prevSpeed => (prevSpeed > 1 ? prevSpeed - 1 : prevSpeed));
+        setBps(prevSpeed => (prevSpeed === minSpeed ? prevSpeed : prevSpeed - 1));
         break;
       case "ArrowLeft":
-        setSpeed(prevSpeed => (prevSpeed > 1 ? prevSpeed - 1 : prevSpeed));
+        setBps(prevSpeed => (prevSpeed === minSpeed ? prevSpeed : prevSpeed - 1));
         break;
       case "Escape":
         setShowSettings(false);
@@ -138,45 +169,46 @@ export default function Game() {
       ),
     );
   }
-  function step(interval) {
+
+  function step() {
     switch (gameMode) {
       case "harmonic":
         setHighlightedColumn(null);
-        setBoard(prevBoard => {
-          const [newBoard, newAliveCells] = calculateNextBoard(prevBoard);
-          if (!mute && newAliveCells.length !== 0) {
-            playEntireBoard(newAliveCells, newBoard, interval);
-          }
-          return newBoard;
-        });
+        setBoard(prevBoard => calculateNextBoard(prevBoard));
         break;
       case "iterative":
-        setHighlightedColumn(currentlyHighlighted => {
-          const nextColumn =
-            currentlyHighlighted + 1 >= board[0].length
-              ? 0
-              : currentlyHighlighted + 1;
-          setBoard(prevBoard => {
-            const [newBoard, newAliveCells] = calculateNextBoard(prevBoard);
-            if (!mute && newAliveCells.length !== 0) {
-              playSelectedColumn(newAliveCells, nextColumn, interval, newBoard);
-            }
-            return currentlyHighlighted === board[0].length - 1
-              ? newBoard
-              : prevBoard;
-          });
-          return nextColumn;
-        });
+        setHighlightedColumn(currentlyHighlighted =>
+          currentlyHighlighted + 1 >= board[0].length ? 0 : currentlyHighlighted + 1,
+        );
         break;
     }
   }
+
+  function toggleNote(keyNumber) {
+    const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    let newScale = [...chromaticScale];
+    newScale[keyNumber] = !newScale[keyNumber];
+    setChromaticScale(prevScale => {
+      prevScale[keyNumber] = !prevScale[keyNumber];
+      const newScaleNames = [];
+      prevScale.forEach((value, index) => {
+        if (value) {
+          newScaleNames.push(notes[index]);
+        }
+      });
+      setScaleNames(newScaleNames);
+      return prevScale;
+    });
+    // setChromaticScale(newScale);
+  }
+
   function clickCell(i, j) {
     const newBoard = Array.from(board);
     newBoard[i][j] = !newBoard[i][j];
     setBoard(newBoard);
   }
 
-  function setupBoard({ width, height }, preferredCellSize) {
+  function setupBoard(width, height, preferredCellSize) {
     if (width !== 0 && height !== 0) {
       const boardWidthPercent = 90;
       const numberOfCols = Math.ceil(
@@ -204,14 +236,15 @@ export default function Game() {
   return (
     <GameWrapper>
       <Buttons
-        step={speed => step(speed)}
+        step={() => step()}
         toggle={state => toggle(state)}
         mute={mute}
         changeBoardState={whatToDo => changeBoardState(whatToDo)}
         isGameRunning={isGameRunning}
-        speed={speed}
+        speed={bps}
         maxSpeed={maxSpeed}
-        sliderChange={event => setSpeed(parseInt(event.target.value))}
+        minSpeed={minSpeed}
+        sliderChange={event => setBps(parseInt(event.target.value))}
       />
       <Board
         ref={boardRef}

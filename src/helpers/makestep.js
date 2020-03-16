@@ -1,4 +1,17 @@
-function makeStep(board) {
+export const getAlive = board => {
+  const numberOfRows = board.length;
+  const numberOfCols = board[0].length;
+  let aliveCells = [];
+  for (let i = 0; i < numberOfRows; i++) {
+    for (let j = 0; j < numberOfCols; j++) {
+      if (board[i][j]) {
+        aliveCells.push([i, j]);
+      }
+    }
+  }
+  return aliveCells;
+};
+export const calculateNextBoard = board => {
   const numberOfRows = board.length;
   const numberOfCols = board[0].length;
   let aliveCells = [];
