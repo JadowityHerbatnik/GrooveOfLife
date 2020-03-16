@@ -19,11 +19,10 @@ const ButtonWrapper = styled.div`
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
+  @media screen and (orientation: landscape) {
+    flex-direction: column;
+  }
 `;
-// const StyledIcon = styled.i`
-//   font-size: 4.5vh;
-//   margin: 0 2vw 0 2vw;
-// `;
 const Container = styled.div`
   @keyframes slidefromleft {
     0% {
@@ -36,12 +35,34 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media screen and (orientation: landscape) {
+    flex-direction: row;
+  }
   animation: 0.5s ease 1 both slidefromleft;
+  }
+`;
+const SliderWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+  height: 2vh;
+  width: 50vmin;
+	margin: 1vh 0 1vh 0;
+  @media screen and (orientation: landscape) {
+  width: 2vh;
+  height: 50vmin;
+  }
   .slider {
+    position: absolute;
+    left: 0;
+    top: 0;
+  @media screen and (orientation: landscape) {
+    transform: rotate(90deg);
+    transform-origin: top left;
+  }
     opacity: 0.3;
     width: 50vmin;
     appearance: none;
-    margin: 1vh 0 1vh 0;
+    margin: 0 10px 0 10px;
     background: black;
     outline: none;
     transition: 0.5s;
@@ -58,15 +79,11 @@ const Container = styled.div`
       border-radius: 3px;
       border: none;
     }
-  }
 `;
 const Buttons = props => {
   return (
     <Container>
       <ButtonWrapper>
-        <Button onClick={() => props.toggle("play")}>
-          <StyledIcon className={props.isGameRunning ? "icon-pause" : "icon-play"} />
-        </Button>
         <Button onClick={() => props.step(1000 / props.speed)}>
           <StyledIcon className="icon-forward-1" />
         </Button>
@@ -76,6 +93,9 @@ const Buttons = props => {
         <Button onClick={() => props.changeBoardState("clear")}>
           <StyledIcon className="icon-cancel" />
         </Button>
+        <Button onClick={() => props.toggle("play")}>
+          <StyledIcon className={props.isGameRunning ? "icon-pause" : "icon-play"} />
+        </Button>
         <Button onClick={() => props.toggle("mute")}>
           <StyledIcon className={props.mute ? "icon-volume-off" : "icon-volume-up"} />
         </Button>
@@ -83,15 +103,17 @@ const Buttons = props => {
           <StyledIcon className="icon-cog" />
         </Button>
       </ButtonWrapper>
-      <input
-        className="slider"
-        type="range"
-        min="1"
-        max={props.maxSpeed}
-        step="1"
-        value={props.speed}
-        onChange={event => props.sliderChange(event)}
-      />
+      <SliderWrapper>
+        <input
+          className="slider"
+          type="range"
+          min={props.minSpeed}
+          max={props.maxSpeed}
+          step="1"
+          value={props.speed}
+          onChange={event => props.sliderChange(event)}
+        />
+      </SliderWrapper>
     </Container>
   );
 };

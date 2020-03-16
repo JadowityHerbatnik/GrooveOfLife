@@ -8,13 +8,26 @@ import calculateNextBoard from "../helpers/makestep.js";
 import { playSelectedColumn, playEntireBoard } from "../helpers/sound.js";
 
 const GameWrapper = styled.div`
+  margin: auto;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   @media screen and (orientation: landscape) {
-    height: 85vh;
+    height: 80vh;
+    width: 85vw;
+    flex-direction: row;
+    // background-color: rgba(0, 0, 0, 0.2);
+    @keyframes fadebckgr {
+      0% {
+        background-color: rgba(0, 0, 0, 0);
+      }
+      100% {
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+    }
+    animation: 2s ease 1s 1 both fadebckgr;
   }
 `;
 export default function Game() {
