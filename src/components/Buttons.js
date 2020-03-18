@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import "../styles/fontello/css/fontello.css";
-import StyledIcon from "../components/generic/StyledIcon.js";
+import { StyledIcon, StyledLink } from "../components/Generic.js";
 
 const Button = styled.button`
   background-color: transparent;
@@ -43,10 +43,10 @@ const Container = styled.div`
 `;
 const SliderWrapper = styled.div`
   position: relative;
-  display: inline-block;
+  // display: inline-block;
   height: 2vh;
   width: 50vmin;
-	margin: 1vh 0 1vh 0;
+	margin: 2vh 0 2vh 0;
   @media screen and (orientation: landscape) {
   width: 2vh;
   height: 50vmin;
@@ -56,16 +56,15 @@ const SliderWrapper = styled.div`
     left: 0;
     top: 0;
   @media screen and (orientation: landscape) {
-    transform: rotate(90deg);
+    transform: translateY(50vmin) rotate(-90deg);
     transform-origin: top left;
   }
     opacity: 0.3;
     width: 50vmin;
     appearance: none;
-    margin: 0 10px 0 10px;
     background: black;
     outline: none;
-    transition: 0.5s;
+    transition: opacity 0.5s;
     &:hover {
       opacity: 0.5;
     }
@@ -84,9 +83,6 @@ const Buttons = props => {
   return (
     <Container>
       <ButtonWrapper>
-        <Button onClick={() => props.step(1000 / props.speed)}>
-          <StyledIcon className="icon-forward-1" />
-        </Button>
         <Button onClick={() => props.changeBoardState("randomize")}>
           <StyledIcon className="icon-shuffle" />
         </Button>

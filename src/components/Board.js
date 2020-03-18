@@ -3,14 +3,16 @@ import styled from "styled-components";
 import { sizes } from "../utils/constants.js";
 
 const BoardWrapper = styled.div`
-  height: 72vh;
-  width: 80vw;
+  height: 90%;
+  width: 90%;
   @media screen and (orientation: portrait) {
     // Decreased height on mobile devices to avoid scrollbar and weird interactions with bars
-    height: 60vh;
-    width: 100vw;
+    // height: 60vh;
+    height: 90%;
+    width: 95%;
   }
-  margin: 0 auto 0 auto;
+  // margin: 0 auto 0 auto;
+  margin: 0;
 `;
 const StyledTable = styled.table`
   @keyframes slidefrombottom {
@@ -22,11 +24,10 @@ const StyledTable = styled.table`
     }
   }
   margin: auto;
-  height: 100%;
   opacity: 0.5;
   border-collapse: collapse;
   border-spacing: 0px;
-  animation: 0.5s ease 0.2s 1 both slidefrombottom;
+  animation: 0.5s ease 0.5s 1 both slidefrombottom;
 `;
 const StyledTd = styled.td`
   border: 1px solid black;
