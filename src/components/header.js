@@ -1,8 +1,7 @@
-import { Link } from "gatsby";
 import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
-import StyledIcon from "../components/generic/StyledIcon.js";
+import { StyledLink } from "../components/Generic.js";
 
 const Wrapper = styled.header`
   @keyframes fadein {
@@ -48,15 +47,17 @@ const ButtonBar = styled.div`
 `;
 const Header = ({ siteTitle, animateHeader }) => (
   <Wrapper animateHeader={animateHeader}>
-    <ButtonBar>
-      <StyledButton>
-        <StyledLink to="/about">
-          <StyledIcon className="icon-help" />
-        </StyledLink>
-      </StyledButton>
-    </ButtonBar>
+    <ButtonBar></ButtonBar>
     <H1>
-      <StyledLink to="/">{siteTitle}</StyledLink>
+      <StyledLink
+        cover
+        bg="linear-gradient(to right, #1f498c, #1CB5E0)"
+        direction="up"
+        duration={1}
+        to="/"
+      >
+        {siteTitle}
+      </StyledLink>
     </H1>
   </Wrapper>
 );

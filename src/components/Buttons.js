@@ -92,12 +92,22 @@ const Buttons = props => {
         <Button onClick={() => props.toggle("play")}>
           <StyledIcon className={props.isGameRunning ? "icon-pause" : "icon-play"} />
         </Button>
+        <br />
         <Button onClick={() => props.toggle("mute")}>
           <StyledIcon className={props.mute ? "icon-volume-off" : "icon-volume-up"} />
         </Button>
         <Button onClick={() => props.toggle("settings")}>
           <StyledIcon className="icon-cog" />
         </Button>
+        <StyledLink
+          cover
+          direction="up"
+          bg="linear-gradient(to right, #1f498c, #1CB5E0)"
+          duration={1.5}
+          to="/about"
+        >
+          <StyledIcon className="icon-help" />
+        </StyledLink>
       </ButtonWrapper>
       <SliderWrapper>
         <input
