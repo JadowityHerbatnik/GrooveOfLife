@@ -13,10 +13,13 @@ const GameWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  height: ${props => `${props.height * 0.85}px`};
+  width: 100vw;
   @media screen and (orientation: landscape) {
     height: 80vh;
-    width: 85vw;
+    width: 80vw;
+    justify-content: center;
     flex-direction: row;
     // background-color: rgba(0, 0, 0, 0.2);
     @keyframes fadebckgr {
@@ -216,7 +219,7 @@ export default function Game() {
       const numberOfCols = Math.ceil(
         ((boardWidthPercent / 100) * width) / preferredCellSize,
       );
-      const numberOfRows = Math.ceil(height / preferredCellSize);
+      const numberOfRows = Math.floor(height / preferredCellSize);
       setBoard(prevBoard => {
         const newBoard = new Array(numberOfRows)
           .fill(false)
@@ -236,7 +239,7 @@ export default function Game() {
   }
 
   return (
-    <GameWrapper>
+    <GameWrapper height={vh}>
       <Buttons
         step={() => step()}
         toggle={state => toggle(state)}
