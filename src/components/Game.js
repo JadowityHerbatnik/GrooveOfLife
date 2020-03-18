@@ -43,9 +43,28 @@ export default function Game() {
   const [chromaticScale, setChromaticScale] = useState([true, false, false, true, false, true, false, false, true, false, true, false, ]);
   // prettier-ignore
   const [scaleNames, setScaleNames] = useState(["C", "D#", "F", "G#", "A#", ]);
+  const [vh, setVh] = useState(0);
   const maxSpeed = 7;
   const minSpeed = 1;
   const boardRef = useRef(null);
+  const previousColumn = usePrevious(highlightedColumn);
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  }
+  useEffect(() => {
+    function recalculate() {
+      setVh(window.innerHeight);
+      const { width, height } = boardRef.current.getBoundingClientRect();
+      setupBoard(width, height, sizes.preferredCellSize);
+    }
+    window.addEventListener("resize", recalculate);
+    recalculate();
+    return () => window.removeEventListener("resize", recalculate);
+  }, [vh]);
   useEffect(() => {
     const interval = 1000 / bps;
     const aliveCells = getAlive(board);
@@ -56,27 +75,17 @@ export default function Game() {
         }
         break;
       case "iterative":
-        if (!mute && aliveCells.length !== 0 && scaleNames.length !== 0) {
-          playSelectedColumn(aliveCells, highlightedColumn, interval, board, scaleNames);
-        }
-        break;
-    }
-  }, [board]);
-  useEffect(() => {
-    const interval = 1000 / bps;
-    const aliveCells = getAlive(board);
-    switch (gameMode) {
-      case "iterative":
-        if (highlightedColumn === 0) {
+        if (highlightedColumn === 0 && previousColumn !== 0) {
           setBoard(prevBoard => calculateNextBoard(prevBoard));
-          return;
+          break;
         }
         if (!mute && aliveCells.length !== 0 && scaleNames.length !== 0) {
           playSelectedColumn(aliveCells, highlightedColumn, interval, board, scaleNames);
         }
         break;
+      //no default
     }
-  }, [highlightedColumn]);
+  }, [board, highlightedColumn, gameMode, bps, scaleNames, mute, previousColumn]);
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
@@ -93,15 +102,6 @@ export default function Game() {
       clearInterval(ID);
     };
   }, [bps, isGameRunning, mute, scaleNames, gameMode]);
-  useEffect(() => {
-    function getBoardDimensions() {
-      const { width, height } = boardRef.current.getBoundingClientRect();
-      setupBoard(width, height, sizes.preferredCellSize);
-    }
-    window.addEventListener("resize", getBoardDimensions);
-    getBoardDimensions();
-    return () => window.removeEventListener("resize", getBoardDimensions);
-  }, []);
 
   function toggle(state) {
     switch (state) {
@@ -164,6 +164,7 @@ export default function Game() {
               return false;
             case "randomize":
               return Math.random() >= 0.8; //At 0.5 there's too many alive cells also add this one to settings parameter
+            //no default
           }
         }),
       ),
@@ -181,6 +182,7 @@ export default function Game() {
           currentlyHighlighted + 1 >= board[0].length ? 0 : currentlyHighlighted + 1,
         );
         break;
+      //no default
     }
   }
 
