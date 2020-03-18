@@ -90,6 +90,45 @@ export default function Game() {
     }
   }, [board, highlightedColumn, gameMode, bps, scaleNames, mute, previousColumn]);
   useEffect(() => {
+    function handleKeyPress(event) {
+      console.log(event.key);
+      switch (event.key) {
+        case "c":
+          changeBoardState("clear");
+          break;
+        case "r":
+          changeBoardState("randomize");
+          break;
+        case " ":
+          toggle("play");
+          break;
+        case "s":
+          step();
+          break;
+        case "m":
+          toggle("mute");
+          break;
+        case "ArrowUp":
+          setBps(prevSpeed => (prevSpeed === maxSpeed ? prevSpeed : prevSpeed + 1));
+          break;
+        case "ArrowRight":
+          setBps(prevSpeed => (prevSpeed === maxSpeed ? prevSpeed : prevSpeed + 1));
+          break;
+        case "ArrowDown":
+          setBps(prevSpeed => (prevSpeed === minSpeed ? prevSpeed : prevSpeed - 1));
+          break;
+        case "ArrowLeft":
+          setBps(prevSpeed => (prevSpeed === minSpeed ? prevSpeed : prevSpeed - 1));
+          break;
+        case "Escape":
+          setShowSettings(false);
+          break;
+        case "S":
+          toggle("settings");
+          break;
+        //no default
+      }
+    }
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [bps, gameMode, scaleNames, highlightedColumn]);
@@ -116,44 +155,7 @@ export default function Game() {
         break;
       case "settings":
         setShowSettings(prevState => !prevState);
-    }
-  }
-
-  function handleKeyPress(event) {
-    switch (event.key) {
-      case "c":
-        changeBoardState("clear");
-        break;
-      case "r":
-        changeBoardState("randomize");
-        break;
-      case " ":
-        toggle("play");
-        break;
-      case "s":
-        step();
-        break;
-      case "m":
-        toggle("mute");
-        break;
-      case "ArrowUp":
-        setBps(prevSpeed => (prevSpeed === maxSpeed ? prevSpeed : prevSpeed + 1));
-        break;
-      case "ArrowRight":
-        setBps(prevSpeed => (prevSpeed === maxSpeed ? prevSpeed : prevSpeed + 1));
-        break;
-      case "ArrowDown":
-        setBps(prevSpeed => (prevSpeed === minSpeed ? prevSpeed : prevSpeed - 1));
-        break;
-      case "ArrowLeft":
-        setBps(prevSpeed => (prevSpeed === minSpeed ? prevSpeed : prevSpeed - 1));
-        break;
-      case "Escape":
-        setShowSettings(false);
-        break;
-      case "S":
-        toggle("settings");
-        break;
+      //no default
     }
   }
 
