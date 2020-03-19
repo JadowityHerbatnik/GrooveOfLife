@@ -7,9 +7,13 @@ const SettingsContainer = styled.div`
   margin: auto;
   border: 1px solid purple;
   background-color: rgba(0, 0, 0, 0.2);
+  position: relative;
+  top: -100vh;
+  transform: translateY(${({ show }) => (show ? "100vh" : "-100vh")});
+  transition: transform 1s;
 `;
 const BlurredBackground = styled.div`
-  position: absolute;
+  animation: ${({ show }) => `0.2s ease-in ${show ? "fadein" : "fadeout"}`};
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -80,14 +84,17 @@ const Label = styled.p`
   font-size: 1.5em;
 `;
 const Settings = props => {
-  return (
-    <BlurredBackground>
-      <SettingsContainer>
-        <CloseButtonContainer>
-          <CloseButton onClick={() => props.toggle("settings")}>
-            <Icon className="icon-cancel"></Icon>
-          </CloseButton>
-        </CloseButtonContainer>
+  const [shouldRender, setRender] = useState(props.show);
+
+  useEffect(() => {
+    if (props.show) setRender(true);
+  }, [props.show]);
+  const onAnimationEnd = () => {
+    if (!props.show) setRender(false);
+  };
+  return !shouldRender ? null : (
+    <BlurredBackground onAnimationEnd={onAnimationEnd} show={props.show}>
+      <SettingsContainer show={props.show}>
         <Label> Gameplay mode:</Label>
         <FlexRow>
           <ModeButton
