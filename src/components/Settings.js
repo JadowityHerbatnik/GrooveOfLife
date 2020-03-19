@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import styled, { css } from "styled-components";
 import "../styles/fontello/css/fontello.css";
 import { keyboard } from "../utils/constants.js";
+import { FadeIn, FadeOut } from "../styles/animations.js";
 const { margin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard;
 const SettingsContainer = styled.div`
   margin: auto;
@@ -13,7 +15,7 @@ const SettingsContainer = styled.div`
   transition: transform 1s;
 `;
 const BlurredBackground = styled.div`
-  animation: ${({ show }) => `0.2s ease-in ${show ? "fadein" : "fadeout"}`};
+  animation: ${({ show }) => css`0.2s ease ${show ? FadeIn : FadeOut}`};
   height: 100vh;
   width: 100vw;
   display: flex;

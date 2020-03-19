@@ -1,19 +1,12 @@
 import PropTypes from "prop-types";
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { StyledLink } from "../components/Generic.js";
+import { FadeIn } from "../styles/animations.js";
 
 const Wrapper = styled.header`
-  @keyframes fadein {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
   animation: ${({ animateHeader }) =>
-    animateHeader ? `2s ease 1s 1 both fadein` : "none"};
+    animateHeader ? () => css`2s ease 1s 1 both ${FadeIn}` : "none"};
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
   text-align: center;
   height: 15vh;

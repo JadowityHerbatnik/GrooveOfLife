@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { sizes } from "../utils/constants.js";
+import { SlideFromBottom } from "../styles/animations.js";
 
 const BoardWrapper = styled.div`
   height: 90%;
@@ -15,19 +16,11 @@ const BoardWrapper = styled.div`
   margin: 0;
 `;
 const StyledTable = styled.table`
-  @keyframes slidefrombottom {
-    0% {
-      transform: translateY(100vh);
-    }
-    100% {
-      transform: translateY(1);
-    }
-  }
   margin: auto;
   opacity: 0.5;
   border-collapse: collapse;
   border-spacing: 0px;
-  animation: 0.5s ease 0.5s 1 both slidefrombottom;
+  animation: 0.5s ease 0.5s 1 both ${SlideFromBottom};
 `;
 const StyledTd = styled.td`
   border: 1px solid black;

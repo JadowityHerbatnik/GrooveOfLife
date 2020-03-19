@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import "../styles/fontello/css/fontello.css";
 import { StyledIcon, StyledLink } from "../components/Generic.js";
+import { SlideFromLeft } from "../styles/animations.js";
 
 const Button = styled.button`
   background-color: transparent;
@@ -24,21 +25,14 @@ const ButtonWrapper = styled.div`
   }
 `;
 const Container = styled.div`
-  @keyframes slidefromleft {
-    0% {
-      transform: translateX(-100vw);
-    }
-    100% {
-      transform: translateX(1);
-    }
-  }
+
   display: flex;
   flex-direction: column;
   align-items: center;
   @media screen and (orientation: landscape) {
     flex-direction: row;
   }
-  animation: 0.5s ease 1 both slidefromleft;
+  animation: 0.5s ease 1 both ${SlideFromLeft};
   }
 `;
 const SliderWrapper = styled.div`
