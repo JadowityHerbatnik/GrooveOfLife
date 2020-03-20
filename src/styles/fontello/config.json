@@ -31,12 +31,6 @@
       "src": "entypo"
     },
     {
-      "uid": "de9a631a7d18106aea1c89ba51b1990a",
-      "css": "help-circled",
-      "code": 59396,
-      "src": "entypo"
-    },
-    {
       "uid": "dpxunrtmigvk6jm0ieo7axfsgzx4awll",
       "css": "cog",
       "code": 59397,
@@ -59,6 +53,18 @@
       "css": "volume-up",
       "code": 59400,
       "src": "elusive"
+    },
+    {
+      "uid": "ce3cf091d6ebd004dd0b52d24074e6e3",
+      "css": "help",
+      "code": 61736,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "ccddff8e8670dcd130e3cb55fdfc2fd0",
+      "css": "down-open",
+      "code": 59396,
+      "src": "fontawesome"
     }
   ]
 }
