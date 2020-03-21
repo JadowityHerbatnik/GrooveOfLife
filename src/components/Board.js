@@ -34,49 +34,49 @@ const StyledTd = styled.td`
     opacity: 0.5;
   }
 `;
+const GenerateColumns = props =>
+  [...Array(props.numberOfCols).keys()].map(columnIndex => (
+    <StyledTd
+      cellSize={sizes.preferredCellSize}
+      key={`${props.rowIndex}x${columnIndex}`}
+      cols={props.numberOfCols}
+      column={columnIndex}
+      active={props.forwardedProps.board[props.rowIndex][columnIndex] ? true : false}
+      highlightedColumn={props.forwardedProps.highlightedColumn}
+      onMouseDown={() => {
+        props.forwardedProps.handleClick("down");
+        props.forwardedProps.clickCell(props.rowIndex, columnIndex);
+      }}
+      onMouseUp={() => props.forwardedProps.handleClick("up")}
+      onMouseEnter={() => {
+        if (props.forwardedProps.mousedown) {
+          props.forwardedProps.clickCell(props.rowIndex, columnIndex);
+        }
+      }}
+    />
+  ));
 const Board = React.forwardRef((props, ref) => {
   const numberOfRows = props.board.length;
   const numberOfCols = props.board[0].length;
 
-  const GenerateRows = () =>
+  const GenerateRows = numberOfRows =>
     [...Array(numberOfRows).keys()].map(rowIndex => (
       <tr key={rowIndex} row={rowIndex}>
-        <GenerateColumns rowIndex={rowIndex} forwardedProps={props} />
+        <GenerateColumns
+          rowIndex={rowIndex}
+          forwardedProps={props}
+          numberOfCols={numberOfCols}
+        />
       </tr>
-    ));
-
-  const GenerateColumns = props =>
-    [...Array(numberOfCols).keys()].map(columnIndex => (
-      <StyledTd
-        cellSize={sizes.preferredCellSize}
-        key={`${props.rowIndex}x${columnIndex}`}
-        cols={numberOfCols}
-        column={columnIndex}
-        active={props.forwardedProps.board[props.rowIndex][columnIndex] ? true : false}
-        highlightedColumn={props.forwardedProps.highlightedColumn}
-        onMouseDown={() => {
-          props.forwardedProps.handleClick("down");
-          props.forwardedProps.clickCell(props.rowIndex, columnIndex);
-        }}
-        onMouseUp={() => props.forwardedProps.handleClick("up")}
-        onMouseEnter={() => {
-          if (props.forwardedProps.mousedown) {
-            props.forwardedProps.clickCell(props.rowIndex, columnIndex);
-          }
-        }}
-      />
     ));
 
   return (
     <BoardWrapper ref={ref}>
       <StyledTable>
-        <tbody>
-          <GenerateRows />
-        </tbody>
+        <tbody>{GenerateRows(numberOfRows)}</tbody>
       </StyledTable>
     </BoardWrapper>
   );
 });
 
-// export default sizeMe({ monitorHeight: true })(Board);
 export default Board;
