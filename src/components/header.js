@@ -20,16 +20,6 @@ const H1 = styled.h1`
   font-size: 7vh;
   font-family: "Geo";
 `;
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: white;
-`;
-const StyledButton = styled.button`
-  border: none;
-  background: transparent;
-  padding: 0.3em;
-  width: min-content;
-`;
 const ButtonBar = styled.div`
   display: flex;
   justify-content: flex-end;

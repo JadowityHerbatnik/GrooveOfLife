@@ -1,14 +1,17 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import "../styles/fontello/css/fontello.css";
 import { keyboard } from "../utils/constants.js";
+import { WrapperButton, StyledIcon, FlexBox } from "../components/Generic.js";
 import { FadeIn, FadeOut } from "../styles/animations.js";
+
 const { margin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard;
+
 const SettingsContainer = styled.div`
   margin: auto;
-  border: 1px solid purple;
-  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid RoyalBlue;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.75);
   position: relative;
   top: -100vh;
   transform: translateY(${({ show }) => (show ? "100vh" : "-100vh")});
@@ -19,8 +22,6 @@ const BlurredBackground = styled.div`
   height: 100vh;
   width: 100vw;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   position: fixed;
   left: 0;
   top: 0;
@@ -31,29 +32,10 @@ const BlurredBackground = styled.div`
 `;
 const ModeButton = styled.button`
   background-color: ${({ currentGameMode, buttonType }) =>
-    currentGameMode === buttonType ? "purple" : "transparent"};
-  border: 2px solid purple;
+    currentGameMode === buttonType ? "RoyalBlue" : "transparent"};
+  border: 2px solid RoyalBlue;
   color: white;
   font-size: 1em;
-`;
-const FlexRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin: 20px 10px 20px 10px;
-`;
-const CloseButtonContainer = styled(FlexRow)`
-  justify-content: flex-end;
-  margin: 0;
-`;
-const CloseButton = styled.button`
-  background-color: transparent;
-  color: white;
-  border: none;
-  padding: 0;
-`;
-const Icon = styled.i`
-  font-size: 4.5vh;
 `;
 const KeysButtons = props =>
   [...Array(12).keys()].map(keyIndex => (
@@ -97,8 +79,13 @@ const Settings = props => {
   return !shouldRender ? null : (
     <BlurredBackground onAnimationEnd={onAnimationEnd} show={props.show}>
       <SettingsContainer show={props.show}>
+        <FlexBox justify="flex-end">
+          <WrapperButton onClick={() => props.toggle("settings")}>
+            <StyledIcon className="icon-cancel"></StyledIcon>
+          </WrapperButton>
+        </FlexBox>
         <Label> Gameplay mode:</Label>
-        <FlexRow>
+        <FlexBox row>
           <ModeButton
             buttonType="harmonic"
             currentGameMode={props.currentGameMode}
@@ -113,14 +100,14 @@ const Settings = props => {
           >
             Iterative
           </ModeButton>
-        </FlexRow>
+        </FlexBox>
         <Label>Notes to use</Label>
-        <FlexRow>
+        <FlexBox row align="flex-start" style={{ margin: "10px" }}>
           <KeysButtons
             chromaticScale={props.chromaticScale}
             toggleNote={keyIndex => props.toggleNote(keyIndex)}
           />
-        </FlexRow>
+        </FlexBox>
       </SettingsContainer>
     </BlurredBackground>
   );

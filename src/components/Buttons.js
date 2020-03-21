@@ -1,20 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import "../styles/fontello/css/fontello.css";
-import { StyledIcon, StyledLink } from "../components/Generic.js";
+import { WrapperButton, StyledIcon, StyledLink } from "../components/Generic.js";
 import { SlideFromLeft } from "../styles/animations.js";
 
-const Button = styled.button`
-  background-color: transparent;
-  padding: 0;
-  border: none;
-  color: white;
-  outline: none;
-  transition: 0.5s;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-`;
 const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -37,7 +26,6 @@ const Container = styled.div`
 `;
 const SliderWrapper = styled.div`
   position: relative;
-  // display: inline-block;
   height: 2vh;
   width: 50vmin;
 	margin: 2vh 0 2vh 0;
@@ -77,22 +65,22 @@ const Buttons = props => {
   return (
     <Container>
       <ButtonWrapper>
-        <Button onClick={() => props.changeBoardState("randomize")}>
+        <WrapperButton onClick={() => props.changeBoardState("randomize")}>
           <StyledIcon className="icon-shuffle" />
-        </Button>
-        <Button onClick={() => props.changeBoardState("clear")}>
+        </WrapperButton>
+        <WrapperButton onClick={() => props.changeBoardState("clear")}>
           <StyledIcon className="icon-cancel" />
-        </Button>
-        <Button onClick={() => props.toggle("play")}>
+        </WrapperButton>
+        <WrapperButton onClick={() => props.toggle("play")}>
           <StyledIcon className={props.isGameRunning ? "icon-pause" : "icon-play"} />
-        </Button>
+        </WrapperButton>
         <br />
-        <Button onClick={() => props.toggle("mute")}>
+        <WrapperButton onClick={() => props.toggle("mute")}>
           <StyledIcon className={props.mute ? "icon-volume-off" : "icon-volume-up"} />
-        </Button>
-        <Button onClick={() => props.toggle("settings")}>
+        </WrapperButton>
+        <WrapperButton onClick={() => props.toggle("settings")}>
           <StyledIcon className="icon-cog" />
-        </Button>
+        </WrapperButton>
         <StyledLink
           cover
           direction="up"
