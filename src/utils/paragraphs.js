@@ -1,5 +1,5 @@
 import React from "react";
-import StyledAnchor from "../components/Generic.js";
+import { StyledAnchor } from "../components/Generic.js";
 
 const WikiLink = (
   <StyledAnchor
