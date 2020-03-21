@@ -14,7 +14,6 @@ export const getAlive = board => {
 export const calculateNextBoard = board => {
   const numberOfRows = board.length;
   const numberOfCols = board[0].length;
-  let aliveCells = [];
   let newBoard = new Array(numberOfRows)
     .fill(false)
     .map(() => new Array(numberOfCols).fill(false));
@@ -67,10 +66,8 @@ export const calculateNextBoard = board => {
     }
     if (board[row][col]) {
       counter--;
-      aliveCells.push([row, col]);
     }
     return counter;
   }
-  return [newBoard, aliveCells];
-}
-export default makeStep;
+  return newBoard;
+};

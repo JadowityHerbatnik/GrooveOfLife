@@ -11,7 +11,6 @@ const Paragraph = styled.p`
   max-width: 80%;
 `;
 const Container = styled.div`
-  // border: 5px solid black;
   position: relative;
   box-sizing: border-box;
   height: ${props => `${props.height}px`};
@@ -27,10 +26,6 @@ const Img = styled.img`
   margin: 0 50px 0 50px;
   max-height: 20vh;
 `;
-// const StyledLink = styled(Link)`
-//   // position: absolute;
-//   // bottom: 30px;
-// `;
 const ScrollAnchor = props => {
   return (
     <Link to={props.target} duration={props.duration} smooth={true}>
@@ -53,7 +48,7 @@ const IndexPage = () => {
       <SEO title="Home" />
 
       <Container row id="con1" height={vh * 0.85}>
-        <FlexBox row>
+        <FlexBox direction="row" responsive>
           <Paragraph> {intro} </Paragraph>
           <br />
           <Img
