@@ -65,20 +65,39 @@ export function playSelectedColumn(
   }
 }
 function playChord(numberOfNotes, chord, time) {
+  // console.log(time);
+  // const ping = new Tone.PingPongDelay(0.16, 0.2).toMaster();
+
+  const filter = new Tone.Filter(700, "lowpass").toMaster();
   const synth = new Tone.PolySynth(numberOfNotes, Tone.Synth, {
-    volume: -20,
+    volume: -25,
     oscillator: {
-      type: "sine",
-      // partials: [1, 2, 5, 6, 9, 15, 22, 30],
-      // partials: [1, 0, 2, 0, 3],
+      type: "square",
+    },
+    filter: {
+      Q: 3,
+      type: "allpass",
+      rolloff: -24,
     },
     envelope: {
-      attack: 0.2,
-      decay: time / 10,
-      sustain: 0.7,
-      release: 0.7,
+      attack: 0.3,
+      decay: 0,
+      sustain: 1,
+      release: 0.3,
     },
-  }).toMaster();
-
-  synth.triggerAttackRelease(chord, `${time}`);
+    filterEnvelope: {
+      attack: 0.2,
+      decay: 0,
+      sustain: 1,
+      release: 0.2,
+      min: 20,
+      max: 20,
+      exponent: 2,
+    },
+  });
+  const feedbackDelay = new Tone.FeedbackDelay(0.2, 0.3).connect(filter);
+  synth.connect(feedbackDelay);
+  // synth.toMaster();
+  // synth.connect(filter);
+  synth.triggerAttackRelease(chord, time);
 }
