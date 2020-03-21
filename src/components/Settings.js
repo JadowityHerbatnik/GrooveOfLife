@@ -59,7 +59,7 @@ const NoteButtons = styled.div`
   margin-right: ${({ isBlack }) => (isBlack ? `calc(${blackWidth}/-2)` : `-${margin}`)};
   z-index: ${({ isBlack }) => (isBlack ? 1 : 0)};
   background-color: ${({ isNoteUsed, isBlack }) =>
-    isNoteUsed ? "purple" : isBlack ? "black" : "grey"};
+    isNoteUsed ? "RoyalBlue" : isBlack ? "black" : "grey"};
   border: ${() => `${margin} solid black`};
   transition: background-color 0.2s;
 `;

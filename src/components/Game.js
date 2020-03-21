@@ -14,7 +14,7 @@ const GameWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: ${props => `${props.height * 0.85}px`};
+  height: ${({ height }) => `${height * 0.85}px`};
   width: 100vw;
   @media screen and (orientation: landscape) {
     height: 80vh;
