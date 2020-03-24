@@ -7,7 +7,8 @@ import { FadeIn } from "../styles/animations.js";
 const Wrapper = styled.header`
   animation: ${({ animateHeader }) =>
     animateHeader ? () => css`2s ease 1s 1 both ${FadeIn}` : "none"};
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+  backdrop-filter: blur(30px);
   text-align: center;
   height: 15vh;
   width: 100%;
@@ -34,8 +35,8 @@ const Header = ({ siteTitle, animateHeader }) => (
     <H1>
       <StyledLink
         cover
-        bg="linear-gradient(to right, #1f498c, #1CB5E0)"
-        direction="up"
+        bg="linear-gradient(to top, #1f498c, #1cb5e0)"
+        direction="left"
         duration={1}
         to="/"
       >
