@@ -65,6 +65,12 @@
       "css": "down-open",
       "code": 59396,
       "src": "fontawesome"
+    },
+    {
+      "uid": "bd6176c7f1bd64eec8904241316f2f52",
+      "css": "down-bold",
+      "code": 59401,
+      "src": "mfglabs"
     }
   ]
 }
