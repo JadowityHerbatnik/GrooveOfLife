@@ -81,15 +81,17 @@ const Buttons = props => {
         <WrapperButton onClick={() => props.toggle("settings")}>
           <StyledIcon className="icon-cog" />
         </WrapperButton>
-        <StyledLink
-          cover
-          direction="up"
-          bg="linear-gradient(to right, #1f498c, #1CB5E0)"
-          duration={1.5}
-          to="/about"
-        >
-          <StyledIcon className="icon-help" />
-        </StyledLink>
+        <WrapperButton>
+          <StyledLink
+            cover
+            direction="left"
+            bg="linear-gradient(to top, #1f498c, #1cb5e0)"
+            duration={1.5}
+            to="/about"
+          >
+            <StyledIcon className="icon-help" />
+          </StyledLink>
+        </WrapperButton>
       </ButtonWrapper>
       <SliderWrapper>
         <input

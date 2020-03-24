@@ -14,11 +14,7 @@ export const StyledIcon = styled.i`
   font-size: 4vh;
   margin: 0 0.5vw 0 0.5vw;
   color: white;
-  cursor: pointer;
   transition: color 0.2s;
-  &:hover {
-    color: rgba(255, 255, 255, 0.3);
-  }
 `;
 export const FlexBox = styled.div`
   display: flex;
@@ -35,4 +31,9 @@ export const WrapperButton = styled.button`
   padding: 0;
   border: none;
   outline: none;
+  transition: opacity 0.3s;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.5;
+  }
 `;
