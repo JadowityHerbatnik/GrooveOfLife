@@ -9,7 +9,7 @@ const BoardWrapper = styled.div`
   @media screen and (orientation: portrait) {
     // Decreased height on mobile devices to avoid scrollbar and weird interactions with bars
     // height: 60vh;
-    height: 90%;
+    height: 80%;
     width: 95%;
   }
   // margin: 0 auto 0 auto;
@@ -34,46 +34,39 @@ const StyledTd = styled.td`
     opacity: 0.5;
   }
 `;
-const GenerateColumns = props =>
-  [...Array(props.numberOfCols).keys()].map(columnIndex => (
+const GenerateColumns = (rowIndex, props, numberOfCols) =>
+  [...Array(numberOfCols).keys()].map(columnIndex => (
     <StyledTd
       cellSize={sizes.preferredCellSize}
-      key={`${props.rowIndex}x${columnIndex}`}
-      cols={props.numberOfCols}
+      key={`${rowIndex}x${columnIndex}`}
+      cols={numberOfCols}
       column={columnIndex}
-      active={props.forwardedProps.board[props.rowIndex][columnIndex] ? true : false}
-      highlightedColumn={props.forwardedProps.highlightedColumn}
+      active={props.board[rowIndex][columnIndex] ? true : false}
+      highlightedColumn={props.highlightedColumn}
       onMouseDown={() => {
-        props.forwardedProps.handleClick("down");
-        props.forwardedProps.clickCell(props.rowIndex, columnIndex);
+        props.handleClick("down");
+        props.clickCell(rowIndex, columnIndex);
       }}
-      onMouseUp={() => props.forwardedProps.handleClick("up")}
+      onMouseUp={() => props.handleClick("up")}
       onMouseEnter={() => {
-        if (props.forwardedProps.mousedown) {
-          props.forwardedProps.clickCell(props.rowIndex, columnIndex);
+        if (props.mousedown) {
+          props.clickCell(rowIndex, columnIndex);
         }
       }}
     />
+  ));
+const GenerateTable = (numberOfRows, numberOfCols, props) =>
+  [...Array(numberOfRows).keys()].map(rowIndex => (
+    <tr key={rowIndex}>{GenerateColumns(rowIndex, props, numberOfCols)}</tr>
   ));
 const Board = React.forwardRef((props, ref) => {
   const numberOfRows = props.board.length;
   const numberOfCols = props.board[0].length;
 
-  const GenerateRows = numberOfRows =>
-    [...Array(numberOfRows).keys()].map(rowIndex => (
-      <tr key={rowIndex} row={rowIndex}>
-        <GenerateColumns
-          rowIndex={rowIndex}
-          forwardedProps={props}
-          numberOfCols={numberOfCols}
-        />
-      </tr>
-    ));
-
   return (
     <BoardWrapper ref={ref}>
       <StyledTable>
-        <tbody>{GenerateRows(numberOfRows)}</tbody>
+        <tbody>{GenerateTable(numberOfRows, numberOfCols, props)}</tbody>
       </StyledTable>
     </BoardWrapper>
   );
