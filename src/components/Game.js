@@ -4,7 +4,6 @@ import Buttons from "./Buttons.js";
 import Board from "./Board.js";
 import Settings from "./Settings.js";
 import styled from "styled-components";
-import useDebouce from "../helpers/debounce.js";
 import { sizes, progression } from "../utils/constants.js";
 import { getAlive, calculateNextBoard } from "../helpers/makestep.js";
 import { playSelectedColumn, playEntireBoard } from "../helpers/sound.js";
@@ -144,7 +143,6 @@ export default function Game() {
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const boardRef = useRef(null);
-  const [dimensions, setDimensions] = useState([0, 0]);
 
   //prettier-ignore
   const [
