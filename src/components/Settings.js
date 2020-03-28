@@ -6,9 +6,15 @@ import { WrapperButton, StyledIcon, FlexBox } from "../components/Generic.js";
 import { FadeIn, FadeOut } from "../styles/animations.js";
 
 const { margin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard;
+const isBlack = keyIndex => {
+  const blackKeysIndexes = [1, 3, 6, 8, 10];
+  return blackKeysIndexes.includes(keyIndex) ? true : false;
+};
 
 const SettingsContainer = styled.div`
+  position: relative;
   margin: auto;
+  padding: 0 20px 20px 20px;
   border: 1px solid RoyalBlue;
   background-color: rgba(0, 0, 0, 0.5);
   box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.75);
@@ -17,6 +23,10 @@ const SettingsContainer = styled.div`
   transform: translateY(${({ show }) => (show ? "100vh" : "-100vh")});
   transition: transform 1s;
 `;
+// const SettingsContainer = styled.div`
+//   display: grid;
+//   grid: auto-flow /;
+// `;
 const BlurredBackground = styled.div`
   animation: ${({ show }) => css`0.2s ease ${show ? FadeIn : FadeOut}`};
   height: 100vh;
@@ -31,11 +41,12 @@ const BlurredBackground = styled.div`
   backdrop-filter: blur(10px);
 `;
 const ModeButton = styled.button`
-  background-color: ${({ currentGameMode, buttonType }) =>
-    currentGameMode === buttonType ? "RoyalBlue" : "transparent"};
+  background-color: ${({ mode, buttonName }) =>
+    mode === buttonName ? "RoyalBlue" : "transparent"};
   border: 2px solid RoyalBlue;
   color: white;
   font-size: 1em;
+  transition: background-color 0.3s;
 `;
 const KeysButtons = props =>
   [...Array(12).keys()].map(keyIndex => (
@@ -47,10 +58,6 @@ const KeysButtons = props =>
       onClick={() => props.toggleNote(keyIndex)}
     ></NoteButtons>
   ));
-function isBlack(keyIndex) {
-  const blackKeysIndexes = [1, 3, 6, 8, 10];
-  return blackKeysIndexes.includes(keyIndex) ? true : false;
-}
 const NoteButtons = styled.div`
   box-sizing: border-box;
   height: ${({ isBlack }) => (isBlack ? blackHeight : whiteHeight)};
@@ -61,7 +68,7 @@ const NoteButtons = styled.div`
   background-color: ${({ isNoteUsed, isBlack }) =>
     isNoteUsed ? "RoyalBlue" : isBlack ? "black" : "grey"};
   border: ${() => `${margin} solid black`};
-  transition: background-color 0.2s;
+  transition: background-color 0.3s;
 `;
 const Label = styled.p`
   font-family: Geo;
@@ -79,35 +86,57 @@ const Settings = props => {
   return !shouldRender ? null : (
     <BlurredBackground onAnimationEnd={onAnimationEnd} show={props.show}>
       <SettingsContainer show={props.show}>
-        <FlexBox justify="flex-end">
-          <WrapperButton onClick={() => props.toggle("settings")}>
-            <StyledIcon className="icon-cancel"></StyledIcon>
-          </WrapperButton>
-        </FlexBox>
+        <WrapperButton onClick={() => props.toggle("settings")}>
+          <StyledIcon
+            className="icon-cancel"
+            style={{ position: "absolute", right: 0, top: 0 }}
+          ></StyledIcon>
+        </WrapperButton>
         <Label> Gameplay mode:</Label>
         <FlexBox row>
           <ModeButton
-            buttonType="harmonic"
-            currentGameMode={props.currentGameMode}
-            onClick={() => props.changeGameMode("harmonic")}
+            buttonName="harmonic"
+            mode={props.gameMode}
+            onClick={() => props.changeGameMode("entireBoard")}
           >
             Harmonic
           </ModeButton>
           <ModeButton
-            buttonType="iterative"
-            currentGameMode={props.currentGameMode}
-            onClick={() => props.changeGameMode("iterative")}
+            buttonName="iterative"
+            mode={props.gameMode}
+            onClick={() => props.changeGameMode("rowByRow")}
           >
             Iterative
           </ModeButton>
         </FlexBox>
-        <Label>Notes to use</Label>
-        <FlexBox row align="flex-start" style={{ margin: "10px" }}>
-          <KeysButtons
-            chromaticScale={props.chromaticScale}
-            toggleNote={keyIndex => props.toggleNote(keyIndex)}
-          />
+        <Label>Chord progression mode:</Label>
+        <FlexBox row>
+          <ModeButton
+            buttonName="auto"
+            mode={props.progressionMode}
+            onClick={() => props.changeProgressionMode("auto")}
+          >
+            Automatic
+          </ModeButton>
+          <ModeButton
+            buttonName="custom"
+            mode={props.progressionMode}
+            onClick={() => props.changeProgressionMode("custom")}
+          >
+            Custom
+          </ModeButton>
         </FlexBox>
+        {props.progressionMode === "custom" && (
+          <>
+            <Label>Notes to use:</Label>
+            <FlexBox row align="flex-start" style={{ margin: "10px" }}>
+              <KeysButtons
+                chromaticScale={props.chromaticScale}
+                toggleNote={keyIndex => props.toggleNote(keyIndex)}
+              />
+            </FlexBox>
+          </>
+        )}
       </SettingsContainer>
     </BlurredBackground>
   );
