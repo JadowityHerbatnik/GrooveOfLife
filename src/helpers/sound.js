@@ -1,12 +1,11 @@
 import Tone from "tone";
 import { music } from "../utils/constants.js";
 
-export function playEntireBoard(aliveCells, board, speed, chromaticScaleNames) {
+export function playEntireBoard(aliveCells, board, speedms, notes) {
   const highestOctave = music.highestOctave;
   const octaveRange = music.octaveRange;
   const numberOfRows = board.length;
-  const time = (speed / 1000) * 0.8;
-  const notes = chromaticScaleNames;
+  const time = (speedms / 1000) * 0.9;
   let chord = [];
   let aliveCellsPerRow = [];
   let numberOfNotes = notes.length;
@@ -27,31 +26,24 @@ export function playEntireBoard(aliveCells, board, speed, chromaticScaleNames) {
   // console.log(chord);
   const chordNoDuplicates = [...new Set(chord)];
   // console.log(chordNoDuplicates);
-  const final = [chordNoDuplicates[0]];
-  const len = chordNoDuplicates.length;
-  for (let i = 1; i < len; i++) {
-    if (chordNoDuplicates[i].slice(-1) !== chordNoDuplicates[i - 1].slice(-1)) {
-      final.push(chordNoDuplicates[i]);
-    }
-  }
+  // const final = [chordNoDuplicates[0]];
+  // const len = chordNoDuplicates.length;
+  // for (let i = 1; i < len; i++) {
+  //   if (chordNoDuplicates[i].slice(-1) !== chordNoDuplicates[i - 1].slice(-1)) {
+  //     final.push(chordNoDuplicates[i]);
+  //   }
+  // }
   // console.log(final);
   playChord(chordNoDuplicates.length, chordNoDuplicates, `${time}`);
 }
-export function playSelectedColumn(
-  aliveCells,
-  column,
-  speed,
-  board,
-  chromaticScaleNames,
-) {
-  const time = (speed / 1000) * 0.5;
+export function playSelectedColumn(aliveCells, column, speedms, board, notes) {
+  const time = (speedms / 1000) * 0.5;
   const highestOctave = music.highestOctave;
   const octaveRange = music.octaveRange;
   const numberOfRows = board.length;
   const aliveCellsInColumn = aliveCells
     .filter(cell => cell[1] === column)
     .map(cell => cell[0]);
-  const notes = chromaticScaleNames;
 
   const chord = aliveCellsInColumn.map(cell => {
     const octave = highestOctave - Math.floor((cell / numberOfRows) * octaveRange);
@@ -68,36 +60,36 @@ function playChord(numberOfNotes, chord, time) {
   // console.log(time);
   // const ping = new Tone.PingPongDelay(0.16, 0.2).toMaster();
 
-  const filter = new Tone.Filter(700, "lowpass").toMaster();
+  const filter = new Tone.Filter(600, "lowpass").toMaster();
   const synth = new Tone.PolySynth(numberOfNotes, Tone.Synth, {
-    volume: -25,
+    volume: -30,
     oscillator: {
-      type: "square",
+      type: "sine",
     },
-    filter: {
-      Q: 3,
-      type: "allpass",
-      rolloff: -24,
-    },
+    // filter: {
+    //   Q: 3,
+    //   type: "allpass",
+    //   rolloff: -24,
+    // },
     envelope: {
-      attack: 0.3,
+      attack: 0.1,
       decay: 0,
       sustain: 1,
       release: 0.3,
     },
-    filterEnvelope: {
-      attack: 0.2,
-      decay: 0,
-      sustain: 1,
-      release: 0.2,
-      min: 20,
-      max: 20,
-      exponent: 2,
-    },
+    // filterEnvelope: {
+    //   attack: 0.2,
+    //   decay: 0,
+    //   sustain: 1,
+    //   release: 0.2,
+    //   min: 20,
+    //   max: 20,
+    //   exponent: 2,
+    // },
   });
-  const feedbackDelay = new Tone.FeedbackDelay(0.2, 0.3).connect(filter);
-  synth.connect(feedbackDelay);
+  // const feedbackDelay = new Tone.FeedbackDelay(0.2, 0.3).toMaster();
+  synth.connect(filter);
   // synth.toMaster();
-  // synth.connect(filter);
+  // synth.connect(feedbackDelay);
   synth.triggerAttackRelease(chord, time);
 }
