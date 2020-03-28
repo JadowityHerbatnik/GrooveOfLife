@@ -1,12 +1,31 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useReducer } from "react";
+import { debounce } from "lodash";
 import Buttons from "./Buttons.js";
 import Board from "./Board.js";
 import Settings from "./Settings.js";
 import styled from "styled-components";
-import { sizes } from "../utils/constants.js";
+import useDebouce from "../helpers/debounce.js";
+import { sizes, progression } from "../utils/constants.js";
 import { getAlive, calculateNextBoard } from "../helpers/makestep.js";
 import { playSelectedColumn, playEntireBoard } from "../helpers/sound.js";
 
+const notesInOrder = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const initialState = {
+  mute: false,
+  speed: 4,
+  speedms: 250,
+  playMode: "harmonic",
+  progressionMode: "auto",
+  // prettier-ignore
+  scale: [ true, false, false, true, false, true, false, false, true, false, true, false, ],
+  notes: ["C", "D#", "F", "G#", "A#"],
+  column: null,
+  boardd: [[]],
+  isPlaying: false,
+  chord: 0,
+};
+const maxSpeed = 7;
+const minSpeed = 1;
 const GameWrapper = styled.div`
   margin: auto;
   overflow: hidden;
@@ -14,7 +33,7 @@ const GameWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: ${({ height }) => `${height * 0.85}px`};
+  height: ${({ height }) => `${height && height * 0.85}px`};
   width: 100vw;
   @media screen and (orientation: landscape) {
     height: 80vh;
@@ -33,92 +52,184 @@ const GameWrapper = styled.div`
     animation: 2s ease 1s 1 both fadebckgr;
   }
 `;
-export default function Game() {
-  const [board, setBoard] = useState([[]]);
-  const [isMouseDown, setIsMouseDown] = useState(false);
-  const [isGameRunning, setIsGameRunning] = useState(false);
-  const [mute, setMute] = useState(false);
-  const [bps, setBps] = useState(4);
-  const [gameMode, setGameMode] = useState("harmonic");
-  const [highlightedColumn, setHighlightedColumn] = useState(null);
-  const [showSettings, setShowSettings] = useState(false);
-  // prettier-ignore
-  const [chromaticScale, setChromaticScale] = useState([true, false, false, true, false, true, false, false, true, false, true, false, ]);
-  // prettier-ignore
-  const [scaleNames, setScaleNames] = useState(["C", "D#", "F", "G#", "A#", ]);
-  const [vh, setVh] = useState(0);
-  const maxSpeed = 7;
-  const minSpeed = 1;
-  const boardRef = useRef(null);
-  const previousColumn = usePrevious(highlightedColumn);
-  function usePrevious(value) {
-    const ref = useRef();
-    useEffect(() => {
-      ref.current = value;
-    });
-    return ref.current;
+
+const chordReducer = (state, action) => {
+  if (action.changeChord) {
+    if (state.chord === progression.length - 1) {
+      return 0;
+    }
+    return state.chord + 1;
   }
+  return state.chord;
+};
+const dimensionReducer = (state, action) => {
+  const [width, height] = action.dimensions;
+  const numberOfCols = Math.ceil((0.9 * width) / sizes.preferredCellSize);
+  const numberOfRows = Math.floor(height / sizes.preferredCellSize);
+  const newBoard = new Array(numberOfRows)
+    .fill(false)
+    .map(() => new Array(numberOfCols).fill(false));
+  const oldNumberOfRows = state.boardd.length;
+  const oldNumberOfCols = state.boardd[0].length;
+  const numberOfRowsToCopy = Math.min(numberOfRows, oldNumberOfRows);
+  const numberOfColsToCopy = Math.min(numberOfCols, oldNumberOfCols);
+  for (let i = 0; i < numberOfRowsToCopy; i++) {
+    for (let j = 0; j < numberOfColsToCopy; j++) {
+      newBoard[i][j] = state.boardd[i][j];
+    }
+  }
+  return newBoard;
+};
+function reducer(state, action) {
+  switch (action.type) {
+    case "play/pause":
+      return { ...state, isPlaying: !state.isPlaying };
+    case "clear":
+      return {
+        ...state,
+        isPlaying: false,
+        boardd: state.boardd.map(val => val.map(() => false)),
+      };
+    case "randomize":
+      return {
+        ...state,
+        boardd: state.boardd.map(val => val.map(() => Math.random() >= 0.8)),
+      };
+    case "dimensions":
+      return { ...state, boardd: dimensionReducer(state, action) };
+    case "boardClick":
+      const [i, j] = action.coordinates;
+      const clicked = Array.from(state.boardd);
+      clicked[i][j] = !clicked[i][j];
+      return { ...state, boardd: clicked };
+    case "newBoard":
+      return {
+        ...state,
+        boardd: calculateNextBoard(state.boardd),
+        chord: chordReducer(state, action),
+      };
+    case "nextColumn":
+      const ifLastColumn = state.column + 1 >= state.boardd[0].length;
+      return {
+        ...state,
+        column: ifLastColumn ? 0 : state.column + 1,
+        boardd: ifLastColumn ? calculateNextBoard(state.boardd) : state.boardd,
+        chord: chordReducer(state, action),
+      };
+    case "mute":
+      return { ...state, mute: !state.mute };
+    case "speed":
+      return { ...state, speed: action.payload, speedms: 1000 / action.payload };
+    case "rowByRow":
+      return { ...state, playMode: "iterative" };
+    case "entireBoard":
+      return { ...state, playMode: "harmonic", column: null };
+    case "progressionMode":
+      return { ...state, progressionMode: action.mode };
+    case "scale":
+      state.scale[action.key] = !state.scale[action.key];
+      const newNotes = [];
+      state.scale.forEach((value, index) => {
+        if (value) {
+          newNotes.push(notesInOrder[index]);
+        }
+      });
+      return { ...state, scale: state.scale, notes: newNotes };
+    default:
+      throw new Error();
+  }
+}
+export default function Game() {
+  console.log("render");
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const boardRef = useRef(null);
+  const [dimensions, setDimensions] = useState([0, 0]);
+
+  //prettier-ignore
+  const [
+    { isPlaying, boardd, mute, speed, speedms, playMode, progressionMode, scale, notes, column,  chord},
+    dispatch,
+  ] = useReducer(reducer, initialState);
+
   useEffect(() => {
     function recalculate() {
-      setVh(window.innerHeight);
       const { width, height } = boardRef.current.getBoundingClientRect();
-      setupBoard(width, height, sizes.preferredCellSize);
+      if (!!width && !!height) {
+        dispatch({ type: "dimensions", dimensions: [width, height] });
+      }
     }
-    window.addEventListener("resize", recalculate);
+    window.addEventListener("resize", debounce(recalculate, 100));
     recalculate();
-    return () => window.removeEventListener("resize", recalculate);
-  }, [vh]);
+    return () => window.removeEventListener("resize", debounce(recalculate, 100));
+  }, []);
+
   useEffect(() => {
-    const interval = 1000 / bps;
-    const aliveCells = getAlive(board);
-    switch (gameMode) {
+    const aliveCells = getAlive(boardd);
+    const chordToPlay = progressionMode === "auto" ? progression[chord] : notes;
+    // if (!isPlaying || mute) {
+    //   return;
+    // }
+    switch (playMode) {
       case "harmonic":
-        if (!mute && aliveCells.length !== 0 && scaleNames.length !== 0) {
-          playEntireBoard(aliveCells, board, interval, scaleNames);
+        if (!mute && !!aliveCells.length && !!notes.length) {
+          playEntireBoard(aliveCells, boardd, speedms, chordToPlay);
         }
         break;
       case "iterative":
-        if (highlightedColumn === 0 && previousColumn !== 0) {
-          setBoard(prevBoard => calculateNextBoard(prevBoard));
-          break;
-        }
-        if (!mute && aliveCells.length !== 0 && scaleNames.length !== 0) {
-          playSelectedColumn(aliveCells, highlightedColumn, interval, board, scaleNames);
+        if (!mute && !!aliveCells.length && !!notes.length) {
+          playSelectedColumn(aliveCells, column, speedms, boardd, chordToPlay);
         }
         break;
       //no default
     }
-  }, [board, highlightedColumn, gameMode, bps, scaleNames, mute, previousColumn]);
+    // prettier-ignore
+  }, [boardd, column, playMode, speed, notes, mute, progressionMode, speedms, chord]);
+
   useEffect(() => {
     function handleKeyPress(event) {
-      console.log(event.key);
       switch (event.key) {
         case "c":
-          changeBoardState("clear");
+          dispatch({ type: "clear" });
           break;
         case "r":
-          changeBoardState("randomize");
+          dispatch({ type: "randomize" });
           break;
         case " ":
           toggle("play");
           break;
         case "s":
-          step();
+          dispatch({
+            type: playMode === "harmonic" ? "newBoard" : "nextColumn",
+            changeChord: true,
+          });
           break;
         case "m":
           toggle("mute");
           break;
         case "ArrowUp":
-          setBps(prevSpeed => (prevSpeed === maxSpeed ? prevSpeed : prevSpeed + 1));
+          dispatch({
+            type: "speed",
+            payload: speed === maxSpeed ? speed : speed + 1,
+          });
           break;
         case "ArrowRight":
-          setBps(prevSpeed => (prevSpeed === maxSpeed ? prevSpeed : prevSpeed + 1));
+          dispatch({
+            type: "speed",
+            payload: speed === maxSpeed ? speed : speed + 1,
+          });
           break;
         case "ArrowDown":
-          setBps(prevSpeed => (prevSpeed === minSpeed ? prevSpeed : prevSpeed - 1));
+          dispatch({
+            type: "speed",
+            payload: speed === minSpeed ? speed : speed - 1,
+          });
           break;
         case "ArrowLeft":
-          setBps(prevSpeed => (prevSpeed === minSpeed ? prevSpeed : prevSpeed - 1));
+          dispatch({
+            type: "speed",
+            payload: speed === minSpeed ? speed : speed - 1,
+          });
           break;
         case "Escape":
           setShowSettings(false);
@@ -131,27 +242,35 @@ export default function Game() {
     }
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [bps, gameMode, scaleNames, highlightedColumn]);
+  }, [speed, playMode, notes, column]);
+
   useEffect(() => {
-    console.log("chuj");
-    const interval = 1000 / bps;
+    let iter = 0;
     const ID = setInterval(() => {
-      if (isGameRunning) {
-        step();
+      if (isPlaying) {
+        iter = iter === speed ? 0 : (iter += 1);
+        if (iter === speed) {
+          dispatch({
+            type: playMode === "harmonic" ? "newBoard" : "nextColumn",
+            changeChord: true,
+          });
+        } else {
+          dispatch({ type: playMode === "harmonic" ? "newBoard" : "nextColumn" });
+        }
       }
-    }, interval);
+    }, speedms);
     return () => {
       clearInterval(ID);
     };
-  }, [bps, isGameRunning, mute, scaleNames, gameMode]);
+  }, [speed, speedms, isPlaying, mute, notes, playMode]);
 
   function toggle(state) {
     switch (state) {
       case "mute":
-        setMute(prevState => !prevState);
+        dispatch({ type: "mute" });
         break;
       case "play":
-        setIsGameRunning(prevState => !prevState);
+        dispatch({ type: "play/pause" });
         break;
       case "settings":
         setShowSettings(prevState => !prevState);
@@ -159,115 +278,36 @@ export default function Game() {
     }
   }
 
-  function changeBoardState(whatToDo) {
-    setIsGameRunning(false);
-    setBoard(prevBoard =>
-      prevBoard.map(value =>
-        value.map(() => {
-          switch (whatToDo) {
-            case "clear":
-              return false;
-            case "randomize":
-              return Math.random() >= 0.8; //At 0.5 there's too many alive cells also add this one to settings parameter
-            //no default
-          }
-        }),
-      ),
-    );
-  }
-
-  function step() {
-    switch (gameMode) {
-      case "harmonic":
-        setHighlightedColumn(null);
-        setBoard(prevBoard => calculateNextBoard(prevBoard));
-        break;
-      case "iterative":
-        setHighlightedColumn(currentlyHighlighted =>
-          currentlyHighlighted + 1 >= board[0].length ? 0 : currentlyHighlighted + 1,
-        );
-        break;
-      //no default
-    }
-  }
-
-  function toggleNote(keyNumber) {
-    const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-    let newScale = [...chromaticScale];
-    newScale[keyNumber] = !newScale[keyNumber];
-    setChromaticScale(prevScale => {
-      prevScale[keyNumber] = !prevScale[keyNumber];
-      const newScaleNames = [];
-      prevScale.forEach((value, index) => {
-        if (value) {
-          newScaleNames.push(notes[index]);
-        }
-      });
-      setScaleNames(newScaleNames);
-      return prevScale;
-    });
-    // setChromaticScale(newScale);
-  }
-
-  function clickCell(i, j) {
-    const newBoard = Array.from(board);
-    newBoard[i][j] = !newBoard[i][j];
-    setBoard(newBoard);
-  }
-
-  function setupBoard(width, height, preferredCellSize) {
-    if (width !== 0 && height !== 0) {
-      const boardWidthPercent = 90;
-      const numberOfCols = Math.ceil(
-        ((boardWidthPercent / 100) * width) / preferredCellSize,
-      );
-      const numberOfRows = Math.floor(height / preferredCellSize);
-      setBoard(prevBoard => {
-        const newBoard = new Array(numberOfRows)
-          .fill(false)
-          .map(() => new Array(numberOfCols).fill(false));
-        const oldNumberOfRows = prevBoard.length;
-        const oldNumberOfCols = prevBoard[0].length;
-        const numberOfRowsToCopy = Math.min(numberOfRows, oldNumberOfRows);
-        const numberOfColsToCopy = Math.min(numberOfCols, oldNumberOfCols);
-        for (let i = 0; i < numberOfRowsToCopy; i++) {
-          for (let j = 0; j < numberOfColsToCopy; j++) {
-            newBoard[i][j] = prevBoard[i][j];
-          }
-        }
-        return newBoard;
-      });
-    }
-  }
-
   return (
-    <GameWrapper height={vh}>
+    <GameWrapper height={window.innerHeight}>
       <Buttons
-        step={() => step()}
+        // step={() => step()}
         toggle={state => toggle(state)}
         mute={mute}
-        changeBoardState={whatToDo => changeBoardState(whatToDo)}
-        isGameRunning={isGameRunning}
-        speed={bps}
+        changeBoardState={whatToDo => dispatch({ type: whatToDo })}
+        isGameRunning={isPlaying}
+        speed={speed}
         maxSpeed={maxSpeed}
         minSpeed={minSpeed}
-        sliderChange={event => setBps(parseInt(event.target.value))}
+        sliderChange={e => dispatch({ type: "speed", payload: parseInt(e.target.value) })}
       />
       <Board
         ref={boardRef}
-        clickCell={(i, j) => clickCell(i, j)}
-        board={board}
+        clickCell={(i, j) => dispatch({ type: "boardClick", coordinates: [i, j] })}
+        board={boardd}
         handleClick={direction => setIsMouseDown(direction === "down" ? true : false)}
         mousedown={isMouseDown}
-        highlightedColumn={highlightedColumn}
+        highlightedColumn={column}
       />
       <Settings
         show={showSettings}
-        chromaticScale={chromaticScale}
+        chromaticScale={scale}
         toggle={state => toggle(state)}
-        changeGameMode={mode => setGameMode(mode)}
-        currentGameMode={gameMode}
-        toggleNote={keyIndex => toggleNote(keyIndex)}
+        changeGameMode={mode => dispatch({ type: mode })}
+        changeProgressionMode={mode => dispatch({ type: "progressionMode", mode: mode })}
+        gameMode={playMode}
+        progressionMode={progressionMode}
+        toggleNote={keyIndex => dispatch({ type: "scale", key: keyIndex })}
       />
     </GameWrapper>
   );
