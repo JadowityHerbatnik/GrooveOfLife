@@ -30,9 +30,9 @@ const StyledTd = styled.td`
   opacity: ${({ column, highlightedColumn }) =>
     column === highlightedColumn ? "0.5" : "1"};
   background-color: ${({ active }) => (active ? "rgba(0,0,0,0)" : "black")};
-  &:hover {
-    opacity: 0.5;
-  }
+  // &:hover {
+  //   opacity: 0.5;
+  // }
 `;
 const GenerateColumns = (rowIndex, props, numberOfCols) =>
   [...Array(numberOfCols).keys()].map(columnIndex => (
@@ -44,10 +44,18 @@ const GenerateColumns = (rowIndex, props, numberOfCols) =>
       active={props.board[rowIndex][columnIndex] ? true : false}
       highlightedColumn={props.highlightedColumn}
       onMouseDown={() => {
+        if (props.isPlaying) {
+          props.suspend();
+        }
         props.handleClick("down");
         props.clickCell(rowIndex, columnIndex);
       }}
-      onMouseUp={() => props.handleClick("up")}
+      onMouseUp={() => {
+        if (props.isSuspended) {
+          props.resume();
+        }
+        props.handleClick("up");
+      }}
       onMouseEnter={() => {
         if (props.mousedown) {
           props.clickCell(rowIndex, columnIndex);

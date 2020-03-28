@@ -21,6 +21,7 @@ const initialState = {
   column: null,
   boardd: [[]],
   isPlaying: false,
+  isSuspended: false,
   chord: 0,
 };
 const maxSpeed = 7;
@@ -81,8 +82,12 @@ const dimensionReducer = (state, action) => {
 };
 function reducer(state, action) {
   switch (action.type) {
-    case "play/pause":
+    case "togglePlaying":
       return { ...state, isPlaying: !state.isPlaying };
+    case "resume":
+      return { ...state, isSuspended: false, isPlaying: true };
+    case "suspend":
+      return { ...state, isSuspended: true, isPlaying: false };
     case "clear":
       return {
         ...state,
@@ -139,14 +144,13 @@ function reducer(state, action) {
   }
 }
 export default function Game() {
-  console.log("render");
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const boardRef = useRef(null);
 
   //prettier-ignore
   const [
-    { isPlaying, boardd, mute, speed, speedms, playMode, progressionMode, scale, notes, column,  chord},
+    { isPlaying, isSuspended, boardd, mute, speed, speedms, playMode, progressionMode, scale, notes, column,  chord},
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -268,7 +272,7 @@ export default function Game() {
         dispatch({ type: "mute" });
         break;
       case "play":
-        dispatch({ type: "play/pause" });
+        dispatch({ type: "togglePlaying" });
         break;
       case "settings":
         setShowSettings(prevState => !prevState);
@@ -279,7 +283,6 @@ export default function Game() {
   return (
     <GameWrapper height={typeof window !== "undefined" ? window.innerHeight : null}>
       <Buttons
-        // step={() => step()}
         toggle={state => toggle(state)}
         mute={mute}
         changeBoardState={whatToDo => dispatch({ type: whatToDo })}
@@ -290,6 +293,10 @@ export default function Game() {
         sliderChange={e => dispatch({ type: "speed", payload: parseInt(e.target.value) })}
       />
       <Board
+        suspend={() => dispatch({ type: "suspend" })}
+        resume={() => dispatch({ type: "resume" })}
+        isSuspended={isSuspended}
+        isPlaying={isPlaying}
         ref={boardRef}
         clickCell={(i, j) => dispatch({ type: "boardClick", coordinates: [i, j] })}
         board={boardd}
