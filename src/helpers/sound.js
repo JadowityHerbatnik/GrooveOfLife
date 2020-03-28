@@ -15,7 +15,6 @@ export function playEntireBoard(aliveCells, board, speedms, notes) {
     }
     aliveCellsPerRow[value[0]] += value[1];
   });
-  // console.log(aliveCellsPerRow);
   for (let i = 0; i < numberOfRows; i++) {
     if (typeof aliveCellsPerRow[i] !== "undefined") {
       const octave = highestOctave - Math.floor((i / numberOfRows) * octaveRange);
@@ -23,21 +22,11 @@ export function playEntireBoard(aliveCells, board, speedms, notes) {
       chord.push(`${tone}${octave}`);
     }
   }
-  // console.log(chord);
   const chordNoDuplicates = [...new Set(chord)];
-  // console.log(chordNoDuplicates);
-  // const final = [chordNoDuplicates[0]];
-  // const len = chordNoDuplicates.length;
-  // for (let i = 1; i < len; i++) {
-  //   if (chordNoDuplicates[i].slice(-1) !== chordNoDuplicates[i - 1].slice(-1)) {
-  //     final.push(chordNoDuplicates[i]);
-  //   }
-  // }
-  // console.log(final);
   playChord(chordNoDuplicates.length, chordNoDuplicates, `${time}`);
 }
 export function playSelectedColumn(aliveCells, column, speedms, board, notes) {
-  const time = (speedms / 1000) * 0.5;
+  const time = (speedms / 1000) * 0.9;
   const highestOctave = music.highestOctave;
   const octaveRange = music.octaveRange;
   const numberOfRows = board.length;
