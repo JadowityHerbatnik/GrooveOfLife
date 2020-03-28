@@ -166,27 +166,22 @@ export default function Game() {
     return () => window.removeEventListener("resize", debounce(recalculate, 100));
   }, []);
 
-  useEffect(() => {
-    const aliveCells = getAlive(boardd);
-    const chordToPlay = progressionMode === "auto" ? progression[chord] : notes;
-    // if (!isPlaying || mute) {
-    //   return;
-    // }
-    switch (playMode) {
-      case "harmonic":
-        if (!mute && !!aliveCells.length && !!notes.length) {
-          playEntireBoard(aliveCells, boardd, speedms, chordToPlay);
-        }
-        break;
-      case "iterative":
-        if (!mute && !!aliveCells.length && !!notes.length) {
-          playSelectedColumn(aliveCells, column, speedms, boardd, chordToPlay);
-        }
-        break;
-      //no default
-    }
-    // prettier-ignore
-  }, [boardd, column, playMode, speed, notes, mute, progressionMode, speedms, chord]);
+  useEffect(
+    () => {
+      const aliveCells = getAlive(boardd);
+      const chordToPlay = progressionMode === "auto" ? progression[chord] : notes;
+      if (isSuspended || mute || !aliveCells.length || !notes.length) {
+        return;
+      }
+      if (playMode === "harmonic") {
+        playEntireBoard(aliveCells, boardd, speedms, chordToPlay);
+      } else {
+        playSelectedColumn(aliveCells, column, speedms, boardd, chordToPlay);
+      }
+    },
+    //prettier-ignore
+    [ boardd, column, playMode, isSuspended, notes, mute, progressionMode, speedms, chord, ],
+  );
 
   useEffect(() => {
     function handleKeyPress(event) {
@@ -247,11 +242,11 @@ export default function Game() {
   }, [speed, playMode, notes, column]);
 
   useEffect(() => {
-    let iter = 0;
+    let iteration = 0;
     const ID = setInterval(() => {
       if (isPlaying) {
-        iter = iter === speed ? 0 : (iter += 1);
-        if (iter === speed) {
+        iteration = iteration === speed ? 0 : (iteration += 1);
+        if (iteration === speed) {
           dispatch({
             type: playMode === "harmonic" ? "newBoard" : "nextColumn",
             changeChord: true,

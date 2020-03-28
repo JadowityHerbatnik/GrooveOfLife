@@ -20,8 +20,8 @@ export const intro = (
     Yeah, this is yet another implementation of the famous Game of Life...but this one
     utilizes {TonejsLink} library!
     <br />
-    <br /> Game of Life is a cool cellular automata invented by John Conway. If you wanna
-    read a nice definition, here's a {WikiLink} link, I'm not gonna copypaste it.
+    <br /> If you don't know, Game of Life is a cool cellular automata invented by John
+    Conway. For a nice definition, here's a {WikiLink} link, I'm not gonna copypaste it.
   </>
 );
 export const rules = (

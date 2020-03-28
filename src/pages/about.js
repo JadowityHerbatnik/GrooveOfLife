@@ -127,10 +127,9 @@ const IndexPage = () => {
             </Paragraph>
           </ScrollAnimation>
         </FlexBox>
-        <WrapperButton>
+        <WrapperButton onClick={() => animateScroll.scrollToTop()}>
           <StyledIcon
             className="icon-down-open"
-            onClick={() => animateScroll.scrollToTop()}
             style={{ transform: "rotate(180deg)" }}
           ></StyledIcon>
         </WrapperButton>
