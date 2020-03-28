@@ -14,4 +14,21 @@ export const keyboard = {
   margin: "1px",
 };
 export const colors = {};
-export const chords = {};
+export const progression = [
+  [`D`, `D#`, `G`, `A#`],
+  [`C#`, `D#`, "E", `G`, `A#`],
+  [`C`, `D#`, `G`, `G#`],
+  [`D#`, `F#`, `G#`, `B`],
+  [`D`, `F`, `G`, `A#`],
+  [`C`, `D`, `E`, `G`, `A#`],
+  [`C`, `D#`, `F`, `G`, `G#`],
+  [`D`, `F`, `G#`, `A#`, `B`],
+];
+// export const progression = [
+//   ["C", "E", "G"],
+//   ["F", "A", "C"],
+//   ["F", "G", "B", "D"],
+//   ["C", "E", "A"],
+//   ["C", "D", "F", "A"],
+//   ["C", "D", "F", "G#", "B"],
+// ];
