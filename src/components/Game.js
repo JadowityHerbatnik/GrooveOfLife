@@ -277,7 +277,7 @@ export default function Game() {
   }
 
   return (
-    <GameWrapper height={window.innerHeight}>
+    <GameWrapper height={typeof window !== "undefined" ? window.innerHeight : null}>
       <Buttons
         // step={() => step()}
         toggle={state => toggle(state)}
