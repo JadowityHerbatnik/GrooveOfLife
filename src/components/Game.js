@@ -146,6 +146,7 @@ function reducer(state, action) {
 export default function Game() {
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [innerHeight, setInnerHeight] = useState();
   const boardRef = useRef(null);
 
   //prettier-ignore
@@ -155,6 +156,7 @@ export default function Game() {
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    setInnerHeight(window.innerHeight);
     const recalculate = debounce(() => {
       const { width, height } = boardRef.current.getBoundingClientRect();
       if (!!width && !!height) {
@@ -164,7 +166,7 @@ export default function Game() {
     window.addEventListener("resize", recalculate);
     recalculate();
     return () => window.removeEventListener("resize", recalculate);
-  }, []);
+  }, [innerHeight]);
 
   useEffect(
     () => {
@@ -276,7 +278,7 @@ export default function Game() {
   }
 
   return (
-    <GameWrapper height={typeof window !== "undefined" ? window.innerHeight : null}>
+    <GameWrapper height={innerHeight}>
       <Buttons
         toggle={state => toggle(state)}
         mute={mute}
