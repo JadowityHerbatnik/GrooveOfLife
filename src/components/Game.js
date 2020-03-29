@@ -155,15 +155,15 @@ export default function Game() {
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    function recalculate() {
+    const recalculate = debounce(() => {
       const { width, height } = boardRef.current.getBoundingClientRect();
       if (!!width && !!height) {
         dispatch({ type: "dimensions", dimensions: [width, height] });
       }
-    }
-    window.addEventListener("resize", debounce(recalculate, 100));
+    }, 100);
+    window.addEventListener("resize", recalculate);
     recalculate();
-    return () => window.removeEventListener("resize", debounce(recalculate, 100));
+    return () => window.removeEventListener("resize", recalculate);
   }, []);
 
   useEffect(
