@@ -16,7 +16,6 @@ const ButtonWrapper = styled.div`
   }
 `;
 const Container = styled.div`
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,19 +29,19 @@ const SliderWrapper = styled.div`
   position: relative;
   height: 2vh;
   width: 50vmin;
-	margin: 2vh 0 2vh 0;
+  margin: 2vh 0 2vh 0;
   @media screen and (orientation: landscape) {
-  width: 2vh;
-  height: 50vmin;
+    width: 2vh;
+    height: 50vmin;
   }
   .slider {
     position: absolute;
     left: 0;
     top: 0;
-  @media screen and (orientation: landscape) {
-    transform: translateY(50vmin) rotate(-90deg);
-    transform-origin: top left;
-  }
+    @media screen and (orientation: landscape) {
+      transform: translateY(50vmin) rotate(-90deg);
+      transform-origin: top left;
+    }
     opacity: 0.3;
     width: 50vmin;
     appearance: none;
@@ -62,6 +61,7 @@ const SliderWrapper = styled.div`
       border-radius: 3px;
       border: none;
     }
+  }
 `;
 const Buttons = (props) => {
   return (
@@ -73,14 +73,14 @@ const Buttons = (props) => {
         <WrapperButton onClick={() => props.changeBoardState("clear")}>
           <StyledIcon className="icon-cancel" />
         </WrapperButton>
-        <WrapperButton onClick={() => props.toggle("play")}>
+        <WrapperButton onClick={() => props.togglePlaying()}>
           <StyledIcon className={props.isGameRunning ? "icon-pause" : "icon-play"} />
         </WrapperButton>
         <br />
-        <WrapperButton onClick={() => props.toggle("mute")}>
+        <WrapperButton onClick={() => props.toggleMute()}>
           <StyledIcon className={props.mute ? "icon-volume-off" : "icon-volume-up"} />
         </WrapperButton>
-        <WrapperButton onClick={() => props.toggle("settings")}>
+        <WrapperButton onClick={() => props.toggleSettings()}>
           <StyledIcon className="icon-cog" />
         </WrapperButton>
         <WrapperButton>
