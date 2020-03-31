@@ -4,8 +4,8 @@ import { getAlive, calculateNextBoard } from "../helpers/makestep.js";
 const { minSpeed, maxSpeed } = music;
 
 const notesInOrder = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-const chordReducer = (state, action, newAliveCelles = []) => {
-  if (isEqual(newAliveCelles, state.aliveCells)) {
+const chordReducer = (state, action, nextAlive = []) => {
+  if (state.progressionMode === "harmonic" && isEqual(nextAlive, state.aliveCells)) {
     return state.chord;
   }
   if (action.changeChord) {
@@ -35,6 +35,9 @@ const dimensionReducer = (state, action) => {
   return newBoard;
 };
 export default function reducer(state, action) {
+  const newBoard = calculateNextBoard(state.board);
+  const currentlyAlive = getAlive(state.board);
+  const nextAlive = getAlive(newBoard);
   switch (action.type) {
     case "togglePlaying":
       return { ...state, isPlaying: !state.isPlaying };
@@ -65,20 +68,20 @@ export default function reducer(state, action) {
 
       return { ...state, board: clicked, aliveCells: getAlive(clicked) };
     case "newBoard":
-      const newAliveCells = getAlive(state.board);
       return {
         ...state,
-        board: calculateNextBoard(state.board),
-        aliveCells: newAliveCells,
-        chord: chordReducer(state, action, newAliveCells),
+        board: newBoard,
+        aliveCells: nextAlive,
+        chord: chordReducer(state, action, nextAlive),
       };
     case "nextColumn":
       const ifLastColumn = state.column + 1 >= state.board[0].length;
       return {
         ...state,
         column: ifLastColumn ? 0 : state.column + 1,
-        board: ifLastColumn ? calculateNextBoard(state.board) : state.board,
-        chord: chordReducer(state, action),
+        board: ifLastColumn ? newBoard : state.board,
+        chord: chordReducer(state, action, currentlyAlive),
+        aliveCells: ifLastColumn ? nextAlive : currentlyAlive,
       };
     case "mute":
       return { ...state, mute: !state.mute };
