@@ -3,7 +3,7 @@ import { music } from "../utils/constants.js";
 const { highestOctave, octaveRange } = music;
 const getCommonVariables = (board, speedms) => {
   const numberOfRows = board.length;
-  const time = (speedms / 1000) * 0.9;
+  const time = (speedms / 1000) * 0.95;
   return { numberOfRows, time };
 };
 
@@ -30,13 +30,12 @@ export function playEntireBoard(aliveCells, board, speedms, notes) {
 }
 export function playSelectedColumn(aliveCells, column, speedms, board, notes) {
   const { numberOfRows, time } = getCommonVariables(board, speedms);
-  const aliveCellsInColumn = aliveCells
-    .filter((cell) => cell[1] === column)
-    .map((cell) => cell[0]);
+  const aliveCellsInColumn = aliveCells.filter((cell) => cell[1] === column).map((cell) => cell[0]);
+  console.log(aliveCellsInColumn);
 
   const chord = aliveCellsInColumn.map((cell) => {
     const octave = highestOctave - Math.floor((cell / numberOfRows) * octaveRange);
-    const tone = notes[(numberOfRows - cell) % notes.length];
+    const tone = notes[(numberOfRows - 1 - cell) % notes.length];
     return `${tone}${octave}`;
   });
   const chordNoDuplicates = [...new Set(chord)];
