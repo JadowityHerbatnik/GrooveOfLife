@@ -2,7 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import "../styles/fontello/css/fontello.css";
 import { WrapperButton, StyledIcon, StyledLink } from "../components/Generic.js";
+import { music } from "../utils/constants.js";
 import { SlideFromLeft } from "../styles/animations.js";
+const { minSpeed, maxSpeed } = music;
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -61,7 +63,7 @@ const SliderWrapper = styled.div`
       border: none;
     }
 `;
-const Buttons = props => {
+const Buttons = (props) => {
   return (
     <Container>
       <ButtonWrapper>
@@ -84,8 +86,8 @@ const Buttons = props => {
         <WrapperButton>
           <StyledLink
             cover
-            direction="left"
-            bg="linear-gradient(to top, #1f498c, #1cb5e0)"
+            direction="up"
+            bg="linear-gradient(90deg, rgba(9,38,182,1) 0%, rgba(106,12,238,1) 100%)"
             duration={1.5}
             to="/about"
           >
@@ -97,11 +99,11 @@ const Buttons = props => {
         <input
           className="slider"
           type="range"
-          min={props.minSpeed}
-          max={props.maxSpeed}
+          min={minSpeed}
+          max={maxSpeed}
           step="1"
           value={props.speed}
-          onChange={event => props.sliderChange(event)}
+          onChange={(event) => props.sliderChange(event)}
         />
       </SliderWrapper>
     </Container>

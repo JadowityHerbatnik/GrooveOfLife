@@ -3,16 +3,16 @@ import styled, { css } from "styled-components";
 import "../styles/fontello/css/fontello.css";
 import { keyboard } from "../utils/constants.js";
 import { WrapperButton, StyledIcon, FlexBox } from "../components/Generic.js";
-import { FadeIn, FadeOut } from "../styles/animations.js";
+import { FadeIn, FadeOut, SlideInUp } from "../styles/animations.js";
+import { Table } from "../components/Table.js";
 
-const { margin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard;
-const isBlack = keyIndex => {
+const { keyMargin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard;
+const isBlack = (keyIndex) => {
   const blackKeysIndexes = [1, 3, 6, 8, 10];
   return blackKeysIndexes.includes(keyIndex) ? true : false;
 };
 
 const SettingsContainer = styled.div`
-  position: relative;
   margin: auto;
   padding: 0 20px 20px 20px;
   border: 1px solid RoyalBlue;
@@ -20,13 +20,10 @@ const SettingsContainer = styled.div`
   box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.75);
   position: relative;
   top: -100vh;
+  animation: ${() => css`0.5s ease ${SlideInUp}`};
   transform: translateY(${({ show }) => (show ? "100vh" : "-100vh")});
   transition: transform 1s;
 `;
-// const SettingsContainer = styled.div`
-//   display: grid;
-//   grid: auto-flow /;
-// `;
 const BlurredBackground = styled.div`
   animation: ${({ show }) => css`0.2s ease ${show ? FadeIn : FadeOut}`};
   height: 100vh;
@@ -48,13 +45,13 @@ const ModeButton = styled.button`
   font-size: 1em;
   transition: background-color 0.3s;
 `;
-const KeysButtons = props =>
-  [...Array(12).keys()].map(keyIndex => (
+const KeysButtons = (props) =>
+  [...Array(12).keys()].map((keyIndex) => (
     <NoteButtons
       key={keyIndex}
       isBlack={isBlack(keyIndex)}
       note={keyIndex}
-      isNoteUsed={props.chromaticScale[keyIndex] ? true : false}
+      isNoteUsed={props.scale[keyIndex] ? true : false}
       onClick={() => props.toggleNote(keyIndex)}
     ></NoteButtons>
   ));
@@ -62,78 +59,116 @@ const NoteButtons = styled.div`
   box-sizing: border-box;
   height: ${({ isBlack }) => (isBlack ? blackHeight : whiteHeight)};
   width: ${({ isBlack }) => (isBlack ? blackWidth : whiteWidth)};
-  margin-left: ${({ isBlack }) => (isBlack ? `calc(${blackWidth}/-2)` : `-${margin}`)};
-  margin-right: ${({ isBlack }) => (isBlack ? `calc(${blackWidth}/-2)` : `-${margin}`)};
+  margin-left: ${({ isBlack }) => (isBlack ? `calc(${blackWidth}/-2)` : `-${keyMargin}`)};
+  margin-right: ${({ isBlack }) => (isBlack ? `calc(${blackWidth}/-2)` : `-${keyMargin}`)};
   z-index: ${({ isBlack }) => (isBlack ? 1 : 0)};
   background-color: ${({ isNoteUsed, isBlack }) =>
     isNoteUsed ? "RoyalBlue" : isBlack ? "black" : "grey"};
-  border: ${() => `${margin} solid black`};
+  border: ${() => `${keyMargin} solid black`};
   transition: background-color 0.3s;
 `;
 const Label = styled.p`
   font-family: Geo;
   font-size: 1.5em;
 `;
-const Settings = props => {
-  const [shouldRender, setRender] = useState(props.show);
+const StyledLabel = styled.label`
+  margin: 3px;
+  padding: 6px;
+  display: inline-block;
+  border: 2px solid RoyalBlue;
+  opacity: 0.8;
+  color: RoyalBlue;
+  transition: opacity 0.5s;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: subpixel-antialiased;
+`;
+const CloseButton = styled(StyledIcon)`
+  position: absolute;
+  right: 0;
+  top: 0;
+`;
+const StyledInput = styled.input`
+  appearance: none;
+  &:checked + ${StyledLabel} {
+    color: black;
+    background-color: RoyalBlue;
+    opacity: 1;
+  }
+`;
+const Settings = ({
+  show,
+  scale,
+  toggleSettings,
+  changeGameMode,
+  changeProgressionMode,
+  playMode,
+  progressionMode,
+  toggleNote,
+}) => {
+  const [shouldRender, setRender] = useState(show);
 
   useEffect(() => {
-    if (props.show) setRender(true);
-  }, [props.show]);
+    if (show) setRender(true);
+  }, [show]);
   const onAnimationEnd = () => {
-    if (!props.show) setRender(false);
+    if (!show) setRender(false);
   };
   return !shouldRender ? null : (
-    <BlurredBackground onAnimationEnd={onAnimationEnd} show={props.show}>
-      <SettingsContainer show={props.show}>
-        <WrapperButton onClick={() => props.toggle("settings")}>
-          <StyledIcon
-            className="icon-cancel"
-            style={{ position: "absolute", right: 0, top: 0 }}
-          ></StyledIcon>
-        </WrapperButton>
+    <BlurredBackground
+      id="close"
+      onClickCapture={(e) => {
+        if (e.target.id !== "close") {
+          return;
+        }
+        toggleSettings();
+      }}
+      onAnimationEnd={onAnimationEnd}
+      show={show}
+    >
+      <SettingsContainer show={show}>
         <Label> Gameplay mode:</Label>
-        <FlexBox row>
-          <ModeButton
-            buttonName="harmonic"
-            mode={props.gameMode}
-            onClick={() => props.changeGameMode("entireBoard")}
-          >
-            Harmonic
-          </ModeButton>
-          <ModeButton
-            buttonName="iterative"
-            mode={props.gameMode}
-            onClick={() => props.changeGameMode("rowByRow")}
-          >
-            Iterative
-          </ModeButton>
-        </FlexBox>
+        <StyledInput
+          checked={playMode === "entireBoard"}
+          type="radio"
+          name="playMode"
+          value="entireBoard"
+          id="entireBoard"
+          onChange={changeGameMode}
+        />
+        <StyledLabel htmlFor="entireBoard">Entire board</StyledLabel>
+        <StyledInput
+          onChange={changeGameMode}
+          checked={playMode === "columns"}
+          type="radio"
+          name="playMode"
+          id="columns"
+          value="columns"
+        />
+        <StyledLabel htmlFor="columns">One column</StyledLabel>
         <Label>Chord progression mode:</Label>
-        <FlexBox row>
-          <ModeButton
-            buttonName="auto"
-            mode={props.progressionMode}
-            onClick={() => props.changeProgressionMode("auto")}
-          >
-            Automatic
-          </ModeButton>
-          <ModeButton
-            buttonName="custom"
-            mode={props.progressionMode}
-            onClick={() => props.changeProgressionMode("custom")}
-          >
-            Custom
-          </ModeButton>
-        </FlexBox>
-        {props.progressionMode === "custom" && (
+        <StyledInput
+          onChange={changeProgressionMode}
+          checked={progressionMode === "auto"}
+          type="radio"
+          name="progressionMode"
+          id="auto"
+          value="auto"
+        />
+        <StyledLabel htmlFor="auto">Auto</StyledLabel>
+        <StyledInput
+          onChange={changeProgressionMode}
+          checked={progressionMode === "custom"}
+          type="radio"
+          name="progressionMode"
+          id="custom"
+          value="custom"
+        />
+        <StyledLabel htmlFor="custom">Custom</StyledLabel>
+        {progressionMode === "custom" && (
           <>
             <Label>Notes to use:</Label>
             <FlexBox row align="flex-start" style={{ margin: "10px" }}>
-              <KeysButtons
-                chromaticScale={props.chromaticScale}
-                toggleNote={keyIndex => props.toggleNote(keyIndex)}
-              />
+              <KeysButtons scale={scale} toggleNote={(keyIndex) => toggleNote(keyIndex)} />
             </FlexBox>
           </>
         )}

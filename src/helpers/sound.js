@@ -1,15 +1,18 @@
 import Tone from "tone";
 import { music } from "../utils/constants.js";
-
-export function playEntireBoard(aliveCells, board, speedms, notes) {
-  const highestOctave = music.highestOctave;
-  const octaveRange = music.octaveRange;
+const { highestOctave, octaveRange } = music;
+const getCommonVariables = (board, speedms) => {
   const numberOfRows = board.length;
   const time = (speedms / 1000) * 0.9;
+  return { numberOfRows, time };
+};
+
+export function playEntireBoard(aliveCells, board, speedms, notes) {
+  const { numberOfRows, time } = getCommonVariables(board, speedms);
   let chord = [];
   let aliveCellsPerRow = [];
   let numberOfNotes = notes.length;
-  aliveCells.forEach(value => {
+  aliveCells.forEach((value) => {
     if (typeof aliveCellsPerRow[value[0]] === "undefined") {
       aliveCellsPerRow[value[0]] = 0;
     }
@@ -26,20 +29,16 @@ export function playEntireBoard(aliveCells, board, speedms, notes) {
   playChord(chordNoDuplicates.length, chordNoDuplicates, `${time}`);
 }
 export function playSelectedColumn(aliveCells, column, speedms, board, notes) {
-  const time = (speedms / 1000) * 0.9;
-  const highestOctave = music.highestOctave;
-  const octaveRange = music.octaveRange;
-  const numberOfRows = board.length;
+  const { numberOfRows, time } = getCommonVariables(board, speedms);
   const aliveCellsInColumn = aliveCells
-    .filter(cell => cell[1] === column)
-    .map(cell => cell[0]);
+    .filter((cell) => cell[1] === column)
+    .map((cell) => cell[0]);
 
-  const chord = aliveCellsInColumn.map(cell => {
+  const chord = aliveCellsInColumn.map((cell) => {
     const octave = highestOctave - Math.floor((cell / numberOfRows) * octaveRange);
     const tone = notes[(numberOfRows - cell) % notes.length];
     return `${tone}${octave}`;
   });
-  // console.log(chord);
   const chordNoDuplicates = [...new Set(chord)];
   if (chordNoDuplicates.length > 0) {
     playChord(chordNoDuplicates.length, chordNoDuplicates, `${time}`);

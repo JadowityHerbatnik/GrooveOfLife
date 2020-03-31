@@ -35,8 +35,8 @@ const Header = ({ siteTitle, animateHeader }) => (
     <H1>
       <StyledLink
         cover
-        bg="linear-gradient(to top, #1f498c, #1cb5e0)"
-        direction="left"
+        bg="linear-gradient(90deg, rgba(9,38,182,1) 0%, rgba(106,12,238,1) 100%)"
+        direction="up"
         duration={1}
         to="/"
       >

@@ -22,13 +22,13 @@ const GlobalStyle = createGlobalStyle`
 `;
 const BackgroundWrapper = styled.div`
   position: relative;
+  background: linear-gradient(90deg, rgba(9, 38, 182, 1) 0%, rgba(106, 12, 238, 1) 100%);
+  // min-height: 100vh;
   min-height: 100vh;
-  background-color: #000000;
-  background-image: linear-gradient(to top, #1f498c, #1cb5e0);
   z-index: -5;
   &:before {
     z-index: -2;
-    backdrop-filter: blur(30px);
+    backdrop-filter: blur(80px);
     content: "";
     position: absolute;
     left: 0;
@@ -37,7 +37,7 @@ const BackgroundWrapper = styled.div`
     bottom: 0;
   }
 `;
-const Layout = props => {
+const Layout = (props) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -52,10 +52,7 @@ const Layout = props => {
     <>
       <GlobalStyle />
       <BackgroundWrapper>
-        <Header
-          siteTitle={data.site.siteMetadata.title}
-          animateHeader={props.animateHeader}
-        />
+        <Header siteTitle={data.site.siteMetadata.title} animateHeader={props.animateHeader} />
         <main>{props.children}</main>
       </BackgroundWrapper>
     </>

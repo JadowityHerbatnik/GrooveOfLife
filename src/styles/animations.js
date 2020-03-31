@@ -16,19 +16,18 @@ export const FadeOut = keyframes`
     opacity: 0;
   }
 `;
+export const SlideInUp = keyframes`
+		0% {
+      transform: translateY(-100vh);
+    }
+`;
 export const SlideFromBottom = keyframes`
 		0% {
       transform: translateY(100vh);
-    }
-    100% {
-      transform: translateY(0);
     }
 `;
 export const SlideFromLeft = keyframes`
     0% {
       transform: translateX(-100vw);
-    }
-    100% {
-      transform: translateX(1);
     }
 `;

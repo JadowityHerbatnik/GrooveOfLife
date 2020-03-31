@@ -13,31 +13,24 @@ const StyledTd = styled.td`
     width: 5vh;
     height: 5vh;
   }
-  width: 7vmin;
-  height: 7vmin;
+  width: 8vmin;
+  height: 8vmin;
   border: 2px solid black;
-  // opacity: 0.2;
   background-color: ${({ ifActive }) => (ifActive ? "white" : "transparent")};
 `;
 
-const GenerateColumns = (numberOfCols, rowIndex, props) =>
-  [...Array(numberOfCols).keys()].map(columnIndex => {
-    const cellNumber = rowIndex * 3 + columnIndex;
-    const ifActive = props.active.includes(cellNumber);
-    return (
-      <StyledTd
-        key={`${rowIndex}x${columnIndex}`}
-        index={cellNumber}
-        ifActive={ifActive}
-      />
-    );
+const GenerateColumns = (numberOfCols, rowIndex, active) =>
+  [...Array(numberOfCols).keys()].map((columnIndex) => {
+    const cellNumber = rowIndex * numberOfCols + columnIndex;
+    const ifActive = active.includes(cellNumber);
+    return <StyledTd key={`${rowIndex}x${columnIndex}`} index={cellNumber} ifActive={ifActive} />;
   });
-const GenerateTable = (numberOfRows, numberOfCols, props) =>
-  [...Array(numberOfRows).keys()].map(rowIndex => (
-    <tr key={rowIndex}>{GenerateColumns(numberOfCols, rowIndex, props)}</tr>
+const GenerateTable = (numberOfRows, numberOfCols, active) =>
+  [...Array(numberOfRows).keys()].map((rowIndex) => (
+    <tr key={rowIndex}>{GenerateColumns(numberOfCols, rowIndex, active)}</tr>
   ));
-export const Table = props => (
+export const Table = ({ size = [3, 3], active = [5] }) => (
   <StyledTable>
-    <tbody>{GenerateTable(3, 3, props)}</tbody>
+    <tbody>{GenerateTable(size[0], size[1], active)}</tbody>
   </StyledTable>
 );

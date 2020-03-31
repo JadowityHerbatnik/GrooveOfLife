@@ -1,31 +1,16 @@
 import React, { useRef, useState, useEffect, useReducer } from "react";
-import { debounce } from "lodash";
+import styled from "styled-components";
 import Buttons from "./Buttons.js";
 import Board from "./Board.js";
 import Settings from "./Settings.js";
-import styled from "styled-components";
-import { sizes, progression } from "../utils/constants.js";
+import { debounce } from "lodash";
+import reducer from "../components/Reducer.js";
+import { progression, initialState } from "../utils/constants.js";
 import { getAlive, calculateNextBoard } from "../helpers/makestep.js";
 import { playSelectedColumn, playEntireBoard } from "../helpers/sound.js";
 
-const notesInOrder = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-const initialState = {
-  mute: false,
-  speed: 4,
-  speedms: 250,
-  playMode: "harmonic",
-  progressionMode: "auto",
-  // prettier-ignore
-  scale: [ true, false, false, true, false, true, false, false, true, false, true, false, ],
-  notes: ["C", "D#", "F", "G#", "A#"],
-  column: null,
-  boardd: [[]],
-  isPlaying: false,
-  isSuspended: false,
-  chord: 0,
-};
-const maxSpeed = 7;
-const minSpeed = 1;
+// const maxSpeed = 7;
+// const minSpeed = 1;
 const GameWrapper = styled.div`
   margin: auto;
   overflow: hidden;
@@ -36,114 +21,24 @@ const GameWrapper = styled.div`
   height: ${({ height }) => `${height && height * 0.85}px`};
   width: 100vw;
   @media screen and (orientation: landscape) {
-    height: 80vh;
+    height: 83vh;
     width: 80vw;
     justify-content: center;
     flex-direction: row;
     // background-color: rgba(0, 0, 0, 0.2);
-    @keyframes fadebckgr {
-      0% {
-        background-color: rgba(0, 0, 0, 0);
-      }
-      100% {
-        background-color: rgba(0, 0, 0, 0.2);
-      }
-    }
-    animation: 2s ease 1s 1 both fadebckgr;
+    // @keyframes fadebckgr {
+    //   0% {
+    //     background-color: rgba(0, 0, 0, 0);
+    //   }
+    //   100% {
+    //     background-color: rgba(0, 0, 0, 0.2);
+    //   }
+    // }
+    // animation: 2s ease 1s 1 both fadebckgr;
   }
 `;
-
-const chordReducer = (state, action) => {
-  if (action.changeChord) {
-    if (state.chord === progression.length - 1) {
-      return 0;
-    }
-    return state.chord + 1;
-  }
-  return state.chord;
-};
-const dimensionReducer = (state, action) => {
-  const [width, height] = action.dimensions;
-  const numberOfCols = Math.ceil((0.9 * width) / sizes.preferredCellSize);
-  const numberOfRows = Math.floor(height / sizes.preferredCellSize);
-  const newBoard = new Array(numberOfRows)
-    .fill(false)
-    .map(() => new Array(numberOfCols).fill(false));
-  const oldNumberOfRows = state.boardd.length;
-  const oldNumberOfCols = state.boardd[0].length;
-  const numberOfRowsToCopy = Math.min(numberOfRows, oldNumberOfRows);
-  const numberOfColsToCopy = Math.min(numberOfCols, oldNumberOfCols);
-  for (let i = 0; i < numberOfRowsToCopy; i++) {
-    for (let j = 0; j < numberOfColsToCopy; j++) {
-      newBoard[i][j] = state.boardd[i][j];
-    }
-  }
-  return newBoard;
-};
-function reducer(state, action) {
-  switch (action.type) {
-    case "togglePlaying":
-      return { ...state, isPlaying: !state.isPlaying };
-    case "resume":
-      return { ...state, isSuspended: false, isPlaying: true };
-    case "suspend":
-      return { ...state, isSuspended: true, isPlaying: false };
-    case "clear":
-      return {
-        ...state,
-        isPlaying: false,
-        boardd: state.boardd.map(val => val.map(() => false)),
-      };
-    case "randomize":
-      return {
-        ...state,
-        boardd: state.boardd.map(val => val.map(() => Math.random() >= 0.8)),
-      };
-    case "dimensions":
-      return { ...state, boardd: dimensionReducer(state, action) };
-    case "boardClick":
-      const [i, j] = action.coordinates;
-      const clicked = Array.from(state.boardd);
-      clicked[i][j] = !clicked[i][j];
-      return { ...state, boardd: clicked };
-    case "newBoard":
-      return {
-        ...state,
-        boardd: calculateNextBoard(state.boardd),
-        chord: chordReducer(state, action),
-      };
-    case "nextColumn":
-      const ifLastColumn = state.column + 1 >= state.boardd[0].length;
-      return {
-        ...state,
-        column: ifLastColumn ? 0 : state.column + 1,
-        boardd: ifLastColumn ? calculateNextBoard(state.boardd) : state.boardd,
-        chord: chordReducer(state, action),
-      };
-    case "mute":
-      return { ...state, mute: !state.mute };
-    case "speed":
-      return { ...state, speed: action.payload, speedms: 1000 / action.payload };
-    case "rowByRow":
-      return { ...state, playMode: "iterative" };
-    case "entireBoard":
-      return { ...state, playMode: "harmonic", column: null };
-    case "progressionMode":
-      return { ...state, progressionMode: action.mode };
-    case "scale":
-      state.scale[action.key] = !state.scale[action.key];
-      const newNotes = [];
-      state.scale.forEach((value, index) => {
-        if (value) {
-          newNotes.push(notesInOrder[index]);
-        }
-      });
-      return { ...state, scale: state.scale, notes: newNotes };
-    default:
-      throw new Error();
-  }
-}
 export default function Game() {
+  console.log("render");
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [innerHeight, setInnerHeight] = useState();
@@ -151,7 +46,7 @@ export default function Game() {
 
   //prettier-ignore
   const [
-    { isPlaying, isSuspended, boardd, mute, speed, speedms, playMode, progressionMode, scale, notes, column,  chord},
+    { isPlaying, isSuspended, board, aliveCells, mute, speed, speedms, playMode, progressionMode, scale, notes, column,  chord},
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -170,19 +65,18 @@ export default function Game() {
 
   useEffect(
     () => {
-      const aliveCells = getAlive(boardd);
       const chordToPlay = progressionMode === "auto" ? progression[chord] : notes;
       if (isSuspended || mute || !aliveCells.length || !notes.length) {
         return;
       }
-      if (playMode === "harmonic") {
-        playEntireBoard(aliveCells, boardd, speedms, chordToPlay);
+      if (playMode === "entireBoard") {
+        playEntireBoard(aliveCells, board, speedms, chordToPlay);
       } else {
-        playSelectedColumn(aliveCells, column, speedms, boardd, chordToPlay);
+        playSelectedColumn(aliveCells, column, speedms, board, chordToPlay);
       }
     },
     //prettier-ignore
-    [ boardd, column, playMode, isSuspended, notes, mute, progressionMode, speedms, chord, ],
+    [ board, column, playMode, isSuspended, notes, mute, progressionMode, speedms, chord, ],
   );
 
   useEffect(() => {
@@ -199,7 +93,7 @@ export default function Game() {
           break;
         case "s":
           dispatch({
-            type: playMode === "harmonic" ? "newBoard" : "nextColumn",
+            type: playMode === "entireBoard" ? "newBoard" : "nextColumn",
             changeChord: true,
           });
           break;
@@ -208,26 +102,22 @@ export default function Game() {
           break;
         case "ArrowUp":
           dispatch({
-            type: "speed",
-            payload: speed === maxSpeed ? speed : speed + 1,
+            type: "increaseSpeed",
           });
           break;
         case "ArrowRight":
           dispatch({
-            type: "speed",
-            payload: speed === maxSpeed ? speed : speed + 1,
+            type: "increaseSpeed",
           });
           break;
         case "ArrowDown":
           dispatch({
-            type: "speed",
-            payload: speed === minSpeed ? speed : speed - 1,
+            type: "decreaseSpeed",
           });
           break;
         case "ArrowLeft":
           dispatch({
-            type: "speed",
-            payload: speed === minSpeed ? speed : speed - 1,
+            type: "decreaseSpeed",
           });
           break;
         case "Escape":
@@ -250,11 +140,11 @@ export default function Game() {
         iteration = iteration === speed ? 0 : (iteration += 1);
         if (iteration === speed) {
           dispatch({
-            type: playMode === "harmonic" ? "newBoard" : "nextColumn",
+            type: playMode === "entireBoard" ? "newBoard" : "nextColumn",
             changeChord: true,
           });
         } else {
-          dispatch({ type: playMode === "harmonic" ? "newBoard" : "nextColumn" });
+          dispatch({ type: playMode === "entireBoard" ? "newBoard" : "nextColumn" });
         }
       }
     }, speedms);
@@ -272,7 +162,7 @@ export default function Game() {
         dispatch({ type: "togglePlaying" });
         break;
       case "settings":
-        setShowSettings(prevState => !prevState);
+        setShowSettings((prevState) => !prevState);
       //no default
     }
   }
@@ -280,14 +170,12 @@ export default function Game() {
   return (
     <GameWrapper height={innerHeight}>
       <Buttons
-        toggle={state => toggle(state)}
+        toggle={(state) => toggle(state)}
         mute={mute}
-        changeBoardState={whatToDo => dispatch({ type: whatToDo })}
+        changeBoardState={(whatToDo) => dispatch({ type: whatToDo })}
         isGameRunning={isPlaying}
         speed={speed}
-        maxSpeed={maxSpeed}
-        minSpeed={minSpeed}
-        sliderChange={e => dispatch({ type: "speed", payload: parseInt(e.target.value) })}
+        sliderChange={(e) => dispatch({ type: "speed", payload: parseInt(e.target.value) })}
       />
       <Board
         suspend={() => dispatch({ type: "suspend" })}
@@ -296,20 +184,22 @@ export default function Game() {
         isPlaying={isPlaying}
         ref={boardRef}
         clickCell={(i, j) => dispatch({ type: "boardClick", coordinates: [i, j] })}
-        board={boardd}
-        handleClick={direction => setIsMouseDown(direction === "down" ? true : false)}
+        board={board}
+        handleClick={(direction) => setIsMouseDown(direction === "down" ? true : false)}
         mousedown={isMouseDown}
         highlightedColumn={column}
       />
       <Settings
         show={showSettings}
-        chromaticScale={scale}
-        toggle={state => toggle(state)}
-        changeGameMode={mode => dispatch({ type: mode })}
-        changeProgressionMode={mode => dispatch({ type: "progressionMode", mode: mode })}
-        gameMode={playMode}
+        scale={scale}
+        toggleSettings={() => setShowSettings(false)}
+        changeGameMode={(event) => dispatch({ type: event.target.value })}
+        changeProgressionMode={(event) =>
+          dispatch({ type: "progressionMode", mode: event.target.value })
+        }
+        playMode={playMode}
         progressionMode={progressionMode}
-        toggleNote={keyIndex => dispatch({ type: "scale", key: keyIndex })}
+        toggleNote={(keyIndex) => dispatch({ type: "scale", key: keyIndex })}
       />
     </GameWrapper>
   );

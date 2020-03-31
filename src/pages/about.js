@@ -16,6 +16,7 @@ const GridContainer = styled.div`
   grid-gap: 2vmin 2vmin;
   justify-items: center;
   align-items: center;
+  justify-content: stretch;
 `;
 const Paragraph = styled.p`
   margin: auto;
@@ -60,7 +61,7 @@ const Img = styled.img`
   // margin: 0 50px 0 50px;
   max-height: 20vh;
 `;
-const ScrollAnchor = props => {
+const ScrollAnchor = (props) => {
   return (
     <Link to={props.target} duration={props.duration} smooth={true}>
       <StyledIcon className="icon-down-open"></StyledIcon>
@@ -97,15 +98,15 @@ const IndexPage = () => {
           </ScrollAnimation>
           <ScrollAnimation animateIn="fadeInUp">
             <GridContainer>
-              <Table active={[4]} />
+              <Table size={[3, 3]} active={[4]} />
               <StyledIcon className="icon-down-bold"></StyledIcon>
-              <Table active={[]} />
-              <Table active={[...Array(9).keys()]} />
+              <Table size={[3, 3]} active={[]} />
+              <Table size={[3, 3]} active={[...Array(9).keys()]} />
               <StyledIcon className="icon-down-bold"></StyledIcon>
-              <Table active={[]} />
-              <Table active={[1, 3, 5]} />
+              <Table size={[3, 3]} active={[]} />
+              <Table size={[3, 3]} active={[1, 3, 5]} />
               <StyledIcon className="icon-down-bold"></StyledIcon>
-              <Table active={[4]} />
+              <Table size={[3, 3]} active={[4]} />
             </GridContainer>
           </ScrollAnimation>
         </FlexBox>
@@ -117,13 +118,12 @@ const IndexPage = () => {
         <FlexBox direction="column">
           <ScrollAnimation animateIn="fadeInUp">
             <Paragraph>
-              Ipsum rerum quas accusamus dolorum reprehenderit? Accusantium dignissimos
-              perspiciatis suscipit at iste, cum consequatur aliquid. Neque maxime facilis
-              explicabo nostrum recusandae Labore repudiandae sed maxime quos accusamus
-              perferendis Ratione quam. Ipsum rerum quas accusamus dolorum reprehenderit?
-              Accusantium dignissimos perspiciatis suscipit at iste, cum consequatur
-              aliquid. Neque maxime facilis explicabo nostrum recusandae Labore
-              repudiandae sed maxime quos accusamus perferendis Ratione quam.
+              Ipsum rerum quas accusamus dolorum reprehenderit? Accusantium dignissimos perspiciatis
+              suscipit at iste, cum consequatur aliquid. Neque maxime facilis explicabo nostrum
+              recusandae Labore repudiandae sed maxime quos accusamus perferendis Ratione quam.
+              Ipsum rerum quas accusamus dolorum reprehenderit? Accusantium dignissimos perspiciatis
+              suscipit at iste, cum consequatur aliquid. Neque maxime facilis explicabo nostrum
+              recusandae Labore repudiandae sed maxime quos accusamus perferendis Ratione quam.
             </Paragraph>
           </ScrollAnimation>
         </FlexBox>
