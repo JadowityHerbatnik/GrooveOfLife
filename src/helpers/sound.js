@@ -47,7 +47,9 @@ function playChord(numberOfNotes, chord, time) {
   // console.log(time);
   // const ping = new Tone.PingPongDelay(0.16, 0.2).toMaster();
 
-  const filter = new Tone.Filter(600, "lowpass").toMaster();
+  const filter = new Tone.Filter(1000, "lowpass", -12).toMaster();
+  // const filter = new Tone.Filter(50, "lowshelf", -48).toMaster();
+  // const filter = new Tone.AutoFilter(0.8).toMaster().start();
   const synth = new Tone.PolySynth(numberOfNotes, Tone.Synth, {
     volume: -30,
     oscillator: {
