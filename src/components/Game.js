@@ -6,11 +6,8 @@ import Settings from "./Settings.js";
 import { debounce } from "lodash";
 import reducer from "../components/Reducer.js";
 import { progression, initialState } from "../utils/constants.js";
-import { getAlive, calculateNextBoard } from "../helpers/makestep.js";
 import { playSelectedColumn, playEntireBoard } from "../helpers/sound.js";
 
-// const maxSpeed = 7;
-// const minSpeed = 1;
 const GameWrapper = styled.div`
   margin: auto;
   overflow: hidden;
@@ -25,16 +22,6 @@ const GameWrapper = styled.div`
     width: 80vw;
     justify-content: center;
     flex-direction: row;
-    // background-color: rgba(0, 0, 0, 0.2);
-    // @keyframes fadebckgr {
-    //   0% {
-    //     background-color: rgba(0, 0, 0, 0);
-    //   }
-    //   100% {
-    //     background-color: rgba(0, 0, 0, 0.2);
-    //   }
-    // }
-    // animation: 2s ease 1s 1 both fadebckgr;
   }
 `;
 export default function Game() {
@@ -65,10 +52,10 @@ export default function Game() {
 
   useEffect(
     () => {
-      const chordToPlay = progressionMode === "auto" ? progression[chord] : notes;
       if (isSuspended || mute || !aliveCells.length || !notes.length) {
         return;
       }
+      const chordToPlay = progressionMode === "auto" ? progression[chord] : notes;
       if (playMode === "entireBoard") {
         playEntireBoard(aliveCells, board, speedms, chordToPlay);
       } else {
@@ -76,7 +63,7 @@ export default function Game() {
       }
     },
     //prettier-ignore
-    [ board, column, playMode, isSuspended, notes, mute, progressionMode, speedms, chord, ],
+    [ board, aliveCells, column, playMode, isSuspended, notes, mute, progressionMode, speedms, chord, ],
   );
 
   useEffect(() => {
@@ -89,7 +76,7 @@ export default function Game() {
           dispatch({ type: "randomize" });
           break;
         case " ":
-          toggle("play");
+          dispatch({ type: "togglePlaying" });
           break;
         case "s":
           dispatch({
@@ -98,7 +85,7 @@ export default function Game() {
           });
           break;
         case "m":
-          toggle("mute");
+          dispatch({ type: "mute" });
           break;
         case "ArrowUp":
           dispatch({
@@ -124,7 +111,7 @@ export default function Game() {
           setShowSettings(false);
           break;
         case "S":
-          toggle("settings");
+          setShowSettings(true);
           break;
         //no default
       }
@@ -153,24 +140,12 @@ export default function Game() {
     };
   }, [speed, speedms, isPlaying, mute, notes, playMode]);
 
-  function toggle(state) {
-    switch (state) {
-      case "mute":
-        dispatch({ type: "mute" });
-        break;
-      case "play":
-        dispatch({ type: "togglePlaying" });
-        break;
-      case "settings":
-        setShowSettings((prevState) => !prevState);
-      //no default
-    }
-  }
-
   return (
     <GameWrapper height={innerHeight}>
       <Buttons
-        toggle={(state) => toggle(state)}
+        toggleMute={() => dispatch({ type: "mute" })}
+        togglePlaying={() => dispatch({ type: "togglePlaying" })}
+        toggleSettings={() => setShowSettings(true)}
         mute={mute}
         changeBoardState={(whatToDo) => dispatch({ type: whatToDo })}
         isGameRunning={isPlaying}

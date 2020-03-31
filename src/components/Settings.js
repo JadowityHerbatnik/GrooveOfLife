@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import "../styles/fontello/css/fontello.css";
 import { keyboard } from "../utils/constants.js";
-import { WrapperButton, StyledIcon, FlexBox } from "../components/Generic.js";
+import { FlexBox } from "../components/Generic.js";
 import { FadeIn, FadeOut, SlideInUp } from "../styles/animations.js";
-import { Table } from "../components/Table.js";
 
 const { keyMargin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard;
 const isBlack = (keyIndex) => {
@@ -37,14 +36,14 @@ const BlurredBackground = styled.div`
   }
   backdrop-filter: blur(10px);
 `;
-const ModeButton = styled.button`
-  background-color: ${({ mode, buttonName }) =>
-    mode === buttonName ? "RoyalBlue" : "transparent"};
-  border: 2px solid RoyalBlue;
-  color: white;
-  font-size: 1em;
-  transition: background-color 0.3s;
-`;
+// const ModeButton = styled.button`
+//   background-color: ${({ mode, buttonName }) =>
+//     mode === buttonName ? "RoyalBlue" : "transparent"};
+//   border: 2px solid RoyalBlue;
+//   color: white;
+//   font-size: 1em;
+//   transition: background-color 0.3s;
+// `;
 const KeysButtons = (props) =>
   [...Array(12).keys()].map((keyIndex) => (
     <NoteButtons
@@ -81,11 +80,6 @@ const StyledLabel = styled.label`
   transition: opacity 0.5s;
   backface-visibility: hidden;
   -webkit-font-smoothing: subpixel-antialiased;
-`;
-const CloseButton = styled(StyledIcon)`
-  position: absolute;
-  right: 0;
-  top: 0;
 `;
 const StyledInput = styled.input`
   appearance: none;

@@ -28,7 +28,7 @@ const BackgroundWrapper = styled.div`
   z-index: -5;
   &:before {
     z-index: -2;
-    backdrop-filter: blur(80px);
+    backdrop-filter: blur(20px);
     content: "";
     position: absolute;
     left: 0;

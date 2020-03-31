@@ -1,4 +1,3 @@
-import React, { useRef, useState, useEffect, useReducer } from "react";
 import { sizes, progression, music } from "../utils/constants.js";
 import { isEqual } from "lodash";
 import { getAlive, calculateNextBoard } from "../helpers/makestep.js";
@@ -48,11 +47,14 @@ export default function reducer(state, action) {
         ...state,
         isPlaying: false,
         board: state.board.map((val) => val.map(() => false)),
+        aliveCells: [],
       };
     case "randomize":
+      const randomBoard = state.board.map((val) => val.map(() => Math.random() >= 0.8));
       return {
         ...state,
-        board: state.board.map((val) => val.map(() => Math.random() >= 0.8)),
+        board: randomBoard,
+        aliveCells: getAlive(randomBoard),
       };
     case "dimensions":
       return { ...state, board: dimensionReducer(state, action) };
@@ -60,7 +62,8 @@ export default function reducer(state, action) {
       const [i, j] = action.coordinates;
       const clicked = Array.from(state.board);
       clicked[i][j] = !clicked[i][j];
-      return { ...state, board: clicked };
+
+      return { ...state, board: clicked, aliveCells: getAlive(clicked) };
     case "newBoard":
       const newAliveCells = getAlive(state.board);
       return {
