@@ -29,7 +29,7 @@ const GenerateTable = (numberOfRows, numberOfCols, active) =>
   [...Array(numberOfRows).keys()].map((rowIndex) => (
     <tr key={rowIndex}>{GenerateColumns(numberOfCols, rowIndex, active)}</tr>
   ));
-export const Table = ({ size = [3, 3], active = [5] }) => (
+export const Table = ({ size = [3, 3], active = [] }) => (
   <StyledTable>
     <tbody>{GenerateTable(size[0], size[1], active)}</tbody>
   </StyledTable>

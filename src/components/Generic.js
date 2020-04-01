@@ -1,20 +1,22 @@
 import styled from "styled-components";
 import AniLink from "gatsby-plugin-transition-link/AniLink";
+import { colors } from "../utils/constants.js";
+const { white, black } = colors;
 
 export const StyledLink = styled(AniLink)`
   text-decoration: none;
-  color: white;
+  color: ${white};
 `;
 export const StyledAnchor = styled.a`
   text-decoration: underline;
-  color: white;
+  color: ${white};
 `;
 export const StyledIcon = styled.i`
   display: inline-block;
   font-size: 5vh;
   margin: 0 0.5vw 0 0.5vw;
   // margin: 0.5vw;
-  color: white;
+  color: ${({ color }) => (color ? color : white)};
   transition: color 0.2s;
 `;
 export const FlexBox = styled.div`
@@ -25,8 +27,7 @@ export const FlexBox = styled.div`
   ${({ responsive }) =>
     responsive &&
     `@media (orientation: portrait) {
-    flex-direction: ${({ direction, responsive }) =>
-      direction === "row" ? "column" : "row"};
+    flex-direction: ${({ direction, responsive }) => (direction === "row" ? "column" : "row")};
   }
 `}
 `;

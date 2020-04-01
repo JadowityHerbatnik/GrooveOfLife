@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { sizes } from "../utils/constants.js";
+import { colors, sizes } from "../utils/constants.js";
 import { SlideFromBottom } from "../styles/animations.js";
+const { black, brblack, green, cyan, violet, grey, blue } = colors;
 
 const BoardWrapper = styled.div`
-  height: 100%;
+  height: 90%;
   width: 90%;
   @media screen and (orientation: portrait) {
     // Decreased height on mobile devices to avoid scrollbar and weird interactions with bars
@@ -18,6 +19,7 @@ const BoardWrapper = styled.div`
 const StyledTable = styled.table`
   margin: auto;
   opacity: 0.5;
+  border: ${({ isPlaying }) => `2px solid ${isPlaying ? green : cyan}`};
   border-collapse: collapse;
   border-spacing: 0px;
   animation: 0.5s ease 0.7s 1 both ${SlideFromBottom};
@@ -28,7 +30,7 @@ const StyledTd = styled.td`
   height: ${({ cellSize }) => `${cellSize}px`};
   box-sizing: border-box;
   opacity: ${({ column, highlightedColumn }) => (column === highlightedColumn ? "0.5" : "1")};
-  background-color: ${({ active }) => (active ? "rgba(0,0,0,0)" : "black")};
+  background-color: ${({ active }) => (active ? blue : "black")};
   // &:hover {
   //   opacity: 0.5;
   // }
@@ -72,7 +74,7 @@ const Board = React.forwardRef((props, ref) => {
 
   return (
     <BoardWrapper ref={ref}>
-      <StyledTable>
+      <StyledTable isPlaying={props.isPlaying}>
         <tbody>{GenerateTable(numberOfRows, numberOfCols, props)}</tbody>
       </StyledTable>
     </BoardWrapper>

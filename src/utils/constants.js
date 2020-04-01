@@ -31,7 +31,20 @@ export const keyboard = {
   whiteHeight: "130px",
   keyMargin: "1px",
 };
-export const colors = {};
+export const colors = {
+  brblack: "#002b36",
+  black: "#073642",
+  white: "#eee8d5",
+  green: "#859900",
+  red: "#dc322f",
+  orange: "#cb4b16",
+  yellow: "#b58900",
+  blue: "#268bd2",
+  violet: "#6c71c4",
+  pink: "#d33682",
+  grey: "#93a1a1",
+  cyan: "#2aa198",
+};
 export const progression = [
   [`D`, `D#`, `G`, `A#`],
   [`C#`, `D#`, "E", `G`, `A#`],

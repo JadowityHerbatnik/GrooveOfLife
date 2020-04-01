@@ -3,12 +3,13 @@ import SEO from "../components/seo";
 import Layout from "../components/layout.js";
 import styled from "styled-components";
 import { intro, rules } from "../utils/paragraphs.js";
+import { colors } from "../utils/constants.js";
 import { StyledIcon, FlexBox, WrapperButton } from "../components/Generic.js";
 import { Table } from "../components/Table.js";
 import { Link, animateScroll } from "react-scroll";
 import ScrollAnimation from "react-animate-on-scroll";
 import "animate.css/animate.min.css";
-
+const { white, yellow, red, green } = colors;
 const GridContainer = styled.div`
   display: grid;
   grid: repeat(3, auto) / repeat(3, auto);
@@ -31,6 +32,15 @@ const Paragraph = styled.p`
   max-width: 90%;
   @media (orientation: landscape) {
     max-width: 70%;
+  }
+  & span.green {
+    color: ${green};
+  }
+  & span.white {
+    color: ${white};
+  }
+  & span.red {
+    color: ${red};
   }
   // text-align: justify;
 `;
@@ -99,13 +109,13 @@ const IndexPage = () => {
           <ScrollAnimation animateIn="fadeInUp">
             <GridContainer>
               <Table size={[3, 3]} active={[4]} />
-              <StyledIcon className="icon-down-bold"></StyledIcon>
+              <StyledIcon color={yellow} className="icon-down-bold"></StyledIcon>
               <Table size={[3, 3]} active={[]} />
               <Table size={[3, 3]} active={[...Array(9).keys()]} />
-              <StyledIcon className="icon-down-bold"></StyledIcon>
+              <StyledIcon color={yellow} className="icon-down-bold"></StyledIcon>
               <Table size={[3, 3]} active={[]} />
               <Table size={[3, 3]} active={[1, 3, 5]} />
-              <StyledIcon className="icon-down-bold"></StyledIcon>
+              <StyledIcon color={yellow} className="icon-down-bold"></StyledIcon>
               <Table size={[3, 3]} active={[4]} />
             </GridContainer>
           </ScrollAnimation>

@@ -14,13 +14,14 @@ const GameWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   height: ${({ height }) => `${height && height * 0.85}px`};
   width: 100vw;
   @media screen and (orientation: landscape) {
-    height: 83vh;
+    height: 85vh;
     width: 80vw;
     justify-content: center;
+    align-items: center;
     flex-direction: row;
   }
 `;

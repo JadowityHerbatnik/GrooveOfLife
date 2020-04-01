@@ -2,9 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import "../styles/fontello/css/fontello.css";
 import { WrapperButton, StyledIcon, StyledLink } from "../components/Generic.js";
-import { music } from "../utils/constants.js";
+import { music, colors } from "../utils/constants.js";
 import { SlideFromLeft } from "../styles/animations.js";
 const { minSpeed, maxSpeed } = music;
+const { violet, orange, cyan, white, black, green, red, yellow, blue, pink } = colors;
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -67,31 +68,25 @@ const Buttons = (props) => {
   return (
     <Container>
       <ButtonWrapper>
+        <WrapperButton onClick={() => props.togglePlaying()}>
+          <StyledIcon color={green} className={props.isGameRunning ? "icon-pause" : "icon-play"} />
+        </WrapperButton>
         <WrapperButton onClick={() => props.changeBoardState("randomize")}>
-          <StyledIcon className="icon-shuffle" />
+          <StyledIcon color={yellow} className="icon-shuffle" />
         </WrapperButton>
         <WrapperButton onClick={() => props.changeBoardState("clear")}>
-          <StyledIcon className="icon-cancel" />
-        </WrapperButton>
-        <WrapperButton onClick={() => props.togglePlaying()}>
-          <StyledIcon className={props.isGameRunning ? "icon-pause" : "icon-play"} />
+          <StyledIcon color={red} className="icon-cancel" />
         </WrapperButton>
         <br />
         <WrapperButton onClick={() => props.toggleMute()}>
-          <StyledIcon className={props.mute ? "icon-volume-off" : "icon-volume-up"} />
+          <StyledIcon color={blue} className={props.mute ? "icon-volume-off" : "icon-volume-up"} />
         </WrapperButton>
         <WrapperButton onClick={() => props.toggleSettings()}>
-          <StyledIcon className="icon-cog" />
+          <StyledIcon color={cyan} className="icon-cog" />
         </WrapperButton>
         <WrapperButton>
-          <StyledLink
-            cover
-            direction="up"
-            bg="linear-gradient(90deg, rgba(9,38,182,1) 0%, rgba(106,12,238,1) 100%)"
-            duration={1.5}
-            to="/about"
-          >
-            <StyledIcon className="icon-help" />
+          <StyledLink cover direction="up" bg={black} duration={1.5} to="/about">
+            <StyledIcon color={violet} className="icon-help" />
           </StyledLink>
         </WrapperButton>
       </ButtonWrapper>
