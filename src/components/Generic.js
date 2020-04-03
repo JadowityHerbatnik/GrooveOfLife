@@ -3,7 +3,7 @@ import AniLink from "gatsby-plugin-transition-link/AniLink";
 
 export const StyledLink = styled(AniLink)`
   text-decoration: none;
-  color: ${({ colors }) => colors.white};
+  color: ${({ color }) => color};
 `;
 export const StyledAnchor = styled.a`
   text-decoration: underline;

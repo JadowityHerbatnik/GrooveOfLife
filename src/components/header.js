@@ -40,6 +40,7 @@ const Header = ({ siteTitle, animateHeader, setTheme }) => {
       <H1>
         <StyledLink
           colors={colors}
+          color={colors.white}
           cover
           bg={colors.black}
           direction="up"
