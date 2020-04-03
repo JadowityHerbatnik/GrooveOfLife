@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import "../styles/fontello/css/fontello.css";
 import { WrapperButton, StyledIcon, StyledLink } from "../components/Generic.js";
-import { music, colors } from "../utils/constants.js";
+import { ThemeContext } from "../components/layout.js";
+import { music } from "../utils/constants.js";
 import { SlideFromLeft } from "../styles/animations.js";
 const { minSpeed, maxSpeed } = music;
-const { violet, orange, cyan, white, black, green, red, yellow, blue, pink } = colors;
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -43,14 +43,14 @@ const SliderWrapper = styled.div`
       transform: translateY(50vmin) rotate(-90deg);
       transform-origin: top left;
     }
-    opacity: 0.3;
+    opacity: 0.5;
     width: 50vmin;
     appearance: none;
     background: black;
     outline: none;
     transition: opacity 0.5s;
     &:hover {
-      opacity: 0.5;
+      opacity: 0.7;
     }
     &::-webkit-slider-thumb {
       transition: 0.3s;
@@ -65,6 +65,8 @@ const SliderWrapper = styled.div`
   }
 `;
 const Buttons = (props) => {
+  const colors = useContext(ThemeContext);
+  const { violet, orange, white, black, grey, green, red, yellow, blue, pink } = colors;
   return (
     <Container>
       <ButtonWrapper>
@@ -82,7 +84,7 @@ const Buttons = (props) => {
           <StyledIcon color={blue} className={props.mute ? "icon-volume-off" : "icon-volume-up"} />
         </WrapperButton>
         <WrapperButton onClick={() => props.toggleSettings()}>
-          <StyledIcon color={cyan} className="icon-cog" />
+          <StyledIcon color={grey} className="icon-cog" />
         </WrapperButton>
         <WrapperButton>
           <StyledLink cover direction="up" bg={black} duration={1.5} to="/about">

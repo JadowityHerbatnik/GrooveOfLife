@@ -1,10 +1,9 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useContext } from "react";
 import styled, { css } from "styled-components";
-import { StyledLink } from "../components/Generic.js";
+import { StyledLink, WrapperButton } from "../components/Generic.js";
+import { ThemeContext } from "../components/layout.js";
 import { FadeIn } from "../styles/animations.js";
-import { colors } from "../utils/constants.js";
-const { cyan, black } = colors;
 
 const Wrapper = styled.header`
   animation: ${({ animateHeader }) =>
@@ -12,7 +11,7 @@ const Wrapper = styled.header`
   // background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
   backdrop-filter: blur(30px);
   border-width: 0px 0px 3px 0px;
-  border-color: ${cyan};
+  border-color: ${({ colors }) => colors.border};
   border-style: solid;
   text-align: center;
   height: 15vh;
@@ -26,15 +25,33 @@ const H1 = styled.h1`
   font-size: 7vh;
   font-family: "Geo";
 `;
-const Header = ({ siteTitle, animateHeader }) => (
-  <Wrapper animateHeader={animateHeader}>
-    <H1>
-      <StyledLink cover bg={black} direction="up" duration={1} to="/">
-        {siteTitle}
-      </StyledLink>
-    </H1>
-  </Wrapper>
-);
+const ThemeButton = styled(WrapperButton)`
+  position: fixed;
+  top: 10px;
+  right: 10px;
+`;
+
+const Header = ({ siteTitle, animateHeader, setTheme }) => {
+  const colors = useContext(ThemeContext);
+
+  return (
+    <Wrapper colors={colors} animateHeader={animateHeader}>
+      <ThemeButton onClick={() => setTheme()}>theme</ThemeButton>
+      <H1>
+        <StyledLink
+          colors={colors}
+          cover
+          bg={colors.black}
+          direction="up"
+          duration={1}
+          to="/"
+        >
+          {siteTitle}
+        </StyledLink>
+      </H1>
+    </Wrapper>
+  );
+};
 
 Header.propTypes = {
   siteTitle: PropTypes.string,

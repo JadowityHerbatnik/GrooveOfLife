@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import { colors, sizes } from "../utils/constants.js";
+import { sizes, colors } from "../utils/constants.js";
 import { SlideFromBottom } from "../styles/animations.js";
-const { black, brblack, green, cyan, violet, grey, blue } = colors;
+import { ThemeContext } from "../components/layout.js";
 
 const BoardWrapper = styled.div`
   height: 90%;
@@ -19,7 +19,7 @@ const BoardWrapper = styled.div`
 const StyledTable = styled.table`
   margin: auto;
   opacity: 0.5;
-  border: ${({ isPlaying }) => `2px solid ${isPlaying ? green : cyan}`};
+  border: ${({ isPlaying, colors }) => `3px solid ${isPlaying ? colors.green : colors.border}`};
   border-collapse: collapse;
   border-spacing: 0px;
   animation: 0.5s ease 0.7s 1 both ${SlideFromBottom};
@@ -30,14 +30,15 @@ const StyledTd = styled.td`
   height: ${({ cellSize }) => `${cellSize}px`};
   box-sizing: border-box;
   opacity: ${({ column, highlightedColumn }) => (column === highlightedColumn ? "0.5" : "1")};
-  background-color: ${({ active }) => (active ? blue : "black")};
+  background-color: ${({ active, colors }) => (active ? colors.blue : "black")};
   // &:hover {
   //   opacity: 0.5;
   // }
 `;
-const GenerateColumns = (rowIndex, props, numberOfCols) =>
+const GenerateColumns = (rowIndex, numberOfCols, colors, props) =>
   [...Array(numberOfCols).keys()].map((columnIndex) => (
     <StyledTd
+      colors={colors}
       cellSize={sizes.preferredCellSize}
       key={`${rowIndex}x${columnIndex}`}
       cols={numberOfCols}
@@ -64,18 +65,20 @@ const GenerateColumns = (rowIndex, props, numberOfCols) =>
       }}
     />
   ));
-const GenerateTable = (numberOfRows, numberOfCols, props) =>
+const GenerateTable = (numberOfRows, numberOfCols, colors, props) =>
   [...Array(numberOfRows).keys()].map((rowIndex) => (
-    <tr key={rowIndex}>{GenerateColumns(rowIndex, props, numberOfCols)}</tr>
+    <tr key={rowIndex}>{GenerateColumns(rowIndex, numberOfCols, colors, props)}</tr>
   ));
 const Board = React.forwardRef((props, ref) => {
+  const colors = useContext(ThemeContext);
+  // const { black, brblack, green, cyan, violet, grey, blue } = colors;
   const numberOfRows = props.board.length;
   const numberOfCols = props.board[0].length;
 
   return (
     <BoardWrapper ref={ref}>
-      <StyledTable isPlaying={props.isPlaying}>
-        <tbody>{GenerateTable(numberOfRows, numberOfCols, props)}</tbody>
+      <StyledTable colors={colors} isPlaying={props.isPlaying}>
+        <tbody>{GenerateTable(numberOfRows, numberOfCols, colors, props)}</tbody>
       </StyledTable>
     </BoardWrapper>
   );

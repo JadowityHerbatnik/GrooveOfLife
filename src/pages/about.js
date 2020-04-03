@@ -28,7 +28,7 @@ const Paragraph = styled.p`
   @media (min-width: 300px) and (max-width: 960px) {
     font-size: calc(16px + 6 * (100vw - 300px) / (960 - 300));
   }
-  padding: 10px;
+  padding: 30px 10px 30px 10px;
   max-width: 90%;
   @media (orientation: landscape) {
     max-width: 70%;
@@ -102,7 +102,7 @@ const IndexPage = () => {
         </WrapperButton>
       </Container>
       <Container height={vh} id="con2">
-        <FlexBox direction="column">
+        <FlexBox direction="column" justify="center">
           <ScrollAnimation animateIn="fadeInUp">
             <Paragraph>{rules}</Paragraph>
           </ScrollAnimation>

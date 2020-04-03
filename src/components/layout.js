@@ -1,12 +1,12 @@
-import React from "react";
+import React, { createContext, useState } from "react";
 import PropTypes from "prop-types";
 import { useStaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
-import { colors } from "../utils/constants.js";
+import { colors, gruvbox } from "../utils/constants.js";
 import Header from "./header";
 import { createGlobalStyle } from "styled-components";
-
-const { grey, black, yellow } = colors;
+// const { grey, black, yellow } = colors;
+export const ThemeContext = React.createContext(colors);
 
 const GlobalStyle = createGlobalStyle`
 	html, body, main {
@@ -16,7 +16,7 @@ const GlobalStyle = createGlobalStyle`
 		font-family: "Montserrat", sans-serif;
   	margin: 0;
    	padding: 0;
-		color: ${grey};
+		color: ${({ colors }) => colors.grey};
 		height: 100%;
 	}
 	*, *::after, *::before {
@@ -25,8 +25,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 const BackgroundWrapper = styled.div`
   position: relative;
-  // background: linear-gradient(90deg, rgba(9, 38, 182, 1) 0%, rgba(106, 12, 238, 1) 100%);
-  background-color: ${black};
+  background-color: ${({ colors }) => colors.black};
   // min-height: 100vh;
   min-height: 100vh;
   z-index: -5;
@@ -42,6 +41,7 @@ const BackgroundWrapper = styled.div`
   // }
 `;
 const Layout = (props) => {
+  const [theme, setTheme] = useState("solarized");
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -54,11 +54,17 @@ const Layout = (props) => {
 
   return (
     <>
-      <GlobalStyle />
-      <BackgroundWrapper>
-        <Header siteTitle={data.site.siteMetadata.title} animateHeader={props.animateHeader} />
-        <main>{props.children}</main>
-      </BackgroundWrapper>
+      <GlobalStyle colors={theme === "solarized" ? colors : gruvbox} />
+      <ThemeContext.Provider value={theme === "solarized" ? colors : gruvbox}>
+        <BackgroundWrapper colors={theme === "solarized" ? colors : gruvbox}>
+          <Header
+            setTheme={() => setTheme(theme === "solarized" ? "gruvbox" : "solarized")}
+            siteTitle={data.site.siteMetadata.title}
+            animateHeader={props.animateHeader}
+          />
+          <main>{props.children}</main>
+        </BackgroundWrapper>
+      </ThemeContext.Provider>
     </>
   );
 };

@@ -4,7 +4,7 @@ import "../styles/fontello/css/fontello.css";
 import { keyboard, colors } from "../utils/constants.js";
 import { FlexBox } from "../components/Generic.js";
 import { FadeIn, FadeOut, SlideInUp } from "../styles/animations.js";
-const { cyan, white, background, green, red, yellow, blue, pink, grey } = colors;
+const { white, background, green, cyan, red, yellow, blue, pink, grey } = colors;
 
 const { keyMargin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard;
 const isBlack = (keyIndex) => {

@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: `The Game of Life`,
+    title: `The Groove of Life`,
     description: `Conway;s Gmae of Life`,
     author: `jadowityherbatnik`,
   },

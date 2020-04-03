@@ -1,12 +1,14 @@
 import styled from "styled-components";
 import React from "react";
+import { colors } from "../utils/constants.js";
+const { white } = colors;
 
 const StyledTable = styled.table`
   margin: 10px;
   // background-color: rgba(0, 0, 0, 0.5);
   border-collapse: collapse;
   border-spacing: 0px;
-  opacity: 0.5;
+  opacity: 0.7;
 `;
 const StyledTd = styled.td`
   @media (orientation: landscape) {
@@ -16,7 +18,7 @@ const StyledTd = styled.td`
   width: 8vmin;
   height: 8vmin;
   border: 2px solid black;
-  background-color: ${({ ifActive }) => (ifActive ? "white" : "transparent")};
+  background-color: ${({ ifActive }) => (ifActive ? white : "transparent")};
 `;
 
 const GenerateColumns = (numberOfCols, rowIndex, active) =>
