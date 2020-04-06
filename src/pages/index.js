@@ -1,13 +1,12 @@
 import React from "react";
-import SEO from "../components/seo";
-import Layout from "../components/layout.js";
-import Game from "../components/Game.js";
+import SEO from "@common/seo";
+import Game from "@home/Game.js";
 
 const IndexPage = () => (
-  <Layout animateHeader>
+  <>
     <SEO title="Home" />
     <Game />
-  </Layout>
+  </>
 );
 
 export default IndexPage;

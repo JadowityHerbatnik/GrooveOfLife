@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
-import "../styles/fontello/css/fontello.css";
-import { keyboard } from "../utils/constants.js";
-import { FlexBox } from "../components/Generic.js";
-import { FadeIn, FadeOut, SlideInUp } from "../styles/animations.js";
+import "../../styles/fontello/css/fontello.css";
+import { keyboard, colors } from "@utils/constants.js";
+import { FlexBox } from "@common/Generic.js";
+import { FadeIn, FadeOut, SlideInUp } from "@styles/animations.js";
+const { white, background, green, cyan, red, yellow, blue, pink, grey } = colors;
 
 const { keyMargin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard;
 const isBlack = (keyIndex) => {
@@ -14,7 +15,7 @@ const isBlack = (keyIndex) => {
 const SettingsContainer = styled.div`
   margin: auto;
   padding: 0 20px 20px 20px;
-  border: 1px solid RoyalBlue;
+  border: 1px solid ${cyan};
   background-color: rgba(0, 0, 0, 0.5);
   box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.75);
   position: relative;
@@ -61,44 +62,35 @@ const NoteButtons = styled.div`
   margin-left: ${({ isBlack }) => (isBlack ? `calc(${blackWidth}/-2)` : `-${keyMargin}`)};
   margin-right: ${({ isBlack }) => (isBlack ? `calc(${blackWidth}/-2)` : `-${keyMargin}`)};
   z-index: ${({ isBlack }) => (isBlack ? 1 : 0)};
-  background-color: ${({ isNoteUsed, isBlack }) =>
-    isNoteUsed ? "RoyalBlue" : isBlack ? "black" : "grey"};
+  background-color: ${({ isNoteUsed, isBlack }) => (isNoteUsed ? green : isBlack ? "black" : grey)};
   border: ${() => `${keyMargin} solid black`};
   transition: background-color 0.3s;
 `;
 const Label = styled.p`
   font-family: Geo;
   font-size: 1.5em;
+  color: ${grey};
 `;
 const StyledLabel = styled.label`
   margin: 3px;
   padding: 6px;
   display: inline-block;
-  border: 2px solid RoyalBlue;
-  opacity: 0.8;
-  color: RoyalBlue;
+  border: 1px solid ${grey};
+  color: ${grey};
   transition: opacity 0.5s;
-  backface-visibility: hidden;
-  -webkit-font-smoothing: subpixel-antialiased;
+  font-weight: bold;
 `;
 const StyledInput = styled.input`
   appearance: none;
   &:checked + ${StyledLabel} {
-    color: black;
-    background-color: RoyalBlue;
+    color: ${cyan};
+    border-color: ${cyan};
+		// border: 2px solid ${green};
     opacity: 1;
   }
 `;
-const Settings = ({
-  show,
-  scale,
-  toggleSettings,
-  changeGameMode,
-  changeProgressionMode,
-  playMode,
-  progressionMode,
-  toggleNote,
-}) => {
+//prettier-ignore
+const Settings = ({ show, scale, toggleSettings, changeGameMode, changeProgressionMode, playMode, progressionMode, toggleNote, }) => {
   const [shouldRender, setRender] = useState(show);
 
   useEffect(() => {

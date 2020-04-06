@@ -5,7 +5,7 @@ const { minSpeed, maxSpeed } = music;
 
 const notesInOrder = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const chordReducer = (state, action, nextAlive = []) => {
-  if (state.progressionMode === "harmonic" && isEqual(nextAlive, state.aliveCells)) {
+  if (state.playMode === "entireBoard" && isEqual(nextAlive, state.aliveCells)) {
     return state.chord;
   }
   if (action.changeChord) {
