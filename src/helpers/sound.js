@@ -26,6 +26,13 @@ export function playEntireBoard(aliveCells, board, speedms, notes) {
     }
   }
   const chordNoDuplicates = [...new Set(chord)];
+  // const final = [chordNoDuplicates[0]];
+  // const len = chordNoDuplicates.length;
+  // for (let i = 1; i < len; i++) {
+  //   if (chordNoDuplicates[i].slice(-1) !== chordNoDuplicates[i - 1].slice(-1)) {
+  //     final.push(chordNoDuplicates[i]);
+  //   }
+  // }
   playChord(chordNoDuplicates.length, chordNoDuplicates, `${time}`);
 }
 export function playSelectedColumn(aliveCells, column, speedms, board, notes) {

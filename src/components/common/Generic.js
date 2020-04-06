@@ -1,6 +1,11 @@
 import styled from "styled-components";
 import AniLink from "gatsby-plugin-transition-link/AniLink";
-
+export const Grid = styled.div`
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  justify-content: stretch;
+`;
 export const StyledLink = styled(AniLink)`
   text-decoration: none;
   color: ${({ color }) => color};
@@ -25,8 +30,7 @@ export const FlexBox = styled.div`
   ${({ responsive }) =>
     responsive &&
     `@media (orientation: portrait) {
-    flex-direction: ${({ direction, responsive }) =>
-      direction === "row" ? "column" : "row"};
+    flex-direction: ${({ direction, responsive }) => (direction === "row" ? "column" : "row")};
   }
 `}
 `;

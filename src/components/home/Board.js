@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { sizes, colors } from "../utils/constants.js";
-import { SlideFromBottom } from "../styles/animations.js";
-import { ThemeContext } from "../components/layout.js";
+import { sizes, colors } from "@utils/constants.js";
+import { SlideFromBottom } from "@styles/animations.js";
+import { ThemeContext } from "@common/Layout.js";
 
 const BoardWrapper = styled.div`
   height: 90%;
@@ -18,7 +18,7 @@ const BoardWrapper = styled.div`
 `;
 const StyledTable = styled.table`
   margin: auto;
-  opacity: 0.5;
+  opacity: 0.45;
   border: ${({ isPlaying, colors }) => `3px solid ${isPlaying ? colors.green : colors.border}`};
   border-collapse: collapse;
   border-spacing: 0px;
@@ -30,7 +30,8 @@ const StyledTd = styled.td`
   height: ${({ cellSize }) => `${cellSize}px`};
   box-sizing: border-box;
   opacity: ${({ column, highlightedColumn }) => (column === highlightedColumn ? "0.5" : "1")};
-  background-color: ${({ active, colors }) => (active ? colors.blue : "black")};
+  background-color: ${({ active, isPlaying, colors }) =>
+    active ? (isPlaying ? colors.green : colors.border) : "black"};
   // &:hover {
   //   opacity: 0.5;
   // }
@@ -40,6 +41,7 @@ const GenerateColumns = (rowIndex, numberOfCols, colors, props) =>
     <StyledTd
       colors={colors}
       cellSize={sizes.preferredCellSize}
+      isPlaying={props.isPlaying}
       key={`${rowIndex}x${columnIndex}`}
       cols={numberOfCols}
       column={columnIndex}

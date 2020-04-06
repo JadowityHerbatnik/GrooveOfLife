@@ -5,8 +5,28 @@ module.exports = {
     author: `jadowityherbatnik`,
   },
   plugins: [
+    {
+      resolve: `gatsby-plugin-alias-imports`,
+      options: {
+        alias: {
+          "@src": "src",
+          "@components": "src/components",
+          "@common": "src/components/common",
+          "@pages": "src/pages",
+          "@home": "src/components/home",
+          "@about": "src/components/about",
+          "@utils": "src/utils",
+          "@styles": "src/styles",
+          "@helpers": "src/helpers",
+        },
+        extensions: ["js"],
+      },
+    },
     `gatsby-plugin-react-helmet`,
-    `gatsby-plugin-transition-link`,
+    {
+      resolve: `gatsby-plugin-transition-link`,
+      options: { layout: require.resolve(`./src/components/common/Layout.js`) },
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {

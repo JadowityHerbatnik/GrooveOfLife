@@ -34,7 +34,7 @@ export const keyboard = {
 export const gruvbox = {
   border: "#fabd27",
   brblack: "#665c54",
-  black: "#504945",
+  black: "#3c3836",
   white: "#ebdbb2",
   green: "#b8bb26",
   red: "#fb4934",

@@ -1,37 +1,35 @@
-import React, { useRef, useState, useEffect, useReducer } from "react";
+import React, { useRef, useState, useEffect, useReducer, useContext } from "react";
 import styled from "styled-components";
-import Buttons from "./Buttons.js";
-import Board from "./Board.js";
-import Settings from "./Settings.js";
+import ButtonBar from "@home/ButtonBar.js";
+import Board from "@home/Board.js";
+import { HeightContext } from "@common/Layout.js";
+import Settings from "@home/Settings.js";
 import { debounce } from "lodash";
-import reducer from "../components/Reducer.js";
-import { progression, initialState } from "../utils/constants.js";
-import { playSelectedColumn, playEntireBoard } from "../helpers/sound.js";
+import reducer from "../Reducer.js";
+import { progression, initialState } from "@utils/constants.js";
+import { playSelectedColumn, playEntireBoard } from "@helpers/sound.js";
 
 const GameWrapper = styled.div`
   margin: auto;
   overflow: hidden;
-  display: flex;
+ 	display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: ${({ height }) => `${height && height * 0.85}px`};
+// background: rgba(0,0,0,0.3);
+  // height: ${({ height }) => `${height && height * 0.85}px`};
+  height: ${({ height }) => `${height}px`};
   width: 100vw;
   @media screen and (orientation: landscape) {
-    height: 85vh;
-    width: 80vw;
-    justify-content: center;
-    align-items: center;
+    width: 85vw;
     flex-direction: row;
   }
 `;
 export default function Game() {
-  console.log("render");
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [innerHeight, setInnerHeight] = useState();
   const boardRef = useRef(null);
-
+  const { innerHeight, headerHeight } = useContext(HeightContext);
   //prettier-ignore
   const [
     { isPlaying, isSuspended, board, aliveCells, mute, speed, speedms, playMode, progressionMode, scale, notes, column,  chord},
@@ -39,7 +37,7 @@ export default function Game() {
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    setInnerHeight(window.innerHeight);
+    // setInnerHeight(window.innerHeight);
     const recalculate = debounce(() => {
       const { width, height } = boardRef.current.getBoundingClientRect();
       if (!!width && !!height) {
@@ -142,8 +140,8 @@ export default function Game() {
   }, [speed, speedms, isPlaying, mute, notes, playMode]);
 
   return (
-    <GameWrapper height={innerHeight}>
-      <Buttons
+    <GameWrapper height={innerHeight - headerHeight}>
+      <ButtonBar
         toggleMute={() => dispatch({ type: "mute" })}
         togglePlaying={() => dispatch({ type: "togglePlaying" })}
         toggleSettings={() => setShowSettings(true)}

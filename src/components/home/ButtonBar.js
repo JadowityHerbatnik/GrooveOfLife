@@ -1,21 +1,27 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import "../styles/fontello/css/fontello.css";
-import { WrapperButton, StyledIcon, StyledLink } from "../components/Generic.js";
-import { ThemeContext } from "../components/layout.js";
-import { music } from "../utils/constants.js";
-import { SlideFromLeft } from "../styles/animations.js";
-const { minSpeed, maxSpeed } = music;
+import "@styles/fontello/css/fontello.css";
+import { WrapperButton, StyledIcon, StyledLink } from "@common/Generic.js";
+import { ThemeContext } from "@common/Layout.js";
+import { music } from "@utils/constants.js";
+import { SlideFromLeft } from "@styles/animations.js";
 
+const { minSpeed, maxSpeed } = music;
 const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  flex-wrap: wrap;
   @media screen and (orientation: landscape) {
     flex-direction: column;
   }
 `;
+// const RightButtonWrapper = styled(LeftButtonWrapper)`
+// @media screen and (orientation: landscape) {
+//   position: absolute;
+//   top: 50%;
+//   right: 0;
+// }
+// `;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -79,7 +85,6 @@ const Buttons = (props) => {
         <WrapperButton onClick={() => props.changeBoardState("clear")}>
           <StyledIcon color={red} className="icon-cancel" />
         </WrapperButton>
-        <br />
         <WrapperButton onClick={() => props.toggleMute()}>
           <StyledIcon color={blue} className={props.mute ? "icon-volume-off" : "icon-volume-up"} />
         </WrapperButton>
@@ -87,7 +92,7 @@ const Buttons = (props) => {
           <StyledIcon color={grey} className="icon-cog" />
         </WrapperButton>
         <WrapperButton>
-          <StyledLink cover direction="up" bg={black} duration={1.5} to="/about">
+          <StyledLink colors={colors} cover direction="up" bg={black} duration={1.5} to="/about">
             <StyledIcon color={violet} className="icon-help" />
           </StyledLink>
         </WrapperButton>

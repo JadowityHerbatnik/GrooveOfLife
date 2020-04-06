@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
-import "../styles/fontello/css/fontello.css";
-import { keyboard, colors } from "../utils/constants.js";
-import { FlexBox } from "../components/Generic.js";
-import { FadeIn, FadeOut, SlideInUp } from "../styles/animations.js";
+import "../../styles/fontello/css/fontello.css";
+import { keyboard, colors } from "@utils/constants.js";
+import { FlexBox } from "@common/Generic.js";
+import { FadeIn, FadeOut, SlideInUp } from "@styles/animations.js";
 const { white, background, green, cyan, red, yellow, blue, pink, grey } = colors;
 
 const { keyMargin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard;
@@ -89,16 +89,8 @@ const StyledInput = styled.input`
     opacity: 1;
   }
 `;
-const Settings = ({
-  show,
-  scale,
-  toggleSettings,
-  changeGameMode,
-  changeProgressionMode,
-  playMode,
-  progressionMode,
-  toggleNote,
-}) => {
+//prettier-ignore
+const Settings = ({ show, scale, toggleSettings, changeGameMode, changeProgressionMode, playMode, progressionMode, toggleNote, }) => {
   const [shouldRender, setRender] = useState(show);
 
   useEffect(() => {

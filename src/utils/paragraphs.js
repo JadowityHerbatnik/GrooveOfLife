@@ -1,6 +1,6 @@
 import React from "react";
-import { StyledAnchor } from "../components/Generic.js";
-import { colors } from "../utils/constants.js";
+import { StyledAnchor } from "@common/Generic.js";
+import { colors } from "@utils/constants.js";
 const { grey, black, yellow, red, green } = colors;
 
 const WikiLink = (
@@ -32,4 +32,30 @@ export const rules = (
     become alive (so lifelike!)
   </>
 );
-export const keybindings = <>You can use some keyboard shortcuts to control the Game</>;
+export const keybindings = (
+  <>
+    You can also use some keyboard shortcuts to control the Game
+    <br />
+    <br />
+  </>
+);
+export const keybindings2 = (
+  <>
+    <span className="key">Space</span>
+    <span className="green">Play/pause</span>
+    <span className="key">R</span>
+    <span className="yellow">random board</span>
+    <span className="key">C</span>
+    <span className="red">clean board</span>
+    <span className="key">M</span>
+    <span className="blue">mute sound</span>
+    <span className="key">S</span>Make one step
+    <div>
+      <span className="key">&#8592;</span>
+      <span className="key">&#8593;</span>
+      <span className="key">&#8594;</span>
+      <span className="key">&#8595;</span>
+    </div>
+    change speed
+  </>
+);
