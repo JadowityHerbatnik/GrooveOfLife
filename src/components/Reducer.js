@@ -94,11 +94,17 @@ export default function reducer(state, action) {
       const decSpeed = state.speed === minSpeed ? state.speed : state.speed - 1;
       return { ...state, speed: decSpeed, speedms: 1000 / decSpeed };
     case "columns":
-      return { ...state, playMode: "columns" };
+      return { ...state, playMode: action.type };
     case "entireBoard":
-      return { ...state, playMode: "entireBoard", column: null };
-    case "progressionMode":
-      return { ...state, progressionMode: action.mode };
+      return { ...state, playMode: action.type, column: null };
+    case "auto":
+      return { ...state, progressionMode: action.type };
+    case "custom":
+      return { ...state, progressionMode: action.type };
+    case "toggleSettings":
+      return { ...state, showSettings: !state.showSettings };
+    case "mouseDown":
+      return { ...state, isMouseDown: action.payload };
     case "scale":
       state.scale[action.key] = !state.scale[action.key];
       const newNotes = [];

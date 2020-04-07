@@ -12,12 +12,10 @@ import { playSelectedColumn, playEntireBoard } from "@helpers/sound.js";
 const GameWrapper = styled.div`
   margin: auto;
   overflow: hidden;
- 	display: flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-// background: rgba(0,0,0,0.3);
-  // height: ${({ height }) => `${height && height * 0.85}px`};
   height: ${({ height }) => `${height}px`};
   width: 100vw;
   @media screen and (orientation: landscape) {
@@ -26,18 +24,15 @@ const GameWrapper = styled.div`
   }
 `;
 export default function Game() {
-  const [isMouseDown, setIsMouseDown] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   const boardRef = useRef(null);
   const { innerHeight, headerHeight } = useContext(HeightContext);
   //prettier-ignore
   const [
-    { isPlaying, isSuspended, board, aliveCells, mute, speed, speedms, playMode, progressionMode, scale, notes, column,  chord},
+    { isPlaying, isSuspended, board, aliveCells, mute, speed, speedms, playMode, showSettings, isMouseDown, progressionMode, scale, notes, column,  chord},
     dispatch,
   ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    // setInnerHeight(window.innerHeight);
     const recalculate = debounce(() => {
       const { width, height } = boardRef.current.getBoundingClientRect();
       if (!!width && !!height) {
@@ -87,30 +82,16 @@ export default function Game() {
           dispatch({ type: "mute" });
           break;
         case "ArrowUp":
-          dispatch({
-            type: "increaseSpeed",
-          });
+          dispatch({ type: "increaseSpeed" });
           break;
         case "ArrowRight":
-          dispatch({
-            type: "increaseSpeed",
-          });
+          dispatch({ type: "increaseSpeed" });
           break;
         case "ArrowDown":
-          dispatch({
-            type: "decreaseSpeed",
-          });
+          dispatch({ type: "decreaseSpeed" });
           break;
         case "ArrowLeft":
-          dispatch({
-            type: "decreaseSpeed",
-          });
-          break;
-        case "Escape":
-          setShowSettings(false);
-          break;
-        case "S":
-          setShowSettings(true);
+          dispatch({ type: "decreaseSpeed" });
           break;
         //no default
       }
@@ -141,39 +122,22 @@ export default function Game() {
 
   return (
     <GameWrapper height={innerHeight - headerHeight}>
-      <ButtonBar
-        toggleMute={() => dispatch({ type: "mute" })}
-        togglePlaying={() => dispatch({ type: "togglePlaying" })}
-        toggleSettings={() => setShowSettings(true)}
-        mute={mute}
-        changeBoardState={(whatToDo) => dispatch({ type: whatToDo })}
-        isGameRunning={isPlaying}
-        speed={speed}
-        sliderChange={(e) => dispatch({ type: "speed", payload: parseInt(e.target.value) })}
-      />
+      <ButtonBar dispatch={dispatch} mute={mute} isGameRunning={isPlaying} speed={speed} />
       <Board
-        suspend={() => dispatch({ type: "suspend" })}
-        resume={() => dispatch({ type: "resume" })}
+        dispatch={dispatch}
         isSuspended={isSuspended}
         isPlaying={isPlaying}
         ref={boardRef}
-        clickCell={(i, j) => dispatch({ type: "boardClick", coordinates: [i, j] })}
         board={board}
-        handleClick={(direction) => setIsMouseDown(direction === "down" ? true : false)}
         mousedown={isMouseDown}
         highlightedColumn={column}
       />
       <Settings
+        dispatch={dispatch}
         show={showSettings}
         scale={scale}
-        toggleSettings={() => setShowSettings(false)}
-        changeGameMode={(event) => dispatch({ type: event.target.value })}
-        changeProgressionMode={(event) =>
-          dispatch({ type: "progressionMode", mode: event.target.value })
-        }
         playMode={playMode}
         progressionMode={progressionMode}
-        toggleNote={(keyIndex) => dispatch({ type: "scale", key: keyIndex })}
       />
     </GameWrapper>
   );

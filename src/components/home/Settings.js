@@ -37,14 +37,6 @@ const BlurredBackground = styled.div`
   }
   backdrop-filter: blur(10px);
 `;
-// const ModeButton = styled.button`
-//   background-color: ${({ mode, buttonName }) =>
-//     mode === buttonName ? "RoyalBlue" : "transparent"};
-//   border: 2px solid RoyalBlue;
-//   color: white;
-//   font-size: 1em;
-//   transition: background-color 0.3s;
-// `;
 const KeysButtons = (props) =>
   [...Array(12).keys()].map((keyIndex) => (
     <NoteButtons
@@ -52,7 +44,7 @@ const KeysButtons = (props) =>
       isBlack={isBlack(keyIndex)}
       note={keyIndex}
       isNoteUsed={props.scale[keyIndex] ? true : false}
-      onClick={() => props.toggleNote(keyIndex)}
+      onClick={() => props.dispatch({ type: "scale", key: keyIndex })}
     ></NoteButtons>
   ));
 const NoteButtons = styled.div`
@@ -90,7 +82,7 @@ const StyledInput = styled.input`
   }
 `;
 //prettier-ignore
-const Settings = ({ show, scale, toggleSettings, changeGameMode, changeProgressionMode, playMode, progressionMode, toggleNote, }) => {
+const Settings = ({ show, scale, playMode, progressionMode, toggleNote, dispatch }) => {
   const [shouldRender, setRender] = useState(show);
 
   useEffect(() => {
@@ -106,7 +98,7 @@ const Settings = ({ show, scale, toggleSettings, changeGameMode, changeProgressi
         if (e.target.id !== "close") {
           return;
         }
-        toggleSettings();
+        dispatch( { type: "toggleSettings" } )
       }}
       onAnimationEnd={onAnimationEnd}
       show={show}
@@ -119,11 +111,11 @@ const Settings = ({ show, scale, toggleSettings, changeGameMode, changeProgressi
           name="playMode"
           value="entireBoard"
           id="entireBoard"
-          onChange={changeGameMode}
+          onChange={e => dispatch({type: e.target.value})}
         />
         <StyledLabel htmlFor="entireBoard">Entire board</StyledLabel>
         <StyledInput
-          onChange={changeGameMode}
+          onChange={e => dispatch({type: e.target.value})}
           checked={playMode === "columns"}
           type="radio"
           name="playMode"
@@ -133,7 +125,7 @@ const Settings = ({ show, scale, toggleSettings, changeGameMode, changeProgressi
         <StyledLabel htmlFor="columns">One column</StyledLabel>
         <Label>Chord progression mode:</Label>
         <StyledInput
-          onChange={changeProgressionMode}
+          onChange={e => dispatch({type: e.target.value})}
           checked={progressionMode === "auto"}
           type="radio"
           name="progressionMode"
@@ -142,7 +134,7 @@ const Settings = ({ show, scale, toggleSettings, changeGameMode, changeProgressi
         />
         <StyledLabel htmlFor="auto">Auto</StyledLabel>
         <StyledInput
-          onChange={changeProgressionMode}
+          onChange={e => dispatch({type: e.target.value})}
           checked={progressionMode === "custom"}
           type="radio"
           name="progressionMode"
@@ -154,7 +146,7 @@ const Settings = ({ show, scale, toggleSettings, changeGameMode, changeProgressi
           <>
             <Label>Notes to use:</Label>
             <FlexBox row align="flex-start" style={{ margin: "10px" }}>
-              <KeysButtons scale={scale} toggleNote={(keyIndex) => toggleNote(keyIndex)} />
+              <KeysButtons scale={scale} dispatch={dispatch}/>
             </FlexBox>
           </>
         )}
