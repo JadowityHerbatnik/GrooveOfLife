@@ -13,6 +13,8 @@ export const initialState = {
   isPlaying: false,
   isSuspended: false,
   chord: 0,
+  showSettings: false,
+  isMouseDown: false,
 };
 export const sizes = {
   preferredCellSize: 25,

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { sizes, colors } from "@utils/constants.js";
+import { sizes } from "@utils/constants.js";
 import { SlideFromBottom } from "@styles/animations.js";
 import { ThemeContext } from "@common/Layout.js";
 
@@ -32,9 +32,6 @@ const StyledTd = styled.td`
   opacity: ${({ column, highlightedColumn }) => (column === highlightedColumn ? "0.5" : "1")};
   background-color: ${({ active, isPlaying, colors }) =>
     active ? (isPlaying ? colors.green : colors.border) : "black"};
-  // &:hover {
-  //   opacity: 0.5;
-  // }
 `;
 const GenerateColumns = (rowIndex, numberOfCols, colors, props) =>
   [...Array(numberOfCols).keys()].map((columnIndex) => (
@@ -49,20 +46,20 @@ const GenerateColumns = (rowIndex, numberOfCols, colors, props) =>
       highlightedColumn={props.highlightedColumn}
       onMouseDown={() => {
         if (props.isPlaying) {
-          props.suspend();
+          props.dispatch({ type: "suspend" });
         }
-        props.handleClick("down");
-        props.clickCell(rowIndex, columnIndex);
+        props.dispatch({ type: "mouseDown", payload: true });
+        props.dispatch({ type: "boardClick", coordinates: [rowIndex, columnIndex] });
       }}
       onMouseUp={() => {
         if (props.isSuspended) {
-          props.resume();
+          props.dispatch({ type: "resume" });
         }
-        props.handleClick("up");
+        props.dispatch({ type: "mouseDown", payload: false });
       }}
       onMouseEnter={() => {
         if (props.mousedown) {
-          props.clickCell(rowIndex, columnIndex);
+          props.dispatch({ type: "boardClick", coordinates: [rowIndex, columnIndex] });
         }
       }}
     />
@@ -73,7 +70,6 @@ const GenerateTable = (numberOfRows, numberOfCols, colors, props) =>
   ));
 const Board = React.forwardRef((props, ref) => {
   const colors = useContext(ThemeContext);
-  // const { black, brblack, green, cyan, violet, grey, blue } = colors;
   const numberOfRows = props.board.length;
   const numberOfCols = props.board[0].length;
 

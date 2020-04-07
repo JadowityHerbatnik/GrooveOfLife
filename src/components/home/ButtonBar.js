@@ -70,25 +70,25 @@ const SliderWrapper = styled.div`
     }
   }
 `;
-const Buttons = (props) => {
+const Buttons = ({ dispatch, mute, speed, isGameRunning }) => {
   const colors = useContext(ThemeContext);
   const { violet, orange, white, black, grey, green, red, yellow, blue, pink } = colors;
   return (
     <Container>
       <ButtonWrapper>
-        <WrapperButton onClick={() => props.togglePlaying()}>
-          <StyledIcon color={green} className={props.isGameRunning ? "icon-pause" : "icon-play"} />
+        <WrapperButton onClick={() => dispatch({ type: "togglePlaying" })}>
+          <StyledIcon color={green} className={isGameRunning ? "icon-pause" : "icon-play"} />
         </WrapperButton>
-        <WrapperButton onClick={() => props.changeBoardState("randomize")}>
+        <WrapperButton onClick={() => dispatch({ type: "randomize" })}>
           <StyledIcon color={yellow} className="icon-shuffle" />
         </WrapperButton>
-        <WrapperButton onClick={() => props.changeBoardState("clear")}>
+        <WrapperButton onClick={() => dispatch({ type: "clear" })}>
           <StyledIcon color={red} className="icon-cancel" />
         </WrapperButton>
-        <WrapperButton onClick={() => props.toggleMute()}>
-          <StyledIcon color={blue} className={props.mute ? "icon-volume-off" : "icon-volume-up"} />
+        <WrapperButton onClick={() => dispatch({ type: "mute" })}>
+          <StyledIcon color={blue} className={mute ? "icon-volume-off" : "icon-volume-up"} />
         </WrapperButton>
-        <WrapperButton onClick={() => props.toggleSettings()}>
+        <WrapperButton onClick={() => dispatch({ type: "toggleSettings" })}>
           <StyledIcon color={grey} className="icon-cog" />
         </WrapperButton>
         <WrapperButton>
@@ -104,8 +104,8 @@ const Buttons = (props) => {
           min={minSpeed}
           max={maxSpeed}
           step="1"
-          value={props.speed}
-          onChange={(event) => props.sliderChange(event)}
+          value={speed}
+          onChange={(event) => dispatch({ type: "speed", payload: parseInt(event.target.value) })}
         />
       </SliderWrapper>
     </Container>
