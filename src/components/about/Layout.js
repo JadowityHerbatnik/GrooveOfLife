@@ -1,16 +1,9 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { StyledIcon, WrapperButton } from "@common/Generic.js";
-import { HeightContext } from "@common/Layout.js";
+import { HeightContext, ThemeContext } from "@common/Layout.js";
 import { Link, animateScroll } from "react-scroll";
 
-const ScrollAnchor = ({ target, duration }) => {
-  return (
-    <Link to={target} duration={duration} smooth={true}>
-      <StyledIcon className="icon-down-open"></StyledIcon>
-    </Link>
-  );
-};
 const Container = styled.div`
   grid: 1fr 70px/ 1fr;
   display: grid;
@@ -18,22 +11,39 @@ const Container = styled.div`
   height: ${({ height }) => `${height}px`};
   width: 100vw;
 `;
+const ScrollToTop = ({ color }) => (
+  <StyledIcon
+    onClick={() => animateScroll.scrollToTop()}
+    className="icon-down-open"
+    style={{ transform: "rotate(180deg)" }}
+    color={color}
+  ></StyledIcon>
+);
+const ScrollDown = ({ target, duration, color }) => {
+  return (
+    <Link to={target} duration={duration} smooth={true}>
+      <StyledIcon className="icon-down-open" color={color}></StyledIcon>
+    </Link>
+  );
+};
+const ScrollButton = styled(WrapperButton)`
+  margin: auto;
+  width: min-content;
+`;
 export const Layout = ({ children, name, scrollTo }) => {
   const { innerHeight, headerHeight } = useContext(HeightContext);
+  const colors = useContext(ThemeContext);
+
   return (
     <Container id={name} height={name === "intro" ? innerHeight - headerHeight : innerHeight}>
       {children}
-      <WrapperButton>
+      <ScrollButton>
         {scrollTo === "top" ? (
-          <StyledIcon
-            onClick={() => animateScroll.scrollToTop()}
-            className="icon-down-open"
-            style={{ transform: "rotate(180deg)" }}
-          ></StyledIcon>
+          <ScrollToTop color={colors.white} />
         ) : (
-          <ScrollAnchor duration={700} target={scrollTo}></ScrollAnchor>
+          <ScrollDown color={colors.white} duration={700} target={scrollTo}></ScrollDown>
         )}
-      </WrapperButton>
+      </ScrollButton>
     </Container>
   );
 };

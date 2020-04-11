@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled, { css } from "styled-components";
 import "../../styles/fontello/css/fontello.css";
-import { keyboard, colors } from "@utils/constants.js";
+import { keyboard } from "@utils/constants.js";
 import { FlexBox } from "@common/Generic.js";
 import { FadeIn, FadeOut, SlideInUp } from "@styles/animations.js";
-const { white, background, green, cyan, red, yellow, blue, pink, grey } = colors;
+import { RadioInput } from "@home/RadioInput";
+import { DispatchContext } from "@home/Game";
+import { ThemeContext } from "@common/Layout";
 
 const { keyMargin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard;
 const isBlack = (keyIndex) => {
@@ -15,9 +17,9 @@ const isBlack = (keyIndex) => {
 const SettingsContainer = styled.div`
   margin: auto;
   padding: 0 20px 20px 20px;
-  border: 1px solid ${cyan};
-  background-color: rgba(0, 0, 0, 0.5);
-  box-shadow: 10px 10px 15px 0px rgba(0, 0, 0, 0.75);
+  border: ${({ colors }) => `2px solid ${colors.border}`};
+  background-color: ${({ colors }) => colors.background};
+  box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.75);
   position: relative;
   top: -100vh;
   animation: ${() => css`0.5s ease ${SlideInUp}`};
@@ -32,14 +34,16 @@ const BlurredBackground = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-  @supports (not (backdrop-filter: blur())) {
-    background-color: rgba(0, 0, 0, 0.7);
-  }
-  backdrop-filter: blur(10px);
+  background-color: ${({ color }) => `${color}cc`};
+  // @supports (not (backdrop-filter: blur())) {
+  //   background-color: rgba(0, 0, 0, 0.7);
+  // }
+  // backdrop-filter: blur(10px);
 `;
 const KeysButtons = (props) =>
   [...Array(12).keys()].map((keyIndex) => (
     <NoteButtons
+      colors={props.colors}
       key={keyIndex}
       isBlack={isBlack(keyIndex)}
       note={keyIndex}
@@ -54,45 +58,33 @@ const NoteButtons = styled.div`
   margin-left: ${({ isBlack }) => (isBlack ? `calc(${blackWidth}/-2)` : `-${keyMargin}`)};
   margin-right: ${({ isBlack }) => (isBlack ? `calc(${blackWidth}/-2)` : `-${keyMargin}`)};
   z-index: ${({ isBlack }) => (isBlack ? 1 : 0)};
-  background-color: ${({ isNoteUsed, isBlack }) => (isNoteUsed ? green : isBlack ? "black" : grey)};
+  background-color: ${({ isNoteUsed, isBlack, colors }) =>
+    isNoteUsed ? colors.green : isBlack ? "black" : colors.grey};
   border: ${() => `${keyMargin} solid black`};
   transition: background-color 0.3s;
 `;
 const Label = styled.p`
   font-family: Geo;
   font-size: 1.5em;
-  color: ${grey};
-`;
-const StyledLabel = styled.label`
-  margin: 3px;
-  padding: 6px;
-  display: inline-block;
-  border: 1px solid ${grey};
-  color: ${grey};
-  transition: opacity 0.5s;
-  font-weight: bold;
-`;
-const StyledInput = styled.input`
-  appearance: none;
-  &:checked + ${StyledLabel} {
-    color: ${cyan};
-    border-color: ${cyan};
-		// border: 2px solid ${green};
-    opacity: 1;
-  }
+  color: ${({ color }) => color};
 `;
 //prettier-ignore
-const Settings = ({ show, scale, playMode, progressionMode, toggleNote, dispatch }) => {
+const Settings = ({ show, scale, playMode, progressionMode, toggleNote, }) => {
   const [shouldRender, setRender] = useState(show);
+  const colors = useContext(ThemeContext)
+  const dispatch = useContext(DispatchContext)
 
   useEffect(() => {
     if (show) setRender(true);
   }, [show]);
+
   const onAnimationEnd = () => {
     if (!show) setRender(false);
   };
+
   return !shouldRender ? null : (
     <BlurredBackground
+      color={colors.background}
       id="close"
       onClickCapture={(e) => {
         if (e.target.id !== "close") {
@@ -103,50 +95,18 @@ const Settings = ({ show, scale, playMode, progressionMode, toggleNote, dispatch
       onAnimationEnd={onAnimationEnd}
       show={show}
     >
-      <SettingsContainer show={show}>
-        <Label> Gameplay mode:</Label>
-        <StyledInput
-          checked={playMode === "entireBoard"}
-          type="radio"
-          name="playMode"
-          value="entireBoard"
-          id="entireBoard"
-          onChange={e => dispatch({type: e.target.value})}
-        />
-        <StyledLabel htmlFor="entireBoard">Entire board</StyledLabel>
-        <StyledInput
-          onChange={e => dispatch({type: e.target.value})}
-          checked={playMode === "columns"}
-          type="radio"
-          name="playMode"
-          id="columns"
-          value="columns"
-        />
-        <StyledLabel htmlFor="columns">One column</StyledLabel>
-        <Label>Chord progression mode:</Label>
-        <StyledInput
-          onChange={e => dispatch({type: e.target.value})}
-          checked={progressionMode === "auto"}
-          type="radio"
-          name="progressionMode"
-          id="auto"
-          value="auto"
-        />
-        <StyledLabel htmlFor="auto">Auto</StyledLabel>
-        <StyledInput
-          onChange={e => dispatch({type: e.target.value})}
-          checked={progressionMode === "custom"}
-          type="radio"
-          name="progressionMode"
-          id="custom"
-          value="custom"
-        />
-        <StyledLabel htmlFor="custom">Custom</StyledLabel>
+      <SettingsContainer colors={colors} show={show}>
+        <Label color={colors.grey}> Gameplay mode:</Label>
+        <RadioInput dependency={playMode} name="playMode" value="entireBoard" />
+        <RadioInput dependency={playMode} name="playMode" value="columns" />
+        <Label color={colors.grey}>Chord progression mode:</Label>
+        <RadioInput dependency={progressionMode} name="progressionMode" value="auto" />
+        <RadioInput dependency={progressionMode} name="progressionMode" value="custom" />
         {progressionMode === "custom" && (
           <>
-            <Label>Notes to use:</Label>
+            <Label color={colors.grey}>Notes to use:</Label>
             <FlexBox row align="flex-start" style={{ margin: "10px" }}>
-              <KeysButtons scale={scale} dispatch={dispatch}/>
+              <KeysButtons colors={colors} scale={scale} dispatch={dispatch}/>
             </FlexBox>
           </>
         )}

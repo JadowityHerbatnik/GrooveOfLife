@@ -1,11 +1,12 @@
 import PropTypes from "prop-types";
-import React, { useContext, forwardRef } from "react";
+import React, { forwardRef } from "react";
 import styled, { css } from "styled-components";
-import { StyledLink, WrapperButton } from "@common/Generic.js";
-import { ThemeContext } from "@common/Layout.js";
+import { StyledLink } from "@common/Generic.js";
 import { FadeIn } from "@styles/animations.js";
+import { ThemeSwitch } from "@common/ThemeSwitch";
 
 const Wrapper = styled.header`
+  position: relative;
   animation: ${({ animateHeader }) =>
     animateHeader ? () => css`2s ease 1s 1 both ${FadeIn}` : "none"};
   border-width: 0px 0px 3px 0px;
@@ -28,22 +29,23 @@ const H1 = styled.h1`
   }
   margin: 0.4em 0 0.4em 0;
   font-family: "Geo";
-  text-shadow: 6px 6px 0px rgba(0, 0, 0, 0.75);
-`;
-const ThemeButton = styled(WrapperButton)`
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.75);
+  // text-shadow: ${({ colors }) => `6px 6px 0px ${colors.grey}`};
 `;
 
-const Header = forwardRef(({ siteTitle, animateHeader, setTheme }, ref) => {
-  const colors = useContext(ThemeContext);
-
+const Header = forwardRef(({ siteTitle, animateHeader, setTheme, colors, theme }, ref) => {
   return (
     <Wrapper ref={ref} colors={colors} animateHeader={animateHeader}>
-      <ThemeButton onClick={() => setTheme()}>theme</ThemeButton>
-      <H1>
-        <StyledLink color={colors.grey} cover bg={colors.black} direction="up" duration={1} to="/">
+      <ThemeSwitch theme={theme} switchTheme={() => setTheme()} />
+      <H1 colors={colors}>
+        <StyledLink
+          color={colors.header}
+          cover
+          bg={colors.background}
+          direction="up"
+          duration={1}
+          to="/"
+        >
           {siteTitle}
         </StyledLink>
       </H1>

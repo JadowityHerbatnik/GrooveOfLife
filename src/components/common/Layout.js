@@ -3,10 +3,11 @@ import PropTypes from "prop-types";
 import { debounce } from "lodash";
 import { useStaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
-import { colors, gruvbox } from "@utils/constants.js";
+import { solarized, gruvbox } from "@utils/constants.js";
 import Header from "@common/Header";
 import { createGlobalStyle } from "styled-components";
-export const ThemeContext = createContext(colors);
+import { useLocalStorageState } from "@hooks/UseLocalStorageState";
+export const ThemeContext = createContext();
 export const HeightContext = createContext();
 
 const GlobalStyle = createGlobalStyle`
@@ -14,9 +15,10 @@ const GlobalStyle = createGlobalStyle`
 		box-sizing: border-box;
 		text-align: center;
 		font-size: 16px;
-		font-family: "Montserrat", sans-serif;
+		font-family: "Monospace", sans-serif;
   	margin: 0;
    	padding: 0;
+    background-color: ${({ colors }) => colors.background}
 		color: ${({ colors }) => colors.grey};
 		height: 100%;
 	}
@@ -26,7 +28,6 @@ const GlobalStyle = createGlobalStyle`
 `;
 const BackgroundWrapper = styled.div`
   position: relative;
-  background-color: ${({ colors }) => colors.black};
   min-height: ${({ minHeight }) => `${minHeight}px`};
   // min-height: ${({ minHeight }) => (minHeight ? `${minHeight}px` : "100vh")};
   // z-index: -5;
@@ -42,11 +43,12 @@ const BackgroundWrapper = styled.div`
   // }
 `;
 const Layout = (props) => {
-  const [theme, setTheme] = useState("solarized");
   const [innerHeight, setInnerHeight] = useState(0);
   const [headerHeight, setHeaderHeight] = useState(0);
-  const themeColors = theme === "solarized" ? colors : gruvbox;
+  const [theme, setTheme] = useLocalStorageState("theme", "gruvbox");
   const headerRef = useRef(null);
+  const themeColors = theme === "solarized" ? solarized : gruvbox;
+  console.log(theme);
 
   useEffect(() => {
     const recalculate = debounce(() => {
@@ -68,7 +70,6 @@ const Layout = (props) => {
       }
     }
   `);
-
   return (
     <>
       <GlobalStyle colors={themeColors} />
@@ -76,6 +77,8 @@ const Layout = (props) => {
         <HeightContext.Provider value={{ innerHeight: innerHeight, headerHeight: headerHeight }}>
           <BackgroundWrapper minHeight={innerHeight} colors={themeColors}>
             <Header
+              theme={theme}
+              colors={themeColors}
               ref={headerRef}
               setTheme={() => setTheme(theme === "solarized" ? "gruvbox" : "solarized")}
               siteTitle={data.site.siteMetadata.title}
