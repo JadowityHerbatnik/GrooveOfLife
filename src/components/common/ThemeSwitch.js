@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import { solarized, gruvbox } from "@utils/constants";
+import { ThemeContext } from "@common/Layout";
+
 const ThemeButton = styled.button`
-  background-color: ${({ theme }) =>
-    theme === "solarized" ? gruvbox.background : solarized.background};
+  background-color: ${({ colors }) => colors.opposite};
   position: absolute;
   top: 5px;
   right: 5px;
@@ -13,11 +13,12 @@ const ThemeButton = styled.button`
   outline: none;
   cursor: pointer;
 `;
-export const ThemeSwitch = ({ theme, switchTheme }) => {
+export const ThemeSwitch = ({ switchTheme }) => {
+  const colors = useContext(ThemeContext);
   return (
     <ThemeButton
       aria-label="switch theme"
-      theme={theme}
+      colors={colors}
       onClick={() => switchTheme()}
     ></ThemeButton>
   );

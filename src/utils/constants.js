@@ -48,6 +48,7 @@ export const keyboard = {
 //   cyan: "#8ec07c",
 // };
 export const gruvbox = {
+  opposite: "#073642",
   background: "#bdae93",
   header: "#b57614",
   border: "#b57614",
@@ -64,6 +65,7 @@ export const gruvbox = {
   cyan: "#427b58",
 };
 export const solarized = {
+  opposite: "#bdae93",
   background: "#073642",
   header: "#93a1a1",
   border: "#2aa198",
