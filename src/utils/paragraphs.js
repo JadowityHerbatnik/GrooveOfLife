@@ -1,26 +1,34 @@
 import React from "react";
 import { StyledAnchor } from "@common/Generic.js";
-import { colors } from "@utils/constants.js";
-const { grey, black, yellow, red, green } = colors;
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+const wiki = "https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life";
+const tonejs = "https://tonejs.github.io/";
+// const WikiLink = (
+//   <StyledAnchor target="_blank" href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
+//     Wikipedia
+//   </StyledAnchor>
+// );
+// const TonejsLink = (
+//   <StyledAnchor target="_blank" href="https://tonejs.github.io/">
+//     Tone.js
+//   </StyledAnchor>
+// );
+const createLink = (name, url) => (
+  <StyledAnchor target="_blank" href={url}>
+    {name}
+  </StyledAnchor>
+);
 
-const WikiLink = (
-  <StyledAnchor target="_blank" href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
-    Wikipedia
-  </StyledAnchor>
-);
-const TonejsLink = (
-  <StyledAnchor target="_blank" href="https://tonejs.github.io/">
-    Tone.js
-  </StyledAnchor>
-);
 export const intro = (
   <>
-    {/* <span style={{ fontFamily: "Geo" }}> The Sound of life </span> */}
-    Yeah, this is yet another implementation of the famous Game of Life...but this one utilizes{" "}
-    {TonejsLink} library!
+    Yeah, this is yet another implementation of the famous Game of Life... but this one uses{" "}
+    {createLink("Tonejs", tonejs)} library to add sound!
     <br />
     <br /> If you don't know, Game of Life is a cool cellular automata invented by John Conway. For
-    a nice definition, here's a {WikiLink} link, I'm not gonna copypaste it.
+    a nice definition, here's a {createLink("Wikipedia", wiki)} link, I'm not gonna copypaste it.
   </>
 );
 export const rules = (
@@ -39,9 +47,20 @@ export const keybindings = (
     <br />
   </>
 );
+export const keyDescription = new Map([
+  ["Space", { color: "green", desc: "Play/pause" }],
+  ["R", { color: "red", desc: "Random board" }],
+  ["C", { color: "yellow", desc: "Clean board" }],
+  ["M", { color: "blue", desc: "Mute sound" }],
+  ["S", { color: "", desc: "Make one step" }],
+  [<ArrowBackIcon />, { color: "", desc: "Change game speed" }],
+]);
 export const keybindings2 = (
   <>
-    <span className="key">Space</span>
+    {/* <span className="key">Space</span> */}
+    <div style={{ backgroundColor: "grey", width: "5em", height: "2em" }}>
+      <span style={{ lineHeight: "2em" }}>Space</span>
+    </div>
     <span className="green">Play/pause</span>
     <span className="key">R</span>
     <span className="yellow">random board</span>
@@ -51,10 +70,18 @@ export const keybindings2 = (
     <span className="blue">mute sound</span>
     <span className="key">S</span>Make one step
     <div>
-      <span className="key">&#8592;</span>
-      <span className="key">&#8593;</span>
-      <span className="key">&#8594;</span>
-      <span className="key">&#8595;</span>
+      <span className="key">
+        <ArrowBackIcon />
+      </span>
+      <span className="key">
+        <ArrowUpwardIcon />
+      </span>
+      <span className="key">
+        <ArrowForwardIcon />
+      </span>
+      <span className="key">
+        <ArrowDownwardIcon />
+      </span>
     </div>
     change speed
   </>

@@ -1,4 +1,4 @@
-export const getAlive = board => {
+export const getAlive = (board) => {
   const numberOfRows = board.length;
   const numberOfCols = board[0].length;
   let aliveCells = [];
@@ -11,12 +11,10 @@ export const getAlive = board => {
   }
   return aliveCells;
 };
-export const calculateNextBoard = board => {
+export const calculateNextBoard = (board) => {
   const numberOfRows = board.length;
   const numberOfCols = board[0].length;
-  let newBoard = new Array(numberOfRows)
-    .fill(false)
-    .map(() => new Array(numberOfCols).fill(false));
+  let newBoard = new Array(numberOfRows).fill(false).map(() => new Array(numberOfCols).fill(false));
   for (let i = 0; i < numberOfRows; i++) {
     for (let j = 0; j < numberOfCols; j++) {
       const neighbours = countNeighbours(i, j);

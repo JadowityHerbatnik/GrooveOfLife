@@ -12,7 +12,7 @@ export const StyledLink = styled(AniLink)`
 `;
 export const StyledAnchor = styled.a`
   text-decoration: underline;
-  color: white;
+  color: inherit;
 `;
 export const StyledIcon = styled.i`
   display: inline-block;
@@ -41,6 +41,8 @@ export const WrapperButton = styled.button`
   outline: none;
   transition: opacity 0.3s;
   cursor: pointer;
+  width: min-content;
+  margin: auto;
   &:hover {
     opacity: 0.5;
   }

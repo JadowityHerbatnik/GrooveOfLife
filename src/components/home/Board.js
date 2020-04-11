@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { sizes } from "@utils/constants.js";
 import { SlideFromBottom } from "@styles/animations.js";
 import { ThemeContext } from "@common/Layout.js";
+import { DispatchContext } from "@home/Game";
 
 const BoardWrapper = styled.div`
   height: 90%;
@@ -18,23 +19,24 @@ const BoardWrapper = styled.div`
 `;
 const StyledTable = styled.table`
   margin: auto;
-  opacity: 0.45;
+  opacity: 0.75;
   border: ${({ isPlaying, colors }) => `3px solid ${isPlaying ? colors.green : colors.border}`};
   border-collapse: collapse;
   border-spacing: 0px;
   animation: 0.5s ease 0.7s 1 both ${SlideFromBottom};
 `;
 const StyledTd = styled.td`
-  border: 1px solid black;
+  border: ${({ colors }) => `1px solid ${colors.border}`};
   width: ${({ cellSize }) => `${cellSize}px`};
   height: ${({ cellSize }) => `${cellSize}px`};
   box-sizing: border-box;
   opacity: ${({ column, highlightedColumn }) => (column === highlightedColumn ? "0.5" : "1")};
   background-color: ${({ active, isPlaying, colors }) =>
-    active ? (isPlaying ? colors.green : colors.border) : "black"};
+    active ? (isPlaying ? colors.green : colors.border) : colors.background};
 `;
-const GenerateColumns = (rowIndex, numberOfCols, colors, props) =>
-  [...Array(numberOfCols).keys()].map((columnIndex) => (
+const GenerateColumns = ({ rowIndex, numberOfCols, colors, props }) => {
+  const dispatch = useContext(DispatchContext);
+  return [...Array(numberOfCols).keys()].map((columnIndex) => (
     <StyledTd
       colors={colors}
       cellSize={sizes.preferredCellSize}
@@ -46,27 +48,35 @@ const GenerateColumns = (rowIndex, numberOfCols, colors, props) =>
       highlightedColumn={props.highlightedColumn}
       onMouseDown={() => {
         if (props.isPlaying) {
-          props.dispatch({ type: "suspend" });
+          dispatch({ type: "suspend" });
         }
-        props.dispatch({ type: "mouseDown", payload: true });
-        props.dispatch({ type: "boardClick", coordinates: [rowIndex, columnIndex] });
+        dispatch({ type: "mouseDown", payload: true });
+        dispatch({ type: "boardClick", coordinates: [rowIndex, columnIndex] });
       }}
       onMouseUp={() => {
         if (props.isSuspended) {
-          props.dispatch({ type: "resume" });
+          dispatch({ type: "resume" });
         }
-        props.dispatch({ type: "mouseDown", payload: false });
+        dispatch({ type: "mouseDown", payload: false });
       }}
       onMouseEnter={() => {
         if (props.mousedown) {
-          props.dispatch({ type: "boardClick", coordinates: [rowIndex, columnIndex] });
+          dispatch({ type: "boardClick", coordinates: [rowIndex, columnIndex] });
         }
       }}
     />
   ));
+};
 const GenerateTable = (numberOfRows, numberOfCols, colors, props) =>
   [...Array(numberOfRows).keys()].map((rowIndex) => (
-    <tr key={rowIndex}>{GenerateColumns(rowIndex, numberOfCols, colors, props)}</tr>
+    <tr key={rowIndex}>
+      <GenerateColumns
+        rowIndex={rowIndex}
+        numberOfCols={numberOfCols}
+        colors={colors}
+        props={props}
+      />
+    </tr>
   ));
 const Board = React.forwardRef((props, ref) => {
   const colors = useContext(ThemeContext);

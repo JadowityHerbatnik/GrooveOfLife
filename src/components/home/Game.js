@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useReducer, useContext } from "react";
+import React, { useRef, useEffect, useReducer, useContext, createContext } from "react";
 import styled from "styled-components";
 import ButtonBar from "@home/ButtonBar.js";
 import Board from "@home/Board.js";
@@ -8,6 +8,8 @@ import { debounce } from "lodash";
 import reducer from "../Reducer.js";
 import { progression, initialState } from "@utils/constants.js";
 import { playSelectedColumn, playEntireBoard } from "@helpers/sound.js";
+import { usePrevious } from "@hooks/UsePrevious";
+export const DispatchContext = createContext();
 
 const GameWrapper = styled.div`
   margin: auto;
@@ -24,13 +26,14 @@ const GameWrapper = styled.div`
   }
 `;
 export default function Game() {
-  const boardRef = useRef(null);
-  const { innerHeight, headerHeight } = useContext(HeightContext);
   //prettier-ignore
   const [
     { isPlaying, isSuspended, board, aliveCells, mute, speed, speedms, playMode, showSettings, isMouseDown, progressionMode, scale, notes, column,  chord},
     dispatch,
   ] = useReducer(reducer, initialState);
+  const boardRef = useRef(null);
+  const { innerHeight, headerHeight } = useContext(HeightContext);
+  const prevAlive = usePrevious(aliveCells);
 
   useEffect(() => {
     const recalculate = debounce(() => {
@@ -46,6 +49,9 @@ export default function Game() {
 
   useEffect(
     () => {
+      if (prevAlive === aliveCells) {
+        return;
+      }
       if (isSuspended || mute || !aliveCells.length || !notes.length) {
         return;
       }
@@ -57,7 +63,7 @@ export default function Game() {
       }
     },
     //prettier-ignore
-    [ board, aliveCells, column, playMode, isSuspended, notes, mute, progressionMode, speedms, chord, ],
+    [ board, aliveCells, prevAlive, column, playMode, isSuspended, notes, mute, progressionMode, speedms, chord, ],
   );
 
   useEffect(() => {
@@ -122,23 +128,23 @@ export default function Game() {
 
   return (
     <GameWrapper height={innerHeight - headerHeight}>
-      <ButtonBar dispatch={dispatch} mute={mute} isGameRunning={isPlaying} speed={speed} />
-      <Board
-        dispatch={dispatch}
-        isSuspended={isSuspended}
-        isPlaying={isPlaying}
-        ref={boardRef}
-        board={board}
-        mousedown={isMouseDown}
-        highlightedColumn={column}
-      />
-      <Settings
-        dispatch={dispatch}
-        show={showSettings}
-        scale={scale}
-        playMode={playMode}
-        progressionMode={progressionMode}
-      />
+      <DispatchContext.Provider value={dispatch}>
+        <ButtonBar mute={mute} isGameRunning={isPlaying} speed={speed} />
+        <Board
+          isSuspended={isSuspended}
+          isPlaying={isPlaying}
+          ref={boardRef}
+          board={board}
+          mousedown={isMouseDown}
+          highlightedColumn={column}
+        />
+        <Settings
+          show={showSettings}
+          scale={scale}
+          playMode={playMode}
+          progressionMode={progressionMode}
+        />
+      </DispatchContext.Provider>
     </GameWrapper>
   );
 }
