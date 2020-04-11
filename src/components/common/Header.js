@@ -34,11 +34,11 @@ const H1 = styled.h1`
   // text-shadow: ${({ colors }) => `6px 6px 0px ${colors.grey}`};
 `;
 
-const Header = forwardRef(({ siteTitle, animateHeader, setTheme, theme }, ref) => {
+const Header = forwardRef(({ siteTitle, animateHeader, setTheme }, ref) => {
   const colors = useContext(ThemeContext);
   return (
     <Wrapper ref={ref} colors={colors} animateHeader={animateHeader}>
-      <ThemeSwitch theme={theme} switchTheme={() => setTheme()} />
+      <ThemeSwitch switchTheme={() => setTheme()} />
       <H1 colors={colors}>
         <StyledLink
           color={colors.header}

@@ -80,7 +80,6 @@ const Layout = (props) => {
         <HeightContext.Provider value={{ innerHeight: innerHeight, headerHeight: headerHeight }}>
           <BackgroundWrapper minHeight={innerHeight} colors={themeColors}>
             <Header
-              theme={theme}
               ref={headerRef}
               setTheme={() => setTheme(theme === "solarized" ? "gruvbox" : "solarized")}
               siteTitle={data.site.siteMetadata.title}

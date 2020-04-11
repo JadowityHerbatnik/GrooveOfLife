@@ -26,13 +26,13 @@ const StyledTable = styled.table`
   animation: 0.5s ease 0.7s 1 both ${SlideFromBottom};
 `;
 const StyledTd = styled.td`
-  border: ${({ colors }) => `1px solid ${colors.border}`};
+  border: ${({ colors }) => `1px solid ${colors.black}`};
   width: ${({ cellSize }) => `${cellSize}px`};
   height: ${({ cellSize }) => `${cellSize}px`};
   box-sizing: border-box;
   opacity: ${({ column, highlightedColumn }) => (column === highlightedColumn ? "0.5" : "1")};
   background-color: ${({ active, isPlaying, colors }) =>
-    active ? (isPlaying ? colors.green : colors.border) : colors.background};
+    active ? (isPlaying ? colors.green : colors.border) : colors.black};
 `;
 const GenerateColumns = ({ rowIndex, numberOfCols, colors, props }) => {
   const dispatch = useContext(DispatchContext);
