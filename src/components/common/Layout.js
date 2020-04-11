@@ -7,7 +7,7 @@ import { solarized, gruvbox } from "@utils/constants.js";
 import Header from "@common/Header";
 import { createGlobalStyle } from "styled-components";
 import { useLocalStorageState } from "@hooks/UseLocalStorageState";
-export const ThemeContext = createContext();
+export const ThemeContext = createContext(gruvbox);
 export const HeightContext = createContext();
 
 const GlobalStyle = createGlobalStyle`
@@ -46,9 +46,12 @@ const Layout = (props) => {
   const [innerHeight, setInnerHeight] = useState(0);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [theme, setTheme] = useLocalStorageState("theme", "gruvbox");
+  const [themeColors, setThemeColors] = useState(gruvbox);
   const headerRef = useRef(null);
-  const themeColors = theme === "solarized" ? solarized : gruvbox;
-  console.log(theme);
+
+  useEffect(() => {
+    setThemeColors(theme === "solarized" ? solarized : gruvbox);
+  }, [theme]);
 
   useEffect(() => {
     const recalculate = debounce(() => {
@@ -78,7 +81,6 @@ const Layout = (props) => {
           <BackgroundWrapper minHeight={innerHeight} colors={themeColors}>
             <Header
               theme={theme}
-              colors={themeColors}
               ref={headerRef}
               setTheme={() => setTheme(theme === "solarized" ? "gruvbox" : "solarized")}
               siteTitle={data.site.siteMetadata.title}

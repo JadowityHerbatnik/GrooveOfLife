@@ -53,7 +53,7 @@ export const keyDescription = new Map([
   ["C", { color: "yellow", desc: "Clean board" }],
   ["M", { color: "blue", desc: "Mute sound" }],
   ["S", { color: "", desc: "Make one step" }],
-  [<ArrowBackIcon />, { color: "", desc: "speed" }],
+  [<ArrowBackIcon />, { color: "", desc: "Change game speed" }],
 ]);
 export const keybindings2 = (
   <>

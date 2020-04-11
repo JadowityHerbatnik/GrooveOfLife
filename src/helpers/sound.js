@@ -38,7 +38,6 @@ export function playEntireBoard(aliveCells, board, speedms, notes) {
 export function playSelectedColumn(aliveCells, column, speedms, board, notes) {
   const { numberOfRows, time } = getCommonVariables(board, speedms);
   const aliveCellsInColumn = aliveCells.filter((cell) => cell[1] === column).map((cell) => cell[0]);
-  console.log(aliveCellsInColumn);
 
   const chord = aliveCellsInColumn.map((cell) => {
     const octave = highestOctave - Math.floor((cell / numberOfRows) * octaveRange);

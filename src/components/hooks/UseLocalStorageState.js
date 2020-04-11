@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+
 export const useLocalStorageState = (localStorageKey, defaultValue) => {
   let initalValue;
   if (typeof window !== "undefined") {
@@ -7,8 +8,10 @@ export const useLocalStorageState = (localStorageKey, defaultValue) => {
     initalValue = defaultValue;
   }
   const [value, setValue] = useState(initalValue);
-  React.useEffect(() => {
+
+  useEffect(() => {
     localStorage.setItem(localStorageKey, value);
   }, [value, localStorageKey]);
+
   return [value, setValue];
 };

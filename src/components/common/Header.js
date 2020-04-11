@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
-import React, { forwardRef } from "react";
+import React, { forwardRef, useContext } from "react";
 import styled, { css } from "styled-components";
 import { StyledLink } from "@common/Generic.js";
 import { FadeIn } from "@styles/animations.js";
 import { ThemeSwitch } from "@common/ThemeSwitch";
+import { ThemeContext } from "@common/Layout";
 
 const Wrapper = styled.header`
   position: relative;
@@ -33,7 +34,8 @@ const H1 = styled.h1`
   // text-shadow: ${({ colors }) => `6px 6px 0px ${colors.grey}`};
 `;
 
-const Header = forwardRef(({ siteTitle, animateHeader, setTheme, colors, theme }, ref) => {
+const Header = forwardRef(({ siteTitle, animateHeader, setTheme, theme }, ref) => {
+  const colors = useContext(ThemeContext);
   return (
     <Wrapper ref={ref} colors={colors} animateHeader={animateHeader}>
       <ThemeSwitch theme={theme} switchTheme={() => setTheme()} />
