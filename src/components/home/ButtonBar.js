@@ -6,21 +6,20 @@ import { ThemeContext } from "@common/Layout.js";
 import { music } from "@utils/constants.js";
 import { SlideFromLeft } from "@styles/animations.js";
 import { DispatchContext, StateContext } from "@home/Game";
-// import Ikonka from "./settings.svg";
-// import Play from "./play.svg";
-// import Pause from "./pause.svg";
-// import note from "./note.svg";
-// import Random from "./random.svg";
-// import Clear from "./clear.svg";
-// import Help from "./help.svg";
+import { Settings, Play, Pause, Note, Random, Clear, Help } from "@styles/svg/Buttons";
 
 const { minSpeed, maxSpeed } = music;
 const ButtonWrapper = styled.div`
+  border-width: 1px 0 0 1px;
+  border-style: solid;
+  border-color: ${({ colors }) => colors.brblack};
+  box-shadow: 2px 2px 0px black;
   display: flex;
   flex-direction: row;
   justify-content: center;
   @media screen and (orientation: landscape) {
     flex-direction: column;
+    margin-right: 10px;
   }
 `;
 const Container = styled.div`
@@ -83,41 +82,40 @@ const Buttons = () => {
   const colors = useContext(ThemeContext);
   const dispatch = useContext(DispatchContext);
   const { mute, speed, isPlaying } = useContext(StateContext);
-  const { violet, background, grey, green, red, yellow, blue } = colors;
   return (
     <Container>
-      <ButtonWrapper>
+      <ButtonWrapper colors={colors}>
         <WrapperButton onClick={() => dispatch({ type: "togglePlaying" })}>
-          <StyledIcon color={green} className={isPlaying ? "icon-pause" : "icon-play"} />
-          {/* <Svgik color={colors.green} svg={isPlaying ? Pause : Play} /> */}
+          {/* <StyledIcon color={green} className={isPlaying ? "icon-pause" : "icon-play"} /> */}
+          <Svgik color={colors.green} svg={isPlaying ? Pause : Play} />
         </WrapperButton>
         <WrapperButton onClick={() => dispatch({ type: "randomize" })}>
-          {/* <Svgik color={colors.yellow} svg={Random} /> */}
-          <StyledIcon color={yellow} className="icon-shuffle" />
+          <Svgik color={colors.border} svg={Random} />
+          {/* <StyledIcon color={yellow} className="icon-shuffle" /> */}
         </WrapperButton>
         <WrapperButton onClick={() => dispatch({ type: "clear" })}>
-          {/* <Svgik color={colors.red} svg={Clear} /> */}
-          <StyledIcon color={red} className="icon-cancel" />
+          <Svgik color={colors.red} svg={Clear} />
+          {/* <StyledIcon color={red} className="icon-cancel" /> */}
         </WrapperButton>
         <WrapperButton onClick={() => dispatch({ type: "mute" })}>
-          {/* <Svgik color={colors.blue} svg={note} /> */}
-          <StyledIcon color={blue} className={mute ? "icon-volume-off" : "icon-volume-up"} />
+          <Svgik color={colors.blue} svg={Note} />
+          {/* <StyledIcon color={blue} className={mute ? "icon-volume-off" : "icon-volume-up"} /> */}
         </WrapperButton>
         <WrapperButton onClick={() => dispatch({ type: "toggleSettings" })}>
-          {/* <Svgik color={colors.grey} svg={Ikonka} /> */}
-          <StyledIcon color={grey} className="icon-cog" />
+          <Svgik color={colors.grey} svg={Settings} />
+          {/* <StyledIcon color={grey} className="icon-cog" /> */}
         </WrapperButton>
         <WrapperButton>
           <StyledLink
             colors={colors}
             cover
             direction="up"
-            bg={background}
+            bg={colors.background}
             duration={1.5}
             to="/about"
           >
-            {/* <Svgik color={colors.violet} svg={Help} /> */}
-            <StyledIcon color={violet} className="icon-help" />
+            <Svgik color={colors.violet} svg={Help} />
+            {/* <StyledIcon color={violet} className="icon-help" /> */}
           </StyledLink>
         </WrapperButton>
       </ButtonWrapper>

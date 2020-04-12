@@ -6,10 +6,9 @@ import { HeightContext } from "@common/Layout.js";
 import Settings from "@home/Settings.js";
 import { debounce } from "lodash";
 import reducer from "../Reducer.js";
-import { progression, initialState } from "@utils/constants.js";
+import { progression, initialState, keybindings } from "@utils/constants.js";
 import { playSelectedColumn, playEntireBoard } from "@helpers/sound.js";
 import { usePrevious } from "@hooks/UsePrevious";
-import { keybindings } from "@utils/constants";
 export const DispatchContext = createContext();
 export const StateContext = createContext();
 

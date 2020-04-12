@@ -30,7 +30,7 @@ export const FlexBox = styled.div`
   ${({ responsive }) =>
     responsive &&
     `@media (orientation: portrait) {
-    flex-direction: ${({ direction, responsive }) => (direction === "row" ? "column" : "row")};
+    flex-direction: ${({ direction }) => (direction === "row" ? "column" : "row")};
   }
 `}
 `;
