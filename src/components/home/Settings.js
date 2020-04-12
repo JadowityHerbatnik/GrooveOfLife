@@ -5,10 +5,11 @@ import { keyboard } from "@utils/constants.js";
 import { FlexBox } from "@common/Generic.js";
 import { FadeIn, FadeOut, SlideInUp } from "@styles/animations.js";
 import { RadioInput } from "@home/RadioInput";
-import { DispatchContext } from "@home/Game";
+import { DispatchContext, StateContext } from "@home/Game";
 import { ThemeContext } from "@common/Layout";
 
 const { keyMargin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard;
+
 const isBlack = (keyIndex) => {
   const blackKeysIndexes = [1, 3, 6, 8, 10];
   return blackKeysIndexes.includes(keyIndex) ? true : false;
@@ -23,11 +24,11 @@ const SettingsContainer = styled.div`
   position: relative;
   top: -100vh;
   animation: ${() => css`0.5s ease ${SlideInUp}`};
-  transform: translateY(${({ show }) => (show ? "100vh" : "-100vh")});
+  transform: translateY(${({ showSettings }) => (showSettings ? "100vh" : "-100vh")});
   transition: transform 1s;
 `;
 const BlurredBackground = styled.div`
-  animation: ${({ show }) => css`0.2s ease ${show ? FadeIn : FadeOut}`};
+  animation: ${({ showSettings }) => css`0.2s ease ${showSettings ? FadeIn : FadeOut}`};
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -35,10 +36,6 @@ const BlurredBackground = styled.div`
   left: 0;
   top: 0;
   background-color: ${({ color }) => `${color}cc`};
-  // @supports (not (backdrop-filter: blur())) {
-  //   background-color: rgba(0, 0, 0, 0.7);
-  // }
-  // backdrop-filter: blur(10px);
 `;
 const KeysButtons = (props) =>
   [...Array(12).keys()].map((keyIndex) => (
@@ -69,17 +66,18 @@ const Label = styled.p`
   color: ${({ color }) => color};
 `;
 //prettier-ignore
-const Settings = ({ show, scale, playMode, progressionMode, toggleNote, }) => {
-  const [shouldRender, setRender] = useState(show);
+const Settings = () => {
+  const { showSettings, scale, playMode, progressionMode  } = useContext(StateContext)
+  const [shouldRender, setRender] = useState(showSettings);
   const colors = useContext(ThemeContext)
   const dispatch = useContext(DispatchContext)
 
   useEffect(() => {
-    if (show) setRender(true);
-  }, [show]);
+    if (showSettings) setRender(true);
+  }, [showSettings]);
 
   const onAnimationEnd = () => {
-    if (!show) setRender(false);
+    if (!showSettings) setRender(false);
   };
 
   return !shouldRender ? null : (
@@ -93,9 +91,9 @@ const Settings = ({ show, scale, playMode, progressionMode, toggleNote, }) => {
         dispatch( { type: "toggleSettings" } )
       }}
       onAnimationEnd={onAnimationEnd}
-      show={show}
+      showSettings={showSettings}
     >
-      <SettingsContainer colors={colors} show={show}>
+      <SettingsContainer colors={colors} showSettings={showSettings}>
         <Label color={colors.grey}> Gameplay mode:</Label>
         <RadioInput dependency={playMode} name="playMode" value="entireBoard" />
         <RadioInput dependency={playMode} name="playMode" value="columns" />

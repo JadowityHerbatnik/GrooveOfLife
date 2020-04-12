@@ -7,7 +7,7 @@ export const initialState = {
   // prettier-ignore
   scale: [ true, false, false, true, false, true, false, false, true, false, true, false, ],
   notes: ["C", "D#", "F", "G#", "A#"],
-  column: null,
+  activeColumn: null,
   board: [[]],
   aliveCells: [],
   isPlaying: false,
@@ -99,3 +99,15 @@ export const progression = [
 //   ["C", "D", "F", "A"],
 //   ["C", "D", "F", "G#", "B"],
 // ];
+export const keybindings = {
+  c: { type: "clear" },
+  r: { type: "randomize" },
+  " ": { type: "togglePlaying" },
+  m: { type: "mute" },
+  s: { type: "step", changeChord: true },
+  ArrowUp: { type: "increaseSpeed" },
+  ArrowRight: { type: "increaseSpeed" },
+  ArrowDown: { type: "decreaseSpeed" },
+  ArrowLeft: { type: "decreaseSpeed" },
+};
+export const notesInOrder = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
