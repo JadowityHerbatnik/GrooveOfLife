@@ -5,14 +5,14 @@ import { WrapperButton, StyledIcon, StyledLink } from "@common/Generic.js";
 import { ThemeContext } from "@common/Layout.js";
 import { music } from "@utils/constants.js";
 import { SlideFromLeft } from "@styles/animations.js";
-import { DispatchContext } from "@home/Game";
-import Ikonka from "./settings.svg";
-import Play from "./play.svg";
-import Pause from "./pause.svg";
-import note from "./note.svg";
-import Random from "./random.svg";
-import Clear from "./clear.svg";
-import Help from "./help.svg";
+import { DispatchContext, StateContext } from "@home/Game";
+// import Ikonka from "./settings.svg";
+// import Play from "./play.svg";
+// import Pause from "./pause.svg";
+// import note from "./note.svg";
+// import Random from "./random.svg";
+// import Clear from "./clear.svg";
+// import Help from "./help.svg";
 
 const { minSpeed, maxSpeed } = music;
 const ButtonWrapper = styled.div`
@@ -79,16 +79,17 @@ const Svgik = styled.div`
   mask: ${({ svg }) => `url(${svg}) no-repeat center /contain`};
   fill: pink;
 `;
-const Buttons = ({ mute, speed, isGameRunning }) => {
+const Buttons = () => {
   const colors = useContext(ThemeContext);
   const dispatch = useContext(DispatchContext);
-  const { violet, orange, white, background, grey, green, red, yellow, blue } = colors;
+  const { mute, speed, isPlaying } = useContext(StateContext);
+  const { violet, background, grey, green, red, yellow, blue } = colors;
   return (
     <Container>
       <ButtonWrapper>
         <WrapperButton onClick={() => dispatch({ type: "togglePlaying" })}>
-          <StyledIcon color={green} className={isGameRunning ? "icon-pause" : "icon-play"} />
-          {/* <Svgik color={colors.green} svg={isGameRunning ? Pause : Play} /> */}
+          <StyledIcon color={green} className={isPlaying ? "icon-pause" : "icon-play"} />
+          {/* <Svgik color={colors.green} svg={isPlaying ? Pause : Play} /> */}
         </WrapperButton>
         <WrapperButton onClick={() => dispatch({ type: "randomize" })}>
           {/* <Svgik color={colors.yellow} svg={Random} /> */}

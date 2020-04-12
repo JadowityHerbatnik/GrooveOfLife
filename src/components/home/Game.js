@@ -9,7 +9,9 @@ import reducer from "../Reducer.js";
 import { progression, initialState } from "@utils/constants.js";
 import { playSelectedColumn, playEntireBoard } from "@helpers/sound.js";
 import { usePrevious } from "@hooks/UsePrevious";
+import { keybindings } from "@utils/constants";
 export const DispatchContext = createContext();
+export const StateContext = createContext();
 
 const GameWrapper = styled.div`
   margin: auto;
@@ -26,11 +28,10 @@ const GameWrapper = styled.div`
   }
 `;
 export default function Game() {
+  const [state, dispatch] = useReducer(reducer, initialState);
   //prettier-ignore
-  const [
-    { isPlaying, isSuspended, board, aliveCells, mute, speed, speedms, playMode, showSettings, isMouseDown, progressionMode, scale, notes, column,  chord},
-    dispatch,
-  ] = useReducer(reducer, initialState);
+  const { isPlaying, isSuspended, board, aliveCells, mute, speed, speedms, playMode, progressionMode, notes, activeColumn,  chord} = state;
+
   const boardRef = useRef(null);
   const { innerHeight, headerHeight } = useContext(HeightContext);
   const prevAlive = usePrevious(aliveCells);
@@ -59,66 +60,28 @@ export default function Game() {
       if (playMode === "entireBoard") {
         playEntireBoard(aliveCells, board, speedms, chordToPlay);
       } else {
-        playSelectedColumn(aliveCells, column, speedms, board, chordToPlay);
+        playSelectedColumn(aliveCells, activeColumn, speedms, board, chordToPlay);
       }
     },
     //prettier-ignore
-    [ board, aliveCells, prevAlive, column, playMode, isSuspended, notes, mute, progressionMode, speedms, chord, ],
+    [ board, aliveCells, prevAlive, activeColumn, playMode, isSuspended, notes, mute, progressionMode, speedms, chord, ],
   );
 
   useEffect(() => {
     function handleKeyPress(event) {
-      switch (event.key) {
-        case "c":
-          dispatch({ type: "clear" });
-          break;
-        case "r":
-          dispatch({ type: "randomize" });
-          break;
-        case " ":
-          dispatch({ type: "togglePlaying" });
-          break;
-        case "s":
-          dispatch({
-            type: playMode === "entireBoard" ? "newBoard" : "nextColumn",
-            changeChord: true,
-          });
-          break;
-        case "m":
-          dispatch({ type: "mute" });
-          break;
-        case "ArrowUp":
-          dispatch({ type: "increaseSpeed" });
-          break;
-        case "ArrowRight":
-          dispatch({ type: "increaseSpeed" });
-          break;
-        case "ArrowDown":
-          dispatch({ type: "decreaseSpeed" });
-          break;
-        case "ArrowLeft":
-          dispatch({ type: "decreaseSpeed" });
-          break;
-        //no default
-      }
+      const dupa = keybindings[`${event.key}`];
+      dupa && dispatch(dupa);
     }
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [speed, playMode, notes, column]);
+  }, [speed, playMode, notes, activeColumn]);
 
   useEffect(() => {
     let iteration = 0;
     const ID = setInterval(() => {
       if (isPlaying) {
         iteration = iteration === speed ? 0 : (iteration += 1);
-        if (iteration === speed) {
-          dispatch({
-            type: playMode === "entireBoard" ? "newBoard" : "nextColumn",
-            changeChord: true,
-          });
-        } else {
-          dispatch({ type: playMode === "entireBoard" ? "newBoard" : "nextColumn" });
-        }
+        dispatch({ type: "step", changeChord: iteration === speed });
       }
     }, speedms);
     return () => {
@@ -127,24 +90,14 @@ export default function Game() {
   }, [speed, speedms, isPlaying, mute, notes, playMode]);
 
   return (
-    <GameWrapper height={innerHeight - headerHeight}>
-      <DispatchContext.Provider value={dispatch}>
-        <ButtonBar mute={mute} isGameRunning={isPlaying} speed={speed} />
-        <Board
-          isSuspended={isSuspended}
-          isPlaying={isPlaying}
-          ref={boardRef}
-          board={board}
-          mousedown={isMouseDown}
-          highlightedColumn={column}
-        />
-        <Settings
-          show={showSettings}
-          scale={scale}
-          playMode={playMode}
-          progressionMode={progressionMode}
-        />
-      </DispatchContext.Provider>
-    </GameWrapper>
+    <DispatchContext.Provider value={dispatch}>
+      <StateContext.Provider value={state}>
+        <GameWrapper height={innerHeight - headerHeight}>
+          <ButtonBar />
+          <Board ref={boardRef} />
+          <Settings />
+        </GameWrapper>
+      </StateContext.Provider>
+    </DispatchContext.Provider>
   );
 }

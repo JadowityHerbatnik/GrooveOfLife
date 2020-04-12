@@ -1,9 +1,8 @@
-import { sizes, progression, music } from "../utils/constants.js";
+import { sizes, progression, music, notesInOrder } from "../utils/constants.js";
 import { isEqual } from "lodash";
 import { getAlive, calculateNextBoard } from "../helpers/makestep.js";
 const { minSpeed, maxSpeed } = music;
 
-const notesInOrder = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const chordReducer = (state, action, nextAlive = []) => {
   if (state.playMode === "entireBoard" && isEqual(nextAlive, state.aliveCells)) {
     return state.chord;
@@ -34,10 +33,28 @@ const dimensionReducer = (state, action) => {
   }
   return newBoard;
 };
+const newBoard = (state) => calculateNextBoard(state.board);
+const currentlyAlive = (state) => getAlive(state.board);
+const nextAlive = (state) => getAlive(calculateNextBoard(state.board));
+const nextColumnReducer = (state, action) => {
+  const ifLastColumn = state.activeColumn + 1 >= state.board[0].length;
+  return {
+    ...state,
+    activeColumn: ifLastColumn ? 0 : state.activeColumn + 1,
+    board: ifLastColumn ? newBoard(state) : state.board,
+    aliveCells: ifLastColumn ? nextAlive(state) : currentlyAlive(state),
+    chord: chordReducer(state, action),
+  };
+};
+const newBoardReducer = (state, action) => {
+  return {
+    ...state,
+    board: newBoard(state),
+    aliveCells: nextAlive(state),
+    chord: chordReducer(state, action, nextAlive(state)),
+  };
+};
 export default function reducer(state, action) {
-  const newBoard = calculateNextBoard(state.board);
-  const currentlyAlive = getAlive(state.board);
-  const nextAlive = getAlive(newBoard);
   switch (action.type) {
     case "togglePlaying":
       return { ...state, isPlaying: !state.isPlaying };
@@ -68,21 +85,13 @@ export default function reducer(state, action) {
 
       return { ...state, board: clicked, aliveCells: getAlive(clicked) };
     case "newBoard":
-      return {
-        ...state,
-        board: newBoard,
-        aliveCells: nextAlive,
-        chord: chordReducer(state, action, nextAlive),
-      };
+      return newBoardReducer(state, action);
     case "nextColumn":
-      const ifLastColumn = state.column + 1 >= state.board[0].length;
-      return {
-        ...state,
-        column: ifLastColumn ? 0 : state.column + 1,
-        board: ifLastColumn ? newBoard : state.board,
-        chord: chordReducer(state, action, currentlyAlive),
-        aliveCells: ifLastColumn ? nextAlive : currentlyAlive,
-      };
+      return nextColumnReducer(state, action);
+    case "step":
+      return state.playMode === "entireBoard"
+        ? newBoardReducer(state, action)
+        : nextColumnReducer(state, action);
     case "mute":
       return { ...state, mute: !state.mute };
     case "speed":
@@ -96,7 +105,7 @@ export default function reducer(state, action) {
     case "columns":
       return { ...state, playMode: action.type };
     case "entireBoard":
-      return { ...state, playMode: action.type, column: null };
+      return { ...state, playMode: action.type, activeColumn: null };
     case "auto":
       return { ...state, progressionMode: action.type };
     case "custom":
