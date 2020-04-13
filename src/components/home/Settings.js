@@ -2,11 +2,13 @@ import React, { useState, useEffect, useContext } from "react";
 import styled, { css } from "styled-components";
 import "../../styles/fontello/css/fontello.css";
 import { keyboard } from "@utils/constants.js";
-import { FlexBox } from "@common/Generic.js";
+import { FlexBox, StyledLabel } from "@common/Generic.js";
 import { FadeIn, FadeOut, SlideInUp } from "@styles/animations.js";
 import { RadioInput } from "@home/RadioInput";
 import { DispatchContext, StateContext } from "@home/Game";
 import { ThemeContext } from "@common/Layout";
+import { Clear } from "@styles/svg/Buttons";
+import { SelectProgression } from "@home/SelectProgression";
 
 const { keyMargin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard;
 
@@ -17,7 +19,7 @@ const isBlack = (keyIndex) => {
 
 const SettingsContainer = styled.div`
   margin: auto;
-  padding: 0 20px 20px 20px;
+  padding: 0 10px 10px 10px;
   border: ${({ colors }) => `2px solid ${colors.border}`};
   background-color: ${({ colors }) => colors.background};
   box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.75);
@@ -60,11 +62,6 @@ const NoteButtons = styled.div`
   border: ${() => `${keyMargin} solid black`};
   transition: background-color 0.3s;
 `;
-const Label = styled.p`
-  font-family: Geo;
-  font-size: 1.5em;
-  color: ${({ color }) => color};
-`;
 //prettier-ignore
 const Settings = () => {
   const { showSettings, scale, playMode, progressionMode  } = useContext(StateContext)
@@ -94,20 +91,25 @@ const Settings = () => {
       showSettings={showSettings}
     >
       <SettingsContainer colors={colors} showSettings={showSettings}>
-        <Label color={colors.grey}> Gameplay mode:</Label>
-        <RadioInput dependency={playMode} name="playMode" value="entireBoard" />
-        <RadioInput dependency={playMode} name="playMode" value="columns" />
-        <Label color={colors.grey}>Chord progression mode:</Label>
-        <RadioInput dependency={progressionMode} name="progressionMode" value="auto" />
-        <RadioInput dependency={progressionMode} name="progressionMode" value="custom" />
+        <StyledLabel color={colors.grey}> Gameplay mode:</StyledLabel>
+        <div>
+        <RadioInput dependency={playMode} name="playMode" value="entireBoard" text="Entire Board" />
+        <RadioInput dependency={playMode} name="playMode" value="columns"  text="Single column"/>
+        </div>
+        <StyledLabel color={colors.grey}>Chord progression mode:</StyledLabel>
+        <div>
+        <RadioInput dependency={progressionMode} name="progressionMode" value="auto"  text="Preset"/>
+        <RadioInput dependency={progressionMode} name="progressionMode" value="custom" text="Custom"/>
+    </div>
         {progressionMode === "custom" && (
           <>
-            <Label color={colors.grey}>Notes to use:</Label>
+            <StyledLabel color={colors.grey}>Notes to use:</StyledLabel>
             <FlexBox row align="flex-start" style={{ margin: "10px" }}>
               <KeysButtons colors={colors} scale={scale} dispatch={dispatch}/>
             </FlexBox>
           </>
         )}
+        {progressionMode === "auto" && (<><StyledLabel color={colors.grey}>Choose preset:</StyledLabel><SelectProgression/></>)}
       </SettingsContainer>
     </BlurredBackground>
   );

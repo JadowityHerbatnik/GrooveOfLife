@@ -6,7 +6,7 @@ import { HeightContext } from "@common/Layout.js";
 import Settings from "@home/Settings.js";
 import { debounce } from "lodash";
 import reducer from "../Reducer.js";
-import { progression, initialState, keybindings } from "@utils/constants.js";
+import { initialState, keybindings } from "@utils/constants.js";
 import { playSelectedColumn, playEntireBoard } from "@helpers/sound.js";
 import { usePrevious } from "@hooks/UsePrevious";
 export const DispatchContext = createContext();
@@ -29,7 +29,7 @@ const GameWrapper = styled.div`
 export default function Game() {
   const [state, dispatch] = useReducer(reducer, initialState);
   //prettier-ignore
-  const { isPlaying, isSuspended, board, aliveCells, mute, speed, speedms, playMode, progressionMode, notes, activeColumn,  chord} = state;
+  const { isPlaying, isSuspended, board, aliveCells, mute, speed, speedms, playMode, progressionMode, notes, progression, activeColumn,  chord} = state;
 
   const boardRef = useRef(null);
   const { innerHeight, headerHeight } = useContext(HeightContext);
@@ -63,13 +63,13 @@ export default function Game() {
       }
     },
     //prettier-ignore
-    [ board, aliveCells, prevAlive, activeColumn, playMode, isSuspended, notes, mute, progressionMode, speedms, chord, ],
+    [ board, aliveCells, prevAlive, activeColumn, playMode, isSuspended, notes, mute, progressionMode, progression, speedms, chord, ],
   );
 
   useEffect(() => {
     function handleKeyPress(event) {
-      const dupa = keybindings[`${event.key}`];
-      dupa && dispatch(dupa);
+      const keyAction = keybindings[`${event.key}`];
+      keyAction && dispatch(keyAction);
     }
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);

@@ -11,6 +11,13 @@ const StyledLabel = styled.label`
   color: ${({ colors }) => colors.grey};
   transition: opacity 0.5s;
   font-weight: bold;
+  font-size: 12px;
+  @media (min-width: 960px) {
+    font-size: 15px;
+  }
+  @media (min-width: 300px) and (max-width: 960px) {
+    font-size: calc(12px + 3 * (100vw - 300px) / (960 - 300));
+  }
 `;
 const StyledInput = styled.input`
   appearance: none;
@@ -20,7 +27,7 @@ const StyledInput = styled.input`
     opacity: 1;
   }
 `;
-export const RadioInput = ({ name, value, dependency }) => {
+export const RadioInput = ({ name, value, dependency, text = "" }) => {
   const dispatch = useContext(DispatchContext);
   const colors = useContext(ThemeContext);
   return (
@@ -35,7 +42,7 @@ export const RadioInput = ({ name, value, dependency }) => {
         onChange={(e) => dispatch({ type: e.target.value })}
       />
       <StyledLabel colors={colors} htmlFor={value}>
-        {value}
+        {text ? text : value}
       </StyledLabel>
     </>
   );

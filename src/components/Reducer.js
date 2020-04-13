@@ -1,6 +1,6 @@
-import { sizes, progression, music, notesInOrder } from "../utils/constants.js";
+import { sizes, music, notesInOrder } from "@utils/constants.js";
 import { isEqual } from "lodash";
-import { getAlive, calculateNextBoard } from "../helpers/makestep.js";
+import { getAlive, calculateNextBoard } from "@helpers/makestep.js";
 const { minSpeed, maxSpeed } = music;
 
 const chordReducer = (state, action, nextAlive = []) => {
@@ -8,7 +8,7 @@ const chordReducer = (state, action, nextAlive = []) => {
     return state.chord;
   }
   if (action.changeChord) {
-    if (state.chord === progression.length - 1) {
+    if (state.chord === state.progression.length - 1) {
       return 0;
     }
     return state.chord + 1;
@@ -123,6 +123,8 @@ export default function reducer(state, action) {
         }
       });
       return { ...state, scale: state.scale, notes: newNotes };
+    case "changeProgression":
+      return { ...state, progression: action.payload, chord: 0 };
     default:
       throw new Error();
   }

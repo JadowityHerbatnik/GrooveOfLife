@@ -1,3 +1,4 @@
+import { progression } from "@utils/chordProgressions";
 export const initialState = {
   mute: false,
   speed: 4,
@@ -7,6 +8,7 @@ export const initialState = {
   // prettier-ignore
   scale: [ true, false, false, true, false, true, false, false, true, false, true, false, ],
   notes: ["C", "D#", "F", "G#", "A#"],
+  progression: progression,
   activeColumn: null,
   board: [[]],
   aliveCells: [],
@@ -81,24 +83,6 @@ export const solarized = {
   grey: "#93a1a1",
   cyan: "#2aa198",
 };
-export const progression = [
-  [`D`, `D#`, `G`, `A#`],
-  [`C#`, `D#`, "E", `G`, `A#`],
-  [`C`, `D#`, `G`, `G#`],
-  [`D#`, `F#`, `G#`, `B`],
-  [`D`, `F`, `G`, `A#`],
-  [`C`, `D`, `E`, `G`, `A#`],
-  [`C`, `D#`, `F`, `G`, `G#`],
-  [`D`, `F`, `G#`, `A#`, `B`],
-];
-// export const progression = [
-//   ["C", "E", "G"],
-//   ["F", "A", "C"],
-//   ["F", "G", "B", "D"],
-//   ["C", "E", "A"],
-//   ["C", "D", "F", "A"],
-//   ["C", "D", "F", "G#", "B"],
-// ];
 export const keybindings = {
   c: { type: "clear" },
   r: { type: "randomize" },

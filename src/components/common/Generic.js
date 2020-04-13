@@ -22,6 +22,11 @@ export const StyledIcon = styled.i`
   color: ${({ color }) => (color ? color : "white")};
   transition: color 0.2s;
 `;
+export const StyledLabel = styled.p`
+  font-family: Geo;
+  font-size: 1.5em;
+  color: ${({ color }) => color};
+`;
 export const FlexBox = styled.div`
   display: flex;
   flex-direction: ${({ direction }) => direction};
@@ -43,7 +48,4 @@ export const WrapperButton = styled.button`
   cursor: pointer;
   width: min-content;
   margin: auto;
-  &:hover {
-    opacity: 0.5;
-  }
 `;
