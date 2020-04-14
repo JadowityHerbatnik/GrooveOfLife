@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import "@styles/fontello/css/fontello.css";
-import { WrapperButton, StyledIcon, StyledLink } from "@common/Generic.js";
+import { WrapperButton, StyledLink } from "@common/Generic.js";
 import { ThemeContext } from "@common/Layout.js";
 import { music } from "@utils/constants.js";
 import { SlideFromLeft } from "@styles/animations.js";
@@ -88,25 +88,20 @@ const Buttons = () => {
   return (
     <Container>
       <ButtonWrapper colors={colors}>
-        <WrapperButton onClick={() => dispatch({ type: "togglePlaying" })}>
-          {/* <StyledIcon color={green} className={isPlaying ? "icon-pause" : "icon-play"} /> */}
+        <WrapperButton title="dupa" onClick={() => dispatch({ type: TOGGLE_PLAY })}>
           <SvgIcon color={colors.green} svg={isPlaying ? Pause : Play} />
         </WrapperButton>
-        <WrapperButton onClick={() => dispatch({ type: "randomize" })}>
+        <WrapperButton onClick={() => dispatch({ type: RANDOM_BOARD })}>
           <SvgIcon color={colors.border} svg={Random} />
-          {/* <StyledIcon color={yellow} className="icon-shuffle" /> */}
         </WrapperButton>
-        <WrapperButton onClick={() => dispatch({ type: "clear" })}>
+        <WrapperButton onClick={() => dispatch({ type: CLEAR_BOARD })}>
           <SvgIcon color={colors.red} svg={Clear} />
-          {/* <StyledIcon color={red} className="icon-cancel" /> */}
         </WrapperButton>
-        <WrapperButton onClick={() => dispatch({ type: "mute" })}>
+        <WrapperButton onClick={() => dispatch({ type: MUTE_SOUND })}>
           <SvgIcon color={colors.blue} svg={Note} />
-          {/* <StyledIcon color={blue} className={mute ? "icon-volume-off" : "icon-volume-up"} /> */}
         </WrapperButton>
-        <WrapperButton onClick={() => dispatch({ type: "toggleSettings" })}>
+        <WrapperButton onClick={() => dispatch({ type: TOGGLE_SETTINGS })}>
           <SvgIcon color={colors.grey} svg={Settings} />
-          {/* <StyledIcon color={grey} className="icon-cog" /> */}
         </WrapperButton>
         <StyledLink
           colors={colors}
@@ -117,7 +112,6 @@ const Buttons = () => {
           to="/about"
         >
           <SvgIcon color={colors.violet} svg={Help} />
-          {/* <StyledIcon color={violet} className="icon-help" /> */}
         </StyledLink>
       </ButtonWrapper>
       <SliderWrapper colors={colors}>
