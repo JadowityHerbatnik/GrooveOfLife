@@ -7,6 +7,14 @@ import { music } from "@utils/constants.js";
 import { SlideFromLeft } from "@styles/animations.js";
 import { DispatchContext, StateContext } from "@home/Game";
 import { Settings, Play, Pause, Note, Random, Clear, Help } from "@styles/svg/Buttons";
+import {
+  TOGGLE_PLAY,
+  CLEAR_BOARD,
+  RANDOM_BOARD,
+  MUTE_SOUND,
+  SET_SPEED,
+  TOGGLE_SETTINGS,
+} from "@reducer/action-types";
 
 const { minSpeed, maxSpeed } = music;
 const ButtonWrapper = styled.div`
@@ -120,7 +128,7 @@ const Buttons = () => {
           max={maxSpeed}
           step="1"
           value={speed}
-          onChange={(event) => dispatch({ type: "speed", payload: parseInt(event.target.value) })}
+          onChange={(event) => dispatch({ type: SET_SPEED, payload: parseInt(event.target.value) })}
         />
       </SliderWrapper>
     </Container>

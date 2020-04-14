@@ -4,6 +4,7 @@ import { sizes } from "@utils/constants.js";
 import { SlideFromBottom } from "@styles/animations.js";
 import { ThemeContext } from "@common/Layout.js";
 import { DispatchContext, StateContext } from "@home/Game";
+import { CLICK_CELL, IS_MOUSEDOWN, SUSPEND, RESUME } from "@reducer/action-types";
 
 const BoardWrapper = styled.div`
   height: 90%;
@@ -50,20 +51,20 @@ const GenerateColumns = ({ rowIndex, numberOfCols }) => {
       activeColumn={activeColumn}
       onMouseDown={() => {
         if (isPlaying) {
-          dispatch({ type: "suspend" });
+          dispatch({ type: SUSPEND });
         }
-        dispatch({ type: "mouseDown", payload: true });
-        dispatch({ type: "boardClick", coordinates: [rowIndex, columnIndex] });
+        dispatch({ type: IS_MOUSEDOWN, payload: true });
+        dispatch({ type: CLICK_CELL, coordinates: [rowIndex, columnIndex] });
       }}
       onMouseUp={() => {
         if (isSuspended) {
-          dispatch({ type: "resume" });
+          dispatch({ type: RESUME });
         }
-        dispatch({ type: "mouseDown", payload: false });
+        dispatch({ type: IS_MOUSEDOWN, payload: false });
       }}
       onMouseEnter={() => {
         if (isMouseDown) {
-          dispatch({ type: "boardClick", coordinates: [rowIndex, columnIndex] });
+          dispatch({ type: CLICK_CELL, coordinates: [rowIndex, columnIndex] });
         }
       }}
     />

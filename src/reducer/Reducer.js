@@ -1,6 +1,8 @@
-import { sizes, music, notesInOrder } from "@utils/constants.js";
+import { sizes, music, notesInOrder } from "@utils/constants";
 import { isEqual } from "lodash";
-import { getAlive, calculateNextBoard } from "@helpers/makestep.js";
+import { getAlive, calculateNextBoard } from "@helpers/makestep";
+import * as action_types from "@reducer/action-types";
+
 const { minSpeed, maxSpeed } = music;
 
 const chordReducer = (state, action, nextAlive = []) => {
@@ -56,65 +58,61 @@ const newBoardReducer = (state, action) => {
 };
 export default function reducer(state, action) {
   switch (action.type) {
-    case "togglePlaying":
+    case action_types.TOGGLE_PLAY:
       return { ...state, isPlaying: !state.isPlaying };
-    case "resume":
+    case action_types.RESUME:
       return { ...state, isSuspended: false, isPlaying: true };
-    case "suspend":
+    case action_types.SUSPEND:
       return { ...state, isSuspended: true, isPlaying: false };
-    case "clear":
+    case action_types.CLEAR_BOARD:
       return {
         ...state,
         isPlaying: false,
         board: state.board.map((val) => val.map(() => false)),
         aliveCells: [],
       };
-    case "randomize":
+    case action_types.RANDOM_BOARD:
       const randomBoard = state.board.map((val) => val.map(() => Math.random() >= 0.8));
       return {
         ...state,
         board: randomBoard,
         aliveCells: getAlive(randomBoard),
       };
-    case "dimensions":
+    case action_types.RESIZE_BOARD:
       return { ...state, board: dimensionReducer(state, action) };
-    case "boardClick":
+    case action_types.CLICK_CELL:
       const [i, j] = action.coordinates;
       const clicked = Array.from(state.board);
       clicked[i][j] = !clicked[i][j];
 
       return { ...state, board: clicked, aliveCells: getAlive(clicked) };
-    case "newBoard":
-      return newBoardReducer(state, action);
-    case "nextColumn":
-      return nextColumnReducer(state, action);
-    case "step":
-      return state.playMode === "entireBoard"
+    case action_types.MAKE_STEP:
+      return state.playMode === action_types.PLAY_ALL
         ? newBoardReducer(state, action)
         : nextColumnReducer(state, action);
-    case "mute":
+    case action_types.MUTE_SOUND:
       return { ...state, mute: !state.mute };
-    case "speed":
+    case action_types.SET_SPEED:
       return { ...state, speed: action.payload, speedms: 1000 / action.payload };
-    case "increaseSpeed":
+    case action_types.INCREASE_SPEED:
       const incSpeed = state.speed === maxSpeed ? state.speed : state.speed + 1;
       return { ...state, speed: incSpeed, speedms: 1000 / incSpeed };
-    case "decreaseSpeed":
+    case action_types.DECREASE_SPEED:
       const decSpeed = state.speed === minSpeed ? state.speed : state.speed - 1;
       return { ...state, speed: decSpeed, speedms: 1000 / decSpeed };
-    case "columns":
+    case action_types.PLAY_COLUMN:
       return { ...state, playMode: action.type };
-    case "entireBoard":
+    case action_types.PLAY_ALL:
       return { ...state, playMode: action.type, activeColumn: null };
-    case "auto":
+    case action_types.PLAY_PRESET:
       return { ...state, progressionMode: action.type };
-    case "custom":
+    case action_types.PLAY_CUSTOM:
       return { ...state, progressionMode: action.type };
-    case "toggleSettings":
+    case action_types.TOGGLE_SETTINGS:
       return { ...state, showSettings: !state.showSettings };
-    case "mouseDown":
+    case action_types.IS_MOUSEDOWN:
       return { ...state, isMouseDown: action.payload };
-    case "scale":
+    case action_types.SET_SCALE:
       state.scale[action.key] = !state.scale[action.key];
       const newNotes = [];
       state.scale.forEach((value, index) => {
@@ -123,7 +121,7 @@ export default function reducer(state, action) {
         }
       });
       return { ...state, scale: state.scale, notes: newNotes };
-    case "changeProgression":
+    case action_types.CHANGE_PROGRESSION:
       return { ...state, progression: action.payload, chord: 0 };
     default:
       throw new Error();

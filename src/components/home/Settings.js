@@ -9,6 +9,14 @@ import { DispatchContext, StateContext } from "@home/Game";
 import { ThemeContext } from "@common/Layout";
 import { Clear } from "@styles/svg/Buttons";
 import { SelectProgression } from "@home/SelectProgression";
+import {
+  PLAY_ALL,
+  PLAY_COLUMN,
+  PLAY_PRESET,
+  PLAY_CUSTOM,
+  TOGGLE_SETTINGS,
+  SET_SCALE,
+} from "@reducer/action-types";
 
 const { keyMargin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard;
 
@@ -47,7 +55,7 @@ const KeysButtons = (props) =>
       isBlack={isBlack(keyIndex)}
       note={keyIndex}
       isNoteUsed={props.scale[keyIndex] ? true : false}
-      onClick={() => props.dispatch({ type: "scale", key: keyIndex })}
+      onClick={() => props.dispatch({ type: SET_SCALE, key: keyIndex })}
     ></NoteButtons>
   ));
 const NoteButtons = styled.div`
@@ -85,7 +93,7 @@ const Settings = () => {
         if (e.target.id !== "close") {
           return;
         }
-        dispatch( { type: "toggleSettings" } )
+        dispatch( { type: TOGGLE_SETTINGS} )
       }}
       onAnimationEnd={onAnimationEnd}
       showSettings={showSettings}
@@ -93,13 +101,13 @@ const Settings = () => {
       <SettingsContainer colors={colors} showSettings={showSettings}>
         <StyledLabel color={colors.grey}> Gameplay mode:</StyledLabel>
         <div>
-        <RadioInput dependency={playMode} name="playMode" value="entireBoard" text="Entire Board" />
-        <RadioInput dependency={playMode} name="playMode" value="columns"  text="Single column"/>
+        <RadioInput dependency={playMode} name="playMode" value={PLAY_ALL} />
+        <RadioInput dependency={playMode} name="playMode" value={PLAY_COLUMN} />
         </div>
         <StyledLabel color={colors.grey}>Chord progression mode:</StyledLabel>
         <div>
-        <RadioInput dependency={progressionMode} name="progressionMode" value="auto"  text="Preset"/>
-        <RadioInput dependency={progressionMode} name="progressionMode" value="custom" text="Custom"/>
+        <RadioInput dependency={progressionMode} name="progressionMode" value={PLAY_PRESET} />
+        <RadioInput dependency={progressionMode} name="progressionMode" value={PLAY_CUSTOM} />
     </div>
         {progressionMode === "custom" && (
           <>

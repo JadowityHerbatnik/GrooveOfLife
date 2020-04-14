@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
-import { progressions } from "@utils/chordProgressions";
+import { progressions } from "@utils/chord-progressions";
 import styled from "styled-components";
 import { ThemeContext } from "@common/Layout";
 import { StateContext, DispatchContext } from "@home/Game";
+import { CHANGE_PROGRESSION } from "@reducer/action-types";
 
 const StyledSelect = styled.select`
   background: ${({ colors }) => colors.background};
@@ -32,7 +33,7 @@ export const SelectProgression = () => {
   const colors = useContext(ThemeContext);
   const { progression } = useContext(StateContext);
   const changeProgression = (e) =>
-    dispatch({ type: "changeProgression", payload: progressions[e.target.value] });
+    dispatch({ type: CHANGE_PROGRESSION, payload: progressions[e.target.value] });
 
   return (
     <form onChange={(e) => changeProgression(e)}>

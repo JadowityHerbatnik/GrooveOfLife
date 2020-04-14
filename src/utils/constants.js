@@ -1,25 +1,5 @@
-import { progression } from "@utils/chordProgressions";
-export const initialState = {
-  mute: false,
-  speed: 4,
-  speedms: 250,
-  playMode: "entireBoard",
-  progressionMode: "auto",
-  // prettier-ignore
-  scale: [ true, false, false, true, false, true, false, false, true, false, true, false, ],
-  notes: ["C", "D#", "F", "G#", "A#"],
-  progression: progression,
-  activeColumn: null,
-  board: [[]],
-  aliveCells: [],
-  isPlaying: false,
-  isSuspended: false,
-  chord: 0,
-  showSettings: false,
-  isMouseDown: false,
-};
 export const sizes = {
-  preferredCellSize: 25,
+  preferredCellSize: 20,
   headerHeight: "15vh",
 };
 export const music = {
@@ -82,16 +62,5 @@ export const solarized = {
   violet: "#6c71c4",
   grey: "#93a1a1",
   cyan: "#2aa198",
-};
-export const keybindings = {
-  c: { type: "clear" },
-  r: { type: "randomize" },
-  " ": { type: "togglePlaying" },
-  m: { type: "mute" },
-  s: { type: "step", changeChord: true },
-  ArrowUp: { type: "increaseSpeed" },
-  ArrowRight: { type: "increaseSpeed" },
-  ArrowDown: { type: "decreaseSpeed" },
-  ArrowLeft: { type: "decreaseSpeed" },
 };
 export const notesInOrder = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];

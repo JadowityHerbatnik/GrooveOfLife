@@ -27,7 +27,7 @@ const StyledInput = styled.input`
     opacity: 1;
   }
 `;
-export const RadioInput = ({ name, value, dependency, text = "" }) => {
+export const RadioInput = ({ name, value, dependency }) => {
   const dispatch = useContext(DispatchContext);
   const colors = useContext(ThemeContext);
   return (
@@ -42,7 +42,7 @@ export const RadioInput = ({ name, value, dependency, text = "" }) => {
         onChange={(e) => dispatch({ type: e.target.value })}
       />
       <StyledLabel colors={colors} htmlFor={value}>
-        {text ? text : value}
+        {value}
       </StyledLabel>
     </>
   );
