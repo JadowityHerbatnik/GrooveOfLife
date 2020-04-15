@@ -12,6 +12,7 @@ module.exports = {
           "@src": "src",
           "@components": "src/components",
           "@hooks": "src/components/hooks",
+          "@reducer": "src/reducer",
           "@common": "src/components/common",
           "@pages": "src/pages",
           "@home": "src/components/home",

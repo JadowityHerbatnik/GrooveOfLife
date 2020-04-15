@@ -1,14 +1,16 @@
 import React, { useRef, useEffect, useReducer, useContext, createContext } from "react";
 import styled from "styled-components";
-import ButtonBar from "@home/ButtonBar.js";
+import ButtonBar from "@home/ButtonBar";
 import Board from "@home/Board.js";
-import { HeightContext } from "@common/Layout.js";
-import Settings from "@home/Settings.js";
+import { HeightContext } from "@common/Layout";
+import Settings from "@home/Settings";
 import { debounce } from "lodash";
-import reducer from "../Reducer.js";
-import { progression, initialState, keybindings } from "@utils/constants.js";
-import { playSelectedColumn, playEntireBoard } from "@helpers/sound.js";
+import reducer from "@reducer/Reducer";
+import { keybindings } from "@utils/keybindings";
+import { initialState } from "@reducer/initial-state";
+import { playSelectedColumn, playEntireBoard } from "@helpers/sound";
 import { usePrevious } from "@hooks/UsePrevious";
+import { RESIZE_BOARD, MAKE_STEP, PLAY_ALL, PLAY_PRESET } from "@reducer/action-types";
 export const DispatchContext = createContext();
 export const StateContext = createContext();
 
@@ -29,7 +31,7 @@ const GameWrapper = styled.div`
 export default function Game() {
   const [state, dispatch] = useReducer(reducer, initialState);
   //prettier-ignore
-  const { isPlaying, isSuspended, board, aliveCells, mute, speed, speedms, playMode, progressionMode, notes, activeColumn,  chord} = state;
+  const { isPlaying, isSuspended, board, aliveCells, mute, speed, speedms, playMode, progressionMode, notes, progression, activeColumn,  chord} = state;
 
   const boardRef = useRef(null);
   const { innerHeight, headerHeight } = useContext(HeightContext);
@@ -39,7 +41,7 @@ export default function Game() {
     const recalculate = debounce(() => {
       const { width, height } = boardRef.current.getBoundingClientRect();
       if (!!width && !!height) {
-        dispatch({ type: "dimensions", dimensions: [width, height] });
+        dispatch({ type: RESIZE_BOARD, dimensions: [width, height] });
       }
     }, 100);
     window.addEventListener("resize", recalculate);
@@ -55,21 +57,21 @@ export default function Game() {
       if (isSuspended || mute || !aliveCells.length || !notes.length) {
         return;
       }
-      const chordToPlay = progressionMode === "auto" ? progression[chord] : notes;
-      if (playMode === "entireBoard") {
+      const chordToPlay = progressionMode === PLAY_PRESET ? progression[chord] : notes;
+      if (playMode === PLAY_ALL) {
         playEntireBoard(aliveCells, board, speedms, chordToPlay);
       } else {
         playSelectedColumn(aliveCells, activeColumn, speedms, board, chordToPlay);
       }
     },
     //prettier-ignore
-    [ board, aliveCells, prevAlive, activeColumn, playMode, isSuspended, notes, mute, progressionMode, speedms, chord, ],
+    [ board, aliveCells, prevAlive, activeColumn, playMode, isSuspended, notes, mute, progressionMode, progression, speedms, chord, ],
   );
 
   useEffect(() => {
     function handleKeyPress(event) {
-      const dupa = keybindings[`${event.key}`];
-      dupa && dispatch(dupa);
+      const keyAction = keybindings[`${event.key}`];
+      keyAction && dispatch(keyAction);
     }
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
@@ -80,7 +82,7 @@ export default function Game() {
     const ID = setInterval(() => {
       if (isPlaying) {
         iteration = iteration === speed ? 0 : (iteration += 1);
-        dispatch({ type: "step", changeChord: iteration === speed });
+        dispatch({ type: MAKE_STEP, changeChord: iteration === speed });
       }
     }, speedms);
     return () => {

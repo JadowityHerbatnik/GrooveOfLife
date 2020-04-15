@@ -2,11 +2,21 @@ import React, { useState, useEffect, useContext } from "react";
 import styled, { css } from "styled-components";
 import "../../styles/fontello/css/fontello.css";
 import { keyboard } from "@utils/constants.js";
-import { FlexBox } from "@common/Generic.js";
+import { FlexBox, StyledLabel, WrapperButton } from "@common/Generic.js";
 import { FadeIn, FadeOut, SlideInUp } from "@styles/animations.js";
 import { RadioInput } from "@home/RadioInput";
 import { DispatchContext, StateContext } from "@home/Game";
 import { ThemeContext } from "@common/Layout";
+import { Clear } from "@styles/svg/Buttons";
+import { SelectProgression } from "@home/SelectProgression";
+import {
+  PLAY_ALL,
+  PLAY_COLUMN,
+  PLAY_PRESET,
+  PLAY_CUSTOM,
+  TOGGLE_SETTINGS,
+  SET_SCALE,
+} from "@reducer/action-types";
 
 const { keyMargin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard;
 
@@ -17,7 +27,7 @@ const isBlack = (keyIndex) => {
 
 const SettingsContainer = styled.div`
   margin: auto;
-  padding: 0 20px 20px 20px;
+  padding: 0 10px 10px 10px;
   border: ${({ colors }) => `2px solid ${colors.border}`};
   background-color: ${({ colors }) => colors.background};
   box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.75);
@@ -45,7 +55,7 @@ const KeysButtons = (props) =>
       isBlack={isBlack(keyIndex)}
       note={keyIndex}
       isNoteUsed={props.scale[keyIndex] ? true : false}
-      onClick={() => props.dispatch({ type: "scale", key: keyIndex })}
+      onClick={() => props.dispatch({ type: SET_SCALE, key: keyIndex })}
     ></NoteButtons>
   ));
 const NoteButtons = styled.div`
@@ -60,17 +70,18 @@ const NoteButtons = styled.div`
   border: ${() => `${keyMargin} solid black`};
   transition: background-color 0.3s;
 `;
-const Label = styled.p`
-  font-family: Geo;
-  font-size: 1.5em;
-  color: ${({ color }) => color};
+const CloseSvg = styled.img`
+  position: absolute;
+  right: 10px;
+  top 10px;
+  width: 3vh;
+  height: 3vh;
 `;
-//prettier-ignore
 const Settings = () => {
-  const { showSettings, scale, playMode, progressionMode  } = useContext(StateContext)
+  const { showSettings, scale, playMode, progressionMode } = useContext(StateContext);
   const [shouldRender, setRender] = useState(showSettings);
-  const colors = useContext(ThemeContext)
-  const dispatch = useContext(DispatchContext)
+  const colors = useContext(ThemeContext);
+  const dispatch = useContext(DispatchContext);
 
   useEffect(() => {
     if (showSettings) setRender(true);
@@ -88,24 +99,37 @@ const Settings = () => {
         if (e.target.id !== "close") {
           return;
         }
-        dispatch( { type: "toggleSettings" } )
+        dispatch({ type: TOGGLE_SETTINGS });
       }}
       onAnimationEnd={onAnimationEnd}
       showSettings={showSettings}
     >
       <SettingsContainer colors={colors} showSettings={showSettings}>
-        <Label color={colors.grey}> Gameplay mode:</Label>
-        <RadioInput dependency={playMode} name="playMode" value="entireBoard" />
-        <RadioInput dependency={playMode} name="playMode" value="columns" />
-        <Label color={colors.grey}>Chord progression mode:</Label>
-        <RadioInput dependency={progressionMode} name="progressionMode" value="auto" />
-        <RadioInput dependency={progressionMode} name="progressionMode" value="custom" />
+        <WrapperButton onClick={() => dispatch({ type: TOGGLE_SETTINGS })}>
+          <CloseSvg src={Clear} alt="" />
+        </WrapperButton>
+        <StyledLabel color={colors.grey}> Gameplay mode:</StyledLabel>
+        <div>
+          <RadioInput dependency={playMode} name="playMode" value={PLAY_ALL} />
+          <RadioInput dependency={playMode} name="playMode" value={PLAY_COLUMN} />
+        </div>
+        <StyledLabel color={colors.grey}>Chord progression mode:</StyledLabel>
+        <div>
+          <RadioInput dependency={progressionMode} name="progressionMode" value={PLAY_PRESET} />
+          <RadioInput dependency={progressionMode} name="progressionMode" value={PLAY_CUSTOM} />
+        </div>
         {progressionMode === "custom" && (
           <>
-            <Label color={colors.grey}>Notes to use:</Label>
+            <StyledLabel color={colors.grey}>Notes to use:</StyledLabel>
             <FlexBox row align="flex-start" style={{ margin: "10px" }}>
-              <KeysButtons colors={colors} scale={scale} dispatch={dispatch}/>
+              <KeysButtons colors={colors} scale={scale} dispatch={dispatch} />
             </FlexBox>
+          </>
+        )}
+        {progressionMode === "auto" && (
+          <>
+            <StyledLabel color={colors.grey}>Choose preset:</StyledLabel>
+            <SelectProgression />
           </>
         )}
       </SettingsContainer>
