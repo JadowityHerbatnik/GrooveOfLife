@@ -1,9 +1,12 @@
 import React from "react";
 import { StyledAnchor } from "@common/Generic.js";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
-import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+import {
+  TOGGLE_PLAY,
+  RANDOM_BOARD,
+  CLEAR_BOARD,
+  MUTE_SOUND,
+  MAKE_STEP,
+} from "@reducer/action-types";
 const wiki = "https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life";
 const tonejs = "https://tonejs.github.io/";
 // const WikiLink = (
@@ -48,12 +51,12 @@ export const keybindings = (
   </>
 );
 export const keyDescription = new Map([
-  ["Space", { color: "green", desc: "Play/pause" }],
-  ["R", { color: "red", desc: "Random board" }],
-  ["C", { color: "yellow", desc: "Clean board" }],
-  ["M", { color: "blue", desc: "Mute sound" }],
-  ["S", { color: "", desc: "Make one step" }],
-  [<ArrowBackIcon />, { color: "", desc: "Change game speed" }],
+  ["Space", { color: "green", desc: TOGGLE_PLAY }],
+  ["R", { color: "red", desc: RANDOM_BOARD }],
+  ["C", { color: "yellow", desc: CLEAR_BOARD }],
+  ["M", { color: "blue", desc: MUTE_SOUND }],
+  ["S", { color: "", desc: MAKE_STEP }],
+  ["\u2190 \u2191 \u2192 \u2193", { color: "", desc: "Change game speed" }],
 ]);
 // export const keybindings2 = (
 //   <>

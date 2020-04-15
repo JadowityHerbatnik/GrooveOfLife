@@ -20,7 +20,9 @@ function generateKeyDescription(colors) {
     descriptions.push(
       <>
         <KeyDiv colors={colors}>
-          <span style={{ lineHeight: "2em" }}>{key}</span>
+          <span style={{ lineHeight: "2em" }}>
+            <strong>{key}</strong>
+          </span>
         </KeyDiv>
         <span className={value.color}>{value.desc}</span>
       </>,

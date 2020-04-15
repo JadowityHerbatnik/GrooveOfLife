@@ -88,22 +88,23 @@ const Buttons = () => {
   return (
     <Container>
       <ButtonWrapper colors={colors}>
-        <WrapperButton title="dupa" onClick={() => dispatch({ type: TOGGLE_PLAY })}>
+        <WrapperButton title={TOGGLE_PLAY} onClick={() => dispatch({ type: TOGGLE_PLAY })}>
           <SvgIcon color={colors.green} svg={isPlaying ? Pause : Play} />
         </WrapperButton>
-        <WrapperButton onClick={() => dispatch({ type: RANDOM_BOARD })}>
+        <WrapperButton title={RANDOM_BOARD} onClick={() => dispatch({ type: RANDOM_BOARD })}>
           <SvgIcon color={colors.border} svg={Random} />
         </WrapperButton>
-        <WrapperButton onClick={() => dispatch({ type: CLEAR_BOARD })}>
+        <WrapperButton title={CLEAR_BOARD} onClick={() => dispatch({ type: CLEAR_BOARD })}>
           <SvgIcon color={colors.red} svg={Clear} />
         </WrapperButton>
-        <WrapperButton onClick={() => dispatch({ type: MUTE_SOUND })}>
+        <WrapperButton title={MUTE_SOUND} onClick={() => dispatch({ type: MUTE_SOUND })}>
           <SvgIcon color={colors.blue} svg={Note} />
         </WrapperButton>
-        <WrapperButton onClick={() => dispatch({ type: TOGGLE_SETTINGS })}>
+        <WrapperButton title={TOGGLE_SETTINGS} onClick={() => dispatch({ type: TOGGLE_SETTINGS })}>
           <SvgIcon color={colors.grey} svg={Settings} />
         </WrapperButton>
         <StyledLink
+          title="about"
           colors={colors}
           cover
           direction="up"

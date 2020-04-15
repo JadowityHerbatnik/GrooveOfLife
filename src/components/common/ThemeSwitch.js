@@ -17,7 +17,8 @@ export const ThemeSwitch = ({ switchTheme }) => {
   const colors = useContext(ThemeContext);
   return (
     <ThemeButton
-      aria-label="switch theme"
+      title="change theme"
+      aria-label="change theme"
       colors={colors}
       onClick={() => switchTheme()}
     ></ThemeButton>

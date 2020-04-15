@@ -93,31 +93,39 @@ const Settings = () => {
         if (e.target.id !== "close") {
           return;
         }
-        dispatch( { type: TOGGLE_SETTINGS} )
+        dispatch({ type: TOGGLE_SETTINGS });
       }}
       onAnimationEnd={onAnimationEnd}
       showSettings={showSettings}
     >
       <SettingsContainer colors={colors} showSettings={showSettings}>
+        <WrapperButton onClick={() => dispatch({ type: TOGGLE_SETTINGS })}>
+          <CloseSvg src={Clear} alt="" />
+        </WrapperButton>
         <StyledLabel color={colors.grey}> Gameplay mode:</StyledLabel>
         <div>
-        <RadioInput dependency={playMode} name="playMode" value={PLAY_ALL} />
-        <RadioInput dependency={playMode} name="playMode" value={PLAY_COLUMN} />
+          <RadioInput dependency={playMode} name="playMode" value={PLAY_ALL} />
+          <RadioInput dependency={playMode} name="playMode" value={PLAY_COLUMN} />
         </div>
         <StyledLabel color={colors.grey}>Chord progression mode:</StyledLabel>
         <div>
-        <RadioInput dependency={progressionMode} name="progressionMode" value={PLAY_PRESET} />
-        <RadioInput dependency={progressionMode} name="progressionMode" value={PLAY_CUSTOM} />
-    </div>
+          <RadioInput dependency={progressionMode} name="progressionMode" value={PLAY_PRESET} />
+          <RadioInput dependency={progressionMode} name="progressionMode" value={PLAY_CUSTOM} />
+        </div>
         {progressionMode === "custom" && (
           <>
             <StyledLabel color={colors.grey}>Notes to use:</StyledLabel>
             <FlexBox row align="flex-start" style={{ margin: "10px" }}>
-              <KeysButtons colors={colors} scale={scale} dispatch={dispatch}/>
+              <KeysButtons colors={colors} scale={scale} dispatch={dispatch} />
             </FlexBox>
           </>
         )}
-        {progressionMode === "auto" && (<><StyledLabel color={colors.grey}>Choose preset:</StyledLabel><SelectProgression/></>)}
+        {progressionMode === "auto" && (
+          <>
+            <StyledLabel color={colors.grey}>Choose preset:</StyledLabel>
+            <SelectProgression />
+          </>
+        )}
       </SettingsContainer>
     </BlurredBackground>
   );
