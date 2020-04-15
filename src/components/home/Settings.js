@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import styled, { css } from "styled-components";
 import "../../styles/fontello/css/fontello.css";
 import { keyboard } from "@utils/constants.js";
-import { FlexBox, StyledLabel } from "@common/Generic.js";
+import { FlexBox, StyledLabel, WrapperButton } from "@common/Generic.js";
 import { FadeIn, FadeOut, SlideInUp } from "@styles/animations.js";
 import { RadioInput } from "@home/RadioInput";
 import { DispatchContext, StateContext } from "@home/Game";
@@ -70,12 +70,18 @@ const NoteButtons = styled.div`
   border: ${() => `${keyMargin} solid black`};
   transition: background-color 0.3s;
 `;
-//prettier-ignore
+const CloseSvg = styled.img`
+  position: absolute;
+  right: 10px;
+  top 10px;
+  width: 3vh;
+  height: 3vh;
+`;
 const Settings = () => {
-  const { showSettings, scale, playMode, progressionMode  } = useContext(StateContext)
+  const { showSettings, scale, playMode, progressionMode } = useContext(StateContext);
   const [shouldRender, setRender] = useState(showSettings);
-  const colors = useContext(ThemeContext)
-  const dispatch = useContext(DispatchContext)
+  const colors = useContext(ThemeContext);
+  const dispatch = useContext(DispatchContext);
 
   useEffect(() => {
     if (showSettings) setRender(true);
