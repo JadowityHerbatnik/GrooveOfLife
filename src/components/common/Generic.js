@@ -1,5 +1,9 @@
 import styled from "styled-components";
 import AniLink from "gatsby-plugin-transition-link/AniLink";
+export const SvgIcon = styled.div`
+  background-color: ${({ color }) => color};
+  mask: ${({ svg }) => `url(${svg}) no-repeat center /contain`};
+`;
 export const Grid = styled.div`
   display: grid;
   justify-items: center;

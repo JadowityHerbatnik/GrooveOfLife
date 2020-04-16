@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import styled, { css } from "styled-components";
 import "../../styles/fontello/css/fontello.css";
 import { keyboard } from "@utils/constants.js";
-import { FlexBox, StyledLabel, WrapperButton } from "@common/Generic.js";
+import { FlexBox, StyledLabel, WrapperButton, SvgIcon } from "@common/Generic.js";
 import { FadeIn, FadeOut, SlideInUp } from "@styles/animations.js";
 import { RadioInput } from "@home/RadioInput";
 import { DispatchContext, StateContext } from "@home/Game";
@@ -70,7 +70,7 @@ const NoteButtons = styled.div`
   border: ${() => `${keyMargin} solid black`};
   transition: background-color 0.3s;
 `;
-const CloseSvg = styled.img`
+const CloseSvg = styled(SvgIcon)`
   position: absolute;
   right: 10px;
   top 10px;
@@ -106,7 +106,7 @@ const Settings = () => {
     >
       <SettingsContainer colors={colors} showSettings={showSettings}>
         <WrapperButton onClick={() => dispatch({ type: TOGGLE_SETTINGS })}>
-          <CloseSvg src={Clear} alt="" />
+          <CloseSvg svg={Clear} color={colors.grey} />
         </WrapperButton>
         <StyledLabel color={colors.grey}> Gameplay mode:</StyledLabel>
         <div>

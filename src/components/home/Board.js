@@ -10,12 +10,9 @@ const BoardWrapper = styled.div`
   height: 90%;
   width: 90%;
   @media screen and (orientation: portrait) {
-    // Decreased height on mobile devices to avoid scrollbar and weird interactions with bars
-    // height: 60vh;
     height: 80%;
     width: 100%;
   }
-  // margin: 0 auto 0 auto;
   margin: 0;
 `;
 const StyledTable = styled.table`
