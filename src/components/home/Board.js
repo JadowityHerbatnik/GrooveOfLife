@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import styled from "styled-components";
+import { debounce } from "lodash";
+import { HeightContext } from "@common/Layout";
 import { sizes } from "@utils/constants.js";
 import { SlideFromBottom } from "@styles/animations.js";
 import { ThemeContext } from "@common/Layout.js";
 import { DispatchContext, StateContext } from "@home/Game";
-import { CLICK_CELL, IS_MOUSEDOWN, SUSPEND, RESUME } from "@reducer/action-types";
+import { CLICK_CELL, IS_MOUSEDOWN, SUSPEND, RESUME, RESIZE_BOARD } from "@reducer/action-types";
 
 const BoardWrapper = styled.div`
   height: 90%;
@@ -74,11 +76,26 @@ const GenerateTable = (numberOfRows, numberOfCols) =>
       <GenerateCells rowIndex={rowIndex} numberOfCols={numberOfCols} />
     </tr>
   ));
-const Board = React.forwardRef((props, ref) => {
-  const colors = useContext(ThemeContext);
+const Board = () => {
   const { board, isPlaying } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
+  const { innerHeight } = useContext(HeightContext);
+  const colors = useContext(ThemeContext);
+  const ref = useRef(null);
   const numberOfRows = board.length;
   const numberOfCols = board[0].length;
+
+  useEffect(() => {
+    const recalculate = debounce(() => {
+      const { width, height } = ref.current.getBoundingClientRect();
+      if (!!width && !!height) {
+        dispatch({ type: RESIZE_BOARD, dimensions: [width, height] });
+      }
+    }, 100);
+    window.addEventListener("resize", recalculate);
+    recalculate();
+    return () => window.removeEventListener("resize", recalculate);
+  }, [innerHeight, dispatch]);
 
   return (
     <BoardWrapper ref={ref}>
@@ -87,6 +104,6 @@ const Board = React.forwardRef((props, ref) => {
       </StyledTable>
     </BoardWrapper>
   );
-});
+};
 
 export default Board;
