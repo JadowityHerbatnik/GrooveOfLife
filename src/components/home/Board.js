@@ -1,21 +1,20 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import styled from "styled-components";
+import { debounce } from "lodash";
+import { HeightContext } from "@common/Layout";
 import { sizes } from "@utils/constants.js";
 import { SlideFromBottom } from "@styles/animations.js";
 import { ThemeContext } from "@common/Layout.js";
 import { DispatchContext, StateContext } from "@home/Game";
-import { CLICK_CELL, IS_MOUSEDOWN, SUSPEND, RESUME } from "@reducer/action-types";
+import { CLICK_CELL, IS_MOUSEDOWN, SUSPEND, RESUME, RESIZE_BOARD } from "@reducer/action-types";
 
 const BoardWrapper = styled.div`
   height: 90%;
   width: 90%;
   @media screen and (orientation: portrait) {
-    // Decreased height on mobile devices to avoid scrollbar and weird interactions with bars
-    // height: 60vh;
     height: 80%;
     width: 100%;
   }
-  // margin: 0 auto 0 auto;
   margin: 0;
 `;
 const StyledTable = styled.table`
@@ -32,10 +31,11 @@ const StyledTd = styled.td`
   height: ${({ cellSize }) => `${cellSize}px`};
   box-sizing: border-box;
   opacity: ${({ column, activeColumn }) => (column === activeColumn ? "0.5" : "1")};
-  background-color: ${({ active, isPlaying, colors }) =>
-    active ? (isPlaying ? colors.green : colors.border) : colors.black};
+  background-color: ${({ ifActive, isPlaying, colors }) =>
+    ifActive ? (isPlaying ? colors.green : colors.border) : colors.black};
 `;
-const GenerateColumns = ({ rowIndex, numberOfCols }) => {
+
+const GenerateCells = ({ rowIndex, numberOfCols }) => {
   const dispatch = useContext(DispatchContext);
   const colors = useContext(ThemeContext);
   const { board, isPlaying, isMouseDown, isSuspended, activeColumn } = useContext(StateContext);
@@ -47,7 +47,7 @@ const GenerateColumns = ({ rowIndex, numberOfCols }) => {
       key={`${rowIndex}x${columnIndex}`}
       cols={numberOfCols}
       column={columnIndex}
-      active={board[rowIndex][columnIndex] ? true : false}
+      ifActive={board[rowIndex][columnIndex]}
       activeColumn={activeColumn}
       onMouseDown={() => {
         if (isPlaying) {
@@ -73,14 +73,29 @@ const GenerateColumns = ({ rowIndex, numberOfCols }) => {
 const GenerateTable = (numberOfRows, numberOfCols) =>
   [...Array(numberOfRows).keys()].map((rowIndex) => (
     <tr key={rowIndex}>
-      <GenerateColumns rowIndex={rowIndex} numberOfCols={numberOfCols} />
+      <GenerateCells rowIndex={rowIndex} numberOfCols={numberOfCols} />
     </tr>
   ));
-const Board = React.forwardRef((props, ref) => {
-  const colors = useContext(ThemeContext);
+const Board = () => {
   const { board, isPlaying } = useContext(StateContext);
+  const dispatch = useContext(DispatchContext);
+  const { innerHeight } = useContext(HeightContext);
+  const colors = useContext(ThemeContext);
+  const ref = useRef(null);
   const numberOfRows = board.length;
   const numberOfCols = board[0].length;
+
+  useEffect(() => {
+    const recalculate = debounce(() => {
+      const { width, height } = ref.current.getBoundingClientRect();
+      if (!!width && !!height) {
+        dispatch({ type: RESIZE_BOARD, dimensions: [width, height] });
+      }
+    }, 100);
+    window.addEventListener("resize", recalculate);
+    recalculate();
+    return () => window.removeEventListener("resize", recalculate);
+  }, [innerHeight, dispatch]);
 
   return (
     <BoardWrapper ref={ref}>
@@ -89,6 +104,6 @@ const Board = React.forwardRef((props, ref) => {
       </StyledTable>
     </BoardWrapper>
   );
-});
+};
 
 export default Board;

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import styled, { css } from "styled-components";
 import "../../styles/fontello/css/fontello.css";
 import { keyboard } from "@utils/constants.js";
-import { FlexBox, StyledLabel, WrapperButton } from "@common/Generic.js";
+import { FlexBox, StyledLabel, WrapperButton, SvgIcon } from "@common/Generic.js";
 import { FadeIn, FadeOut, SlideInUp } from "@styles/animations.js";
 import { RadioInput } from "@home/RadioInput";
 import { DispatchContext, StateContext } from "@home/Game";
@@ -22,7 +22,7 @@ const { keyMargin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard
 
 const isBlack = (keyIndex) => {
   const blackKeysIndexes = [1, 3, 6, 8, 10];
-  return blackKeysIndexes.includes(keyIndex) ? true : false;
+  return blackKeysIndexes.includes(keyIndex);
 };
 
 const SettingsContainer = styled.div`
@@ -54,7 +54,7 @@ const KeysButtons = (props) =>
       key={keyIndex}
       isBlack={isBlack(keyIndex)}
       note={keyIndex}
-      isNoteUsed={props.scale[keyIndex] ? true : false}
+      isNoteUsed={props.scale[keyIndex]}
       onClick={() => props.dispatch({ type: SET_SCALE, key: keyIndex })}
     ></NoteButtons>
   ));
@@ -70,7 +70,7 @@ const NoteButtons = styled.div`
   border: ${() => `${keyMargin} solid black`};
   transition: background-color 0.3s;
 `;
-const CloseSvg = styled.img`
+const CloseSvg = styled(SvgIcon)`
   position: absolute;
   right: 10px;
   top 10px;
@@ -106,7 +106,7 @@ const Settings = () => {
     >
       <SettingsContainer colors={colors} showSettings={showSettings}>
         <WrapperButton onClick={() => dispatch({ type: TOGGLE_SETTINGS })}>
-          <CloseSvg src={Clear} alt="" />
+          <CloseSvg svg={Clear} color={colors.grey} />
         </WrapperButton>
         <StyledLabel color={colors.grey}> Gameplay mode:</StyledLabel>
         <div>
@@ -118,7 +118,7 @@ const Settings = () => {
           <RadioInput dependency={progressionMode} name="progressionMode" value={PLAY_PRESET} />
           <RadioInput dependency={progressionMode} name="progressionMode" value={PLAY_CUSTOM} />
         </div>
-        {progressionMode === "custom" && (
+        {progressionMode === PLAY_CUSTOM && (
           <>
             <StyledLabel color={colors.grey}>Notes to use:</StyledLabel>
             <FlexBox row align="flex-start" style={{ margin: "10px" }}>
@@ -126,7 +126,7 @@ const Settings = () => {
             </FlexBox>
           </>
         )}
-        {progressionMode === "auto" && (
+        {progressionMode === PLAY_PRESET && (
           <>
             <StyledLabel color={colors.grey}>Choose preset:</StyledLabel>
             <SelectProgression />

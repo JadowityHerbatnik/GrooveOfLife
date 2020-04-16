@@ -9,7 +9,7 @@ export const initialState = {
   progressionMode: PLAY_PRESET,
   // prettier-ignore
   scale: [ true, false, false, true, false, true, false, false, true, false, true, false, ],
-  notes: ["C", "D#", "F", "G#", "A#"],
+  userChord: ["C", "D#", "F", "G#", "A#"],
   progression: progression,
   activeColumn: null,
   board: [[]],

@@ -6,7 +6,7 @@ import * as action_types from "@reducer/action-types";
 const { minSpeed, maxSpeed } = music;
 
 const chordReducer = (state, action, nextAlive = []) => {
-  if (state.playMode === "entireBoard" && isEqual(nextAlive, state.aliveCells)) {
+  if (isEqual(nextAlive, state.aliveCells)) {
     return state.chord;
   }
   if (action.changeChord) {
@@ -38,6 +38,7 @@ const dimensionReducer = (state, action) => {
 const newBoard = (state) => calculateNextBoard(state.board);
 const currentlyAlive = (state) => getAlive(state.board);
 const nextAlive = (state) => getAlive(calculateNextBoard(state.board));
+
 const nextColumnReducer = (state, action) => {
   const ifLastColumn = state.activeColumn + 1 >= state.board[0].length;
   return {
@@ -114,13 +115,13 @@ export default function reducer(state, action) {
       return { ...state, isMouseDown: action.payload };
     case action_types.SET_SCALE:
       state.scale[action.key] = !state.scale[action.key];
-      const newNotes = [];
+      const newChord = [];
       state.scale.forEach((value, index) => {
         if (value) {
-          newNotes.push(notesInOrder[index]);
+          newChord.push(notesInOrder[index]);
         }
       });
-      return { ...state, scale: state.scale, notes: newNotes };
+      return { ...state, scale: state.scale, userChord: newChord };
     case action_types.CHANGE_PROGRESSION:
       return { ...state, progression: action.payload, chord: 0 };
     default:
