@@ -29,10 +29,11 @@ const StyledTd = styled.td`
   height: ${({ cellSize }) => `${cellSize}px`};
   box-sizing: border-box;
   opacity: ${({ column, activeColumn }) => (column === activeColumn ? "0.5" : "1")};
-  background-color: ${({ active, isPlaying, colors }) =>
-    active ? (isPlaying ? colors.green : colors.border) : colors.black};
+  background-color: ${({ ifActive, isPlaying, colors }) =>
+    ifActive ? (isPlaying ? colors.green : colors.border) : colors.black};
 `;
-const GenerateColumns = ({ rowIndex, numberOfCols }) => {
+
+const GenerateCells = ({ rowIndex, numberOfCols }) => {
   const dispatch = useContext(DispatchContext);
   const colors = useContext(ThemeContext);
   const { board, isPlaying, isMouseDown, isSuspended, activeColumn } = useContext(StateContext);
@@ -44,7 +45,7 @@ const GenerateColumns = ({ rowIndex, numberOfCols }) => {
       key={`${rowIndex}x${columnIndex}`}
       cols={numberOfCols}
       column={columnIndex}
-      active={board[rowIndex][columnIndex] ? true : false}
+      ifActive={board[rowIndex][columnIndex]}
       activeColumn={activeColumn}
       onMouseDown={() => {
         if (isPlaying) {
@@ -70,7 +71,7 @@ const GenerateColumns = ({ rowIndex, numberOfCols }) => {
 const GenerateTable = (numberOfRows, numberOfCols) =>
   [...Array(numberOfRows).keys()].map((rowIndex) => (
     <tr key={rowIndex}>
-      <GenerateColumns rowIndex={rowIndex} numberOfCols={numberOfCols} />
+      <GenerateCells rowIndex={rowIndex} numberOfCols={numberOfCols} />
     </tr>
   ));
 const Board = React.forwardRef((props, ref) => {

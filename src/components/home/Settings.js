@@ -22,7 +22,7 @@ const { keyMargin, blackWidth, blackHeight, whiteHeight, whiteWidth } = keyboard
 
 const isBlack = (keyIndex) => {
   const blackKeysIndexes = [1, 3, 6, 8, 10];
-  return blackKeysIndexes.includes(keyIndex) ? true : false;
+  return blackKeysIndexes.includes(keyIndex);
 };
 
 const SettingsContainer = styled.div`
@@ -54,7 +54,7 @@ const KeysButtons = (props) =>
       key={keyIndex}
       isBlack={isBlack(keyIndex)}
       note={keyIndex}
-      isNoteUsed={props.scale[keyIndex] ? true : false}
+      isNoteUsed={props.scale[keyIndex]}
       onClick={() => props.dispatch({ type: SET_SCALE, key: keyIndex })}
     ></NoteButtons>
   ));
