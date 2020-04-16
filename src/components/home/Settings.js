@@ -118,7 +118,7 @@ const Settings = () => {
           <RadioInput dependency={progressionMode} name="progressionMode" value={PLAY_PRESET} />
           <RadioInput dependency={progressionMode} name="progressionMode" value={PLAY_CUSTOM} />
         </div>
-        {progressionMode === "custom" && (
+        {progressionMode === PLAY_CUSTOM && (
           <>
             <StyledLabel color={colors.grey}>Notes to use:</StyledLabel>
             <FlexBox row align="flex-start" style={{ margin: "10px" }}>
@@ -126,7 +126,7 @@ const Settings = () => {
             </FlexBox>
           </>
         )}
-        {progressionMode === "auto" && (
+        {progressionMode === PLAY_PRESET && (
           <>
             <StyledLabel color={colors.grey}>Choose preset:</StyledLabel>
             <SelectProgression />
