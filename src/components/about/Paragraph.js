@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Paragraph = styled.p`
+export const Paragraph = styled.article`
   margin: auto;
   font-size: 13px;
   @media (min-width: 960px) {
@@ -29,12 +29,4 @@ export const Paragraph = styled.p`
   & span.red {
     color: ${({ colors }) => colors.red};
   }
-  // & span.key {
-  //   display: inline-block;
-  //   margin: 0.3em;
-  //   padding: 0.5em;
-  //   border: ${({ colors }) => `1px solid ${colors.brblack}`};
-  //   color: ${({ colors }) => colors.grey};
-  //   background-color: ${({ colors }) => colors.brblack};
-  // }
 `;

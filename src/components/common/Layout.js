@@ -29,18 +29,6 @@ const GlobalStyle = createGlobalStyle`
 const BackgroundWrapper = styled.div`
   position: relative;
   min-height: ${({ minHeight }) => `${minHeight}px`};
-  // min-height: ${({ minHeight }) => (minHeight ? `${minHeight}px` : "100vh")};
-  // z-index: -5;
-  // &:before {
-  //   z-index: -2;
-  //   backdrop-filter: blur(20px);
-  //   content: "";
-  //   position: absolute;
-  //   left: 0;
-  //   right: 0;
-  //   top: 0;
-  //   bottom: 0;
-  // }
 `;
 const Layout = (props) => {
   const [innerHeight, setInnerHeight] = useState(0);

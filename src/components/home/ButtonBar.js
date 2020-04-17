@@ -105,7 +105,7 @@ const Buttons = () => {
           title="about"
           colors={colors}
           cover
-          direction="up"
+          direction="right"
           bg={colors.background}
           duration={1.5}
           to="/about"

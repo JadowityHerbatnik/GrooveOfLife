@@ -14,7 +14,6 @@ const Wrapper = styled.header`
   border-color: ${({ colors }) => colors.border};
   border-style: solid;
   text-align: center;
-  // height: 15vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -31,7 +30,6 @@ const H1 = styled.h1`
   margin: 0.4em 0 0.4em 0;
   font-family: "Geo";
   text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.75);
-  // text-shadow: ${({ colors }) => `6px 6px 0px ${colors.grey}`};
 `;
 
 const Header = forwardRef(({ siteTitle, animateHeader, setTheme }, ref) => {
@@ -44,7 +42,7 @@ const Header = forwardRef(({ siteTitle, animateHeader, setTheme }, ref) => {
           color={colors.header}
           cover
           bg={colors.background}
-          direction="up"
+          direction="right"
           duration={1}
           to="/"
         >

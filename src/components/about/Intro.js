@@ -6,8 +6,6 @@ import { Layout } from "@about/Layout";
 import styled from "styled-components";
 import { ThemeContext } from "@common/Layout";
 const Img = styled.img`
-  // flex: 1 1 auto;
-  // margin: 0 50px 0 50px;
   max-height: 20vh;
 `;
 export const Introduction = () => {
