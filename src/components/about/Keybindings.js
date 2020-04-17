@@ -18,14 +18,14 @@ function generateKeyDescription(colors) {
   let descriptions = [];
   keyDescription.forEach((value, key) => {
     descriptions.push(
-      <>
+      <React.Fragment key={key}>
         <KeyDiv colors={colors}>
           <span style={{ lineHeight: "2em" }}>
             <strong>{key}</strong>
           </span>
         </KeyDiv>
         <span className={value.color}>{value.desc}</span>
-      </>,
+      </React.Fragment>,
     );
   });
   return descriptions;

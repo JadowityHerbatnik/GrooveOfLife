@@ -6,7 +6,6 @@ import { StyledIcon, FlexBox, Grid } from "@common/Generic.js";
 import { Layout } from "@about/Layout";
 import styled from "styled-components";
 import { rules } from "@utils/paragraphs.js";
-// import { solarized } from "@utils/constants.js";
 import { ThemeContext } from "@common/Layout";
 const GridContainer = styled(Grid)`
   grid: repeat(3, auto) / repeat(3, auto);

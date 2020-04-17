@@ -17,7 +17,7 @@ const StyledSelect = styled.select`
     color: ${({ colors }) => colors.grey};
   }
 `;
-const renderOption = () => {
+const renderOptions = () => {
   let options = [];
   for (const key in progressions) {
     options.push(
@@ -31,14 +31,17 @@ const renderOption = () => {
 export const SelectProgression = () => {
   const dispatch = useContext(DispatchContext);
   const colors = useContext(ThemeContext);
-  const { progression } = useContext(StateContext);
+  const { progressionName } = useContext(StateContext);
   const changeProgression = (e) =>
-    dispatch({ type: CHANGE_PROGRESSION, payload: progressions[e.target.value] });
-
+    dispatch({
+      type: CHANGE_PROGRESSION,
+      progression: progressions[e.target.value],
+      name: e.target.value,
+    });
   return (
-    <form onChange={(e) => changeProgression(e)}>
-      <StyledSelect default={progression} colors={colors}>
-        {renderOption()}
+    <form>
+      <StyledSelect onChange={(e) => changeProgression(e)} value={progressionName} colors={colors}>
+        {renderOptions()}
       </StyledSelect>
     </form>
   );

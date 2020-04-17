@@ -63,7 +63,7 @@ export default function Game() {
     let iteration = 0;
     const ID = setInterval(() => {
       if (isPlaying) {
-        iteration = iteration === speed ? 0 : (iteration += 1);
+        iteration = iteration === speed ? 1 : (iteration += 1);
         dispatch({ type: MAKE_STEP, changeChord: iteration === speed });
       }
     }, speedms);

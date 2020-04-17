@@ -123,7 +123,7 @@ export default function reducer(state, action) {
       });
       return { ...state, scale: state.scale, userChord: newChord };
     case action_types.CHANGE_PROGRESSION:
-      return { ...state, progression: action.payload, chord: 0 };
+      return { ...state, progression: action.progression, chord: 0, progressionName: action.name };
     default:
       throw new Error();
   }

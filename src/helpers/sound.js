@@ -3,7 +3,7 @@ import { music } from "../utils/constants.js";
 const { highestOctave, octaveRange } = music;
 const getCommonVariables = (board, speedms) => {
   const numberOfRows = board.length;
-  const time = (speedms / 1000) * 0.95;
+  const time = speedms / 1000;
   return { numberOfRows, time };
 };
 
@@ -26,13 +26,6 @@ export function playEntireBoard(aliveCells, board, speedms, notes) {
     }
   }
   const chordNoDuplicates = [...new Set(chord)];
-  // const final = [chordNoDuplicates[0]];
-  // const len = chordNoDuplicates.length;
-  // for (let i = 1; i < len; i++) {
-  //   if (chordNoDuplicates[i].slice(-1) !== chordNoDuplicates[i - 1].slice(-1)) {
-  //     final.push(chordNoDuplicates[i]);
-  //   }
-  // }
   playChord(chordNoDuplicates.length, chordNoDuplicates, `${time}`);
 }
 export function playSelectedColumn(aliveCells, column, speedms, board, notes) {
@@ -50,14 +43,13 @@ export function playSelectedColumn(aliveCells, column, speedms, board, notes) {
   }
 }
 function playChord(numberOfNotes, chord, time) {
-  // console.log(time);
   // const ping = new Tone.PingPongDelay(0.16, 0.2).toMaster();
 
-  const filter = new Tone.Filter(1000, "lowpass", -12).toMaster();
+  const filter = new Tone.Filter(800, "lowpass", -12).toMaster();
   // const filter = new Tone.Filter(50, "lowshelf", -48).toMaster();
   // const filter = new Tone.AutoFilter(0.8).toMaster().start();
   const synth = new Tone.PolySynth(numberOfNotes, Tone.Synth, {
-    volume: -30,
+    volume: -25,
     oscillator: {
       type: "sine",
     },
@@ -70,7 +62,7 @@ function playChord(numberOfNotes, chord, time) {
       attack: 0.1,
       decay: 0,
       sustain: 1,
-      release: 0.3,
+      release: 0.5,
     },
     // filterEnvelope: {
     //   attack: 0.2,
