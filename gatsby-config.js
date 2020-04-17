@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: `The Groove of Life`,
-    description: `Conway;s Gmae of Life`,
+    description: `Conway's Game of Life with sound`,
     author: `jadowityherbatnik`,
   },
   plugins: [
@@ -54,7 +54,7 @@ module.exports = {
         background_color: `#cc8125`,
         theme_color: `#cc8125`,
         display: `standalone`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        icon: `src/images/note.png`, // This path is relative to the root of the site.
       },
     },
     `gatsby-plugin-styled-components`,
