@@ -78,6 +78,7 @@ const StyledSvg = styled(SvgIcon)`
   width: 4vh;
   height: 4vh;
   margin: 1vh;
+  ${({ muted }) => muted && `opacity: 0.3`}
 `;
 const Buttons = () => {
   const colors = useContext(ThemeContext);
@@ -96,7 +97,7 @@ const Buttons = () => {
           <StyledSvg color={colors.red} svg={Clear} />
         </WrapperButton>
         <WrapperButton title={MUTE_SOUND} onClick={() => dispatch({ type: MUTE_SOUND })}>
-          <StyledSvg color={colors.blue} svg={Note} />
+          <StyledSvg color={colors.blue} muted={mute} svg={Note} />
         </WrapperButton>
         <WrapperButton title={TOGGLE_SETTINGS} onClick={() => dispatch({ type: TOGGLE_SETTINGS })}>
           <StyledSvg color={colors.grey} svg={Settings} />
