@@ -30,9 +30,8 @@ const StyledTd = styled.td`
   width: ${({ cellSize }) => `${cellSize}px`};
   height: ${({ cellSize }) => `${cellSize}px`};
   box-sizing: border-box;
-  opacity: ${({ column, activeColumn }) => (column === activeColumn ? "0.5" : "1")};
-  background-color: ${({ ifActive, isPlaying, colors }) =>
-    ifActive ? (isPlaying ? colors.green : colors.border) : colors.black};
+  opacity: ${({ column, activeColumn }) => (column === activeColumn ? "0.6" : "1")};
+  background-color: ${({ ifActive, colors }) => (ifActive ? colors.border : colors.black)};
 `;
 
 const GenerateCells = ({ rowIndex, numberOfCols }) => {
