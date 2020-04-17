@@ -1,10 +1,10 @@
 export const sizes = {
-  preferredCellSize: 20,
+  preferredCellSize: 25,
   headerHeight: "15vh",
 };
 export const music = {
-  highestOctave: 6,
-  octaveRange: 4,
+  highestOctave: 7,
+  octaveRange: 5,
   maxSpeed: 7,
   minSpeed: 1,
 };
