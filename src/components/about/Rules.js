@@ -14,7 +14,7 @@ const GridContainer = styled(Grid)`
 `;
 export const Rules = () => {
   const colors = useContext(ThemeContext);
-  const { red, green, white, yellow } = colors;
+  const { red, green, yellow } = colors;
   return (
     <Layout name="rules" scrollTo="keybindings">
       <FlexBox direction="column" justify="center">

@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import "@styles/fontello/css/fontello.css";
+import { SpeedSlider } from "@home/SpeedSlider";
 import { WrapperButton, StyledLink, SvgIcon } from "@common/Generic.js";
 import { ThemeContext } from "@common/Layout.js";
-import { music } from "@utils/constants.js";
 import { SlideFromLeft } from "@styles/animations.js";
 import { DispatchContext, StateContext } from "@home/Game";
 import { Settings, Play, Pause, Note, Random, Clear, Help } from "@styles/svg/Buttons";
@@ -12,11 +12,9 @@ import {
   CLEAR_BOARD,
   RANDOM_BOARD,
   MUTE_SOUND,
-  SET_SPEED,
   TOGGLE_SETTINGS,
 } from "@reducer/action-types";
 
-const { minSpeed, maxSpeed } = music;
 const ButtonWrapper = styled.div`
   border-width: 1px 0 0 1px;
   border-style: solid;
@@ -40,40 +38,6 @@ const Container = styled.div`
   animation: 0.5s ease 1 both ${SlideFromLeft};
   }
 `;
-const SliderWrapper = styled.div`
-  position: relative;
-  height: 2vh;
-  width: 50vmin;
-  margin: 2vh 0 2vh 0;
-  @media screen and (orientation: landscape) {
-    width: 2vh;
-    height: 50vmin;
-  }
-  .slider {
-    position: absolute;
-    left: 0;
-    top: 0;
-    @media screen and (orientation: landscape) {
-      transform: translateY(50vmin) rotate(-90deg);
-      transform-origin: top left;
-      box-shadow: -2px 2px 0 black;
-    }
-    width: 50vmin;
-    appearance: none;
-    background: ${({ colors }) => colors.brblack};
-    outline: none;
-    box-shadow: 2px 2px 0 black;
-    &::-webkit-slider-thumb {
-      transition: 0.3s;
-      webkit-appearance: none;
-      appearance: none;
-      width: 4vh;
-      height: 2vh;
-      background: ${({ colors }) => colors.border};
-      border: none;
-    }
-  }
-`;
 const StyledSvg = styled(SvgIcon)`
   width: 4vh;
   height: 4vh;
@@ -83,7 +47,7 @@ const StyledSvg = styled(SvgIcon)`
 const Buttons = () => {
   const colors = useContext(ThemeContext);
   const dispatch = useContext(DispatchContext);
-  const { mute, speed, isPlaying } = useContext(StateContext);
+  const { mute, isPlaying } = useContext(StateContext);
   return (
     <Container>
       <ButtonWrapper colors={colors}>
@@ -114,17 +78,7 @@ const Buttons = () => {
           <StyledSvg color={colors.violet} svg={Help} />
         </StyledLink>
       </ButtonWrapper>
-      <SliderWrapper colors={colors}>
-        <input
-          className="slider"
-          type="range"
-          min={minSpeed}
-          max={maxSpeed}
-          step="1"
-          value={speed}
-          onChange={(event) => dispatch({ type: SET_SPEED, payload: parseInt(event.target.value) })}
-        />
-      </SliderWrapper>
+      <SpeedSlider />
     </Container>
   );
 };
