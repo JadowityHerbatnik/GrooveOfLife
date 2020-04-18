@@ -2,9 +2,9 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import "@styles/fontello/css/fontello.css";
 import { SpeedSlider } from "@home/SpeedSlider";
-import { WrapperButton, StyledLink, SvgIcon } from "@common/Generic.js";
-import { ThemeContext } from "@common/Layout.js";
-import { SlideFromLeft } from "@styles/animations.js";
+import { WrapperButton, StyledLink, SvgIcon } from "@common/Generic";
+import { ThemeContext } from "@common/Layout";
+import { SlideFromLeft } from "@styles/animations";
 import { DispatchContext, StateContext } from "@home/Game";
 import { Settings, Play, Pause, Note, Random, Clear, Help } from "@styles/svg/Buttons";
 import {

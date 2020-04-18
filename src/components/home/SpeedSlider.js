@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { music } from "@utils/constants.js";
+import { music } from "@utils/constants";
 import { SET_SPEED } from "@reducer/action-types";
 import { DispatchContext, StateContext } from "@home/Game";
-import { ThemeContext } from "@common/Layout.js";
+import { ThemeContext } from "@common/Layout";
 
 const { minSpeed, maxSpeed } = music;
 const SliderWrapper = styled.div`
