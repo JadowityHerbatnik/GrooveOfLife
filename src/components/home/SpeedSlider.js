@@ -5,7 +5,7 @@ import { SET_SPEED } from "@reducer/action-types";
 import { DispatchContext, StateContext } from "@home/Game";
 import { ThemeContext } from "@common/Layout";
 
-const { minSpeed, maxSpeed } = music;
+const { minSpeed, maxSpeed, speedStep } = music;
 const SliderWrapper = styled.div`
   position: relative;
   height: 2vh;
@@ -42,8 +42,13 @@ const SliderWrapper = styled.div`
 `;
 export const SpeedSlider = () => {
   const colors = useContext(ThemeContext);
-  const { speed } = useContext(StateContext);
+  const { beatsPerChord } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
+
+  const changeSpeed = (event) => {
+    dispatch({ type: SET_SPEED, payload: parseFloat(event.target.value) });
+  };
+
   return (
     <SliderWrapper colors={colors}>
       <input
@@ -51,9 +56,9 @@ export const SpeedSlider = () => {
         type="range"
         min={minSpeed}
         max={maxSpeed}
-        step="1"
-        value={speed}
-        onChange={(event) => dispatch({ type: SET_SPEED, payload: parseInt(event.target.value) })}
+        step={speedStep}
+        value={beatsPerChord}
+        onChange={(event) => changeSpeed(event)}
       />
     </SliderWrapper>
   );

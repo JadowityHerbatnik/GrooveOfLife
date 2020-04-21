@@ -3,7 +3,7 @@ import { PLAY_ALL, PLAY_PRESET } from "@reducer/action-types";
 
 export const initialState = {
   mute: false,
-  speed: 4,
+  beatsPerChord: 2,
   speedms: 250,
   playMode: PLAY_ALL,
   progressionMode: PLAY_PRESET,

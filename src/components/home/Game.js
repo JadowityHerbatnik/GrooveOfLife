@@ -30,7 +30,7 @@ const GameWrapper = styled.div`
 export default function Game() {
   const [state, dispatch] = useReducer(reducer, initialState);
   //prettier-ignore
-  const { isPlaying, isSuspended, board, aliveCells, mute, speed, speedms, playMode, progressionMode, userChord, progression, activeColumn,  chord} = state;
+  const { isPlaying, isSuspended, board, aliveCells, mute, beatsPerChord, speedms, playMode, progressionMode, userChord, progression, activeColumn,  chord} = state;
 
   const { innerHeight, headerHeight } = useContext(HeightContext);
   const prevAliveCells = usePrevious(aliveCells);
@@ -57,20 +57,20 @@ export default function Game() {
     }
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [speed, playMode, userChord, activeColumn]);
+  }, [beatsPerChord, playMode, userChord, activeColumn]);
 
   useEffect(() => {
     let iteration = 0;
     const ID = setInterval(() => {
       if (isPlaying) {
-        iteration = iteration === speed ? 1 : (iteration += 1);
-        dispatch({ type: MAKE_STEP, changeChord: iteration === speed });
+        iteration = iteration >= beatsPerChord ? 1 : (iteration += 1);
+        dispatch({ type: MAKE_STEP, changeChord: iteration >= beatsPerChord });
       }
     }, speedms);
     return () => {
       clearInterval(ID);
     };
-  }, [speed, speedms, isPlaying, mute, userChord, playMode]);
+  }, [beatsPerChord, speedms, isPlaying, mute, userChord, playMode]);
 
   return (
     <DispatchContext.Provider value={dispatch}>

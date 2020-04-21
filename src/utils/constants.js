@@ -5,8 +5,10 @@ export const sizes = {
 export const music = {
   highestOctave: 7,
   octaveRange: 5,
-  maxSpeed: 7,
+  maxSpeed: 3,
   minSpeed: 1,
+  chordChangeInterval: 500,
+  speedStep: 0.1,
 };
 export const keyboard = {
   blackWidth: "24px",
