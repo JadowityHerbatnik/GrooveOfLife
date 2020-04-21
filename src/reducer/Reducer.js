@@ -3,7 +3,7 @@ import { isEqual } from "lodash";
 import { getAlive, calculateNextBoard } from "@helpers/makestep";
 import * as action_types from "@reducer/action-types";
 
-const { minSpeed, maxSpeed } = music;
+const { minSpeed, maxSpeed, chordChangeInterval, speedStep } = music;
 
 const chordReducer = (state, action, nextAlive = []) => {
   if (isEqual(nextAlive, state.aliveCells)) {
@@ -94,13 +94,19 @@ export default function reducer(state, action) {
     case action_types.MUTE_SOUND:
       return { ...state, mute: !state.mute };
     case action_types.SET_SPEED:
-      return { ...state, speed: action.payload, speedms: 1000 / action.payload };
+      return {
+        ...state,
+        beatsPerChord: action.payload,
+        speedms: chordChangeInterval / action.payload,
+      };
     case action_types.INCREASE_SPEED:
-      const incSpeed = state.speed === maxSpeed ? state.speed : state.speed + 1;
-      return { ...state, speed: incSpeed, speedms: 1000 / incSpeed };
+      const incSpeed =
+        state.beatsPerChord >= maxSpeed ? state.beatsPerChord : state.beatsPerChord + speedStep;
+      return { ...state, beatsPerChord: incSpeed, speedms: chordChangeInterval / incSpeed };
     case action_types.DECREASE_SPEED:
-      const decSpeed = state.speed === minSpeed ? state.speed : state.speed - 1;
-      return { ...state, speed: decSpeed, speedms: 1000 / decSpeed };
+      const decSpeed =
+        state.beatsPerChord <= minSpeed ? state.beatsPerChord : state.beatsPerChord - speedStep;
+      return { ...state, beatsPerChord: decSpeed, speedms: chordChangeInterval / decSpeed };
     case action_types.PLAY_COLUMN:
       return { ...state, playMode: action.type };
     case action_types.PLAY_ALL:
