@@ -8,7 +8,7 @@ const StyledSvg = styled(SvgIcon)`
   height: 3vh;
   margin: 1vh;
 `;
-export const AboutLink = (props) => {
+export const AboutLink = () => {
   const colors = useContext(ThemeContext);
   return (
     <StyledLink
