@@ -33,7 +33,7 @@ export const StyledLabel = styled.p`
 `;
 export const FlexBox = styled.div`
   display: flex;
-  flex-direction: ${({ direction }) => direction};
+  flex-direction: ${({ direction }) => (direction ? direction : "row")};
   justify-content: ${({ justify }) => (justify ? justify : "center")};
   align-items: ${({ align }) => (align ? align : "center")};
   ${({ responsive }) =>
