@@ -7,6 +7,9 @@ import { solarized, gruvbox } from "@utils/constants.js";
 import Header from "@common/Header";
 import { createGlobalStyle } from "styled-components";
 import { useLocalStorageState } from "@hooks/UseLocalStorageState";
+import { FlexBox } from "@common/Generic";
+import { AboutLink } from "@common/AboutLink";
+import { ThemeSwitch } from "@common/ThemeSwitch";
 export const ThemeContext = createContext(gruvbox);
 export const HeightContext = createContext();
 
@@ -26,6 +29,11 @@ const GlobalStyle = createGlobalStyle`
 		box-sizing: border-box;
 	}
 `;
+const TopBar = styled(FlexBox)`
+  width: 100%;
+  position: absolute;
+  z-index: 2;
+`;
 const BackgroundWrapper = styled.div`
   position: relative;
   min-height: ${({ minHeight }) => `${minHeight}px`};
@@ -36,6 +44,8 @@ const Layout = (props) => {
   const [theme, setTheme] = useLocalStorageState("theme", "gruvbox");
   const [themeColors, setThemeColors] = useState(gruvbox);
   const headerRef = useRef(null);
+
+  const switchTheme = () => setTheme(theme === "solarized" ? "gruvbox" : "solarized");
 
   useEffect(() => {
     setThemeColors(theme === "solarized" ? solarized : gruvbox);
@@ -61,18 +71,18 @@ const Layout = (props) => {
       }
     }
   `);
+
   return (
     <>
       <GlobalStyle colors={themeColors} />
       <ThemeContext.Provider value={themeColors}>
         <HeightContext.Provider value={{ innerHeight: innerHeight, headerHeight: headerHeight }}>
           <BackgroundWrapper minHeight={innerHeight} colors={themeColors}>
-            <Header
-              ref={headerRef}
-              setTheme={() => setTheme(theme === "solarized" ? "gruvbox" : "solarized")}
-              siteTitle={data.site.siteMetadata.title}
-              animateHeader={props.animateHeader}
-            />
+            <TopBar justify="space-between">
+              <ThemeSwitch switchTheme={() => switchTheme()} />
+              <AboutLink />
+            </TopBar>
+            <Header ref={headerRef} siteTitle={data.site.siteMetadata.title} />
             <main>{props.children}</main>
           </BackgroundWrapper>
         </HeightContext.Provider>

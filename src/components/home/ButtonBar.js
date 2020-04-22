@@ -2,11 +2,11 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import "@styles/fontello/css/fontello.css";
 import { SpeedSlider } from "@home/SpeedSlider";
-import { WrapperButton, StyledLink, SvgIcon } from "@common/Generic";
+import { WrapperButton, SvgIcon } from "@common/Generic";
 import { ThemeContext } from "@common/Layout";
 import { SlideFromLeft } from "@styles/animations";
 import { DispatchContext, StateContext } from "@home/Game";
-import { Settings, Play, Pause, Note, Random, Clear, Help } from "@styles/svg/Buttons";
+import { Settings, Play, Pause, Note, Random, Clear } from "@styles/svg/Buttons";
 import {
   TOGGLE_PLAY,
   CLEAR_BOARD,
@@ -66,17 +66,6 @@ const Buttons = () => {
         <WrapperButton title={TOGGLE_SETTINGS} onClick={() => dispatch({ type: TOGGLE_SETTINGS })}>
           <StyledSvg color={colors.grey} svg={Settings} />
         </WrapperButton>
-        <StyledLink
-          title="about"
-          colors={colors}
-          cover
-          direction="right"
-          bg={colors.background}
-          duration={1.5}
-          to="/about"
-        >
-          <StyledSvg color={colors.violet} svg={Help} />
-        </StyledLink>
       </ButtonWrapper>
       <SpeedSlider />
     </Container>
