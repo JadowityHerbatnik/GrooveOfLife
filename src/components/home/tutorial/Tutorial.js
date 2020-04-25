@@ -14,8 +14,8 @@ export const Tutorial = (props) => {
   const colors = useContext(ThemeContext);
   const [shouldRender, onAnimationEnd] = useRender(showTutorial);
   return !shouldRender ? null : (
-    <DimmedBackground color={colors.background} show={shouldRender} onAnimationEnd={onAnimationEnd}>
-      <ModalContainer colors={colors} show={shouldRender}>
+    <DimmedBackground color={colors.background} show={showTutorial} onAnimationEnd={onAnimationEnd}>
+      <ModalContainer colors={colors} show={showTutorial}>
         <Carousel>
           <button onClick={() => dispatch({ type: SHOW_TUTORIAL, payload: false })}>asdaf</button>
         </Carousel>
