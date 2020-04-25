@@ -1,5 +1,29 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import AniLink from "gatsby-plugin-transition-link/AniLink";
+import { FadeIn, FadeOut, SlideInUp } from "@styles/animations";
+
+export const ModalContainer = styled.div`
+  margin: auto;
+  padding: 0 10px 10px 10px;
+  border: ${({ colors }) => `2px solid ${colors.border}`};
+  background-color: ${({ colors }) => colors.background};
+  box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.75);
+  position: relative;
+  top: -100vh;
+  animation: ${() => css`0.5s ease ${SlideInUp}`};
+  transform: translateY(${({ show }) => (show ? "100vh" : "-100vh")});
+  transition: transform 1s;
+`;
+export const DimmedBackground = styled.div`
+  animation: ${({ show }) => css`0.2s ease ${show ? FadeIn : FadeOut}`};
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: ${({ color }) => `${color}cc`};
+`;
 export const SvgIcon = styled.div`
   background-color: ${({ color }) => color};
   mask: ${({ svg }) => `url(${svg}) no-repeat center /contain`};
