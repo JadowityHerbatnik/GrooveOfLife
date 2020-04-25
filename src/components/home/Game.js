@@ -27,7 +27,7 @@ const GameWrapper = styled.div`
     flex-direction: row;
   }
 `;
-export default function Game() {
+export const Game = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   //prettier-ignore
   const { isPlaying, isSuspended, board, aliveCells, mute, beatsPerChord, speedms, playMode, progressionMode, userChord, progression, activeColumn,  chord} = state;
@@ -83,4 +83,4 @@ export default function Game() {
       </StateContext.Provider>
     </DispatchContext.Provider>
   );
-}
+};
