@@ -5,6 +5,7 @@ import Board from "@home/Board.js";
 import { HeightContext } from "@common/Layout";
 import Settings from "@settings/Settings";
 import reducer from "@reducer/Reducer";
+import { Tutorial } from "@tutorial/Tutorial";
 import { keybindings } from "@utils/keybindings";
 import { initialState } from "@reducer/initial-state";
 import { playSelectedColumn, playEntireBoard } from "@helpers/sound";
@@ -79,6 +80,7 @@ export const Game = () => {
           <ButtonBar />
           <Board />
           <Settings />
+          <Tutorial />
         </GameWrapper>
       </StateContext.Provider>
     </DispatchContext.Provider>

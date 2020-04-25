@@ -32,7 +32,7 @@ const default_progression = [
   "A#6", "A#6", "C7", "C7", "Fm11", "Fm11", "A#m9", "A#m9",
 ];
 
-const giant_steps = getChords(giant_steps_progression);
 const default_chords = getChords(default_progression);
+export const giant_steps = getChords(giant_steps_progression);
 
 export const progressions = { GiantSteps: giant_steps, default: default_chords };

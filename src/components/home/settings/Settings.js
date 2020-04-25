@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import styled, { css } from "styled-components";
+import React, { useContext } from "react";
+import styled from "styled-components";
 import { Keyboard } from "@settings/Keyboard";
 //prettier-ignore
 import { ModalContainer, DimmedBackground, StyledLabel, WrapperButton, SvgIcon, } from "@common/Generic";
@@ -10,6 +10,7 @@ import { Clear } from "@styles/svg/Buttons";
 import { SelectProgression } from "@settings/SelectProgression";
 //prettier-ignore
 import { PLAY_ALL, PLAY_COLUMN, PLAY_PRESET, PLAY_CUSTOM, TOGGLE_SETTINGS, } from "@reducer/action-types";
+import { useRender } from "@hooks/useRender";
 
 const CloseSvg = styled(SvgIcon)`
   position: absolute;
@@ -20,17 +21,9 @@ const CloseSvg = styled(SvgIcon)`
 `;
 const Settings = () => {
   const { showSettings, playMode, progressionMode } = useContext(StateContext);
-  const [shouldRender, setRender] = useState(showSettings);
   const colors = useContext(ThemeContext);
   const dispatch = useContext(DispatchContext);
-
-  useEffect(() => {
-    if (showSettings) setRender(true);
-  }, [showSettings]);
-
-  const onAnimationEnd = () => {
-    if (!showSettings) setRender(false);
-  };
+  const [shouldRender, onAnimationEnd] = useRender(showSettings);
 
   return !shouldRender ? null : (
     <DimmedBackground

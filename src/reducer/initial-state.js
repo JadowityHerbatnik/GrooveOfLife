@@ -19,5 +19,6 @@ export const initialState = {
   isSuspended: false,
   chord: 0,
   showSettings: false,
+  showTutorial: JSON.parse(localStorage.getItem("showTutorial")) || true,
   isMouseDown: false,
 };

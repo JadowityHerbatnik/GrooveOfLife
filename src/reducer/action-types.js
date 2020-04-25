@@ -15,6 +15,7 @@ export const PLAY_ALL = "entire board";
 export const PLAY_PRESET = "preset";
 export const PLAY_CUSTOM = "custom";
 export const TOGGLE_SETTINGS = "show settings";
+export const SHOW_TUTORIAL = "show tutorial";
 export const IS_MOUSEDOWN = "is mouse down?";
 export const SET_SCALE = "change scale";
 export const CHANGE_PROGRESSION = "change progression";
