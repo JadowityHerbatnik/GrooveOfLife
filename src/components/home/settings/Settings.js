@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled, { css } from "styled-components";
-import { Keyboard } from "./Keyboard";
+import { Keyboard } from "@settings/Keyboard";
 import { StyledLabel, WrapperButton, SvgIcon } from "@common/Generic";
 import { FadeIn, FadeOut, SlideInUp } from "@styles/animations";
-import { RadioInput } from "@home/RadioInput";
+import { RadioInput } from "@settings/RadioInput";
 import { DispatchContext, StateContext } from "@home/Game";
 import { ThemeContext } from "@common/Layout";
 import { Clear } from "@styles/svg/Buttons";
-import { SelectProgression } from "@home/SelectProgression";
+import { SelectProgression } from "@settings/SelectProgression";
 import {
   PLAY_ALL,
   PLAY_COLUMN,

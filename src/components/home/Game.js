@@ -3,7 +3,7 @@ import styled from "styled-components";
 import ButtonBar from "@home/ButtonBar";
 import Board from "@home/Board.js";
 import { HeightContext } from "@common/Layout";
-import Settings from "@home/Settings";
+import Settings from "@settings/Settings";
 import reducer from "@reducer/Reducer";
 import { keybindings } from "@utils/keybindings";
 import { initialState } from "@reducer/initial-state";
