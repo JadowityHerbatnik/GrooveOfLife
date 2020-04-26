@@ -2,6 +2,21 @@ import styled, { css } from "styled-components";
 import AniLink from "gatsby-plugin-transition-link/AniLink";
 import { FadeIn, FadeOut, SlideInUp } from "@styles/animations";
 
+export const ScalableText = styled.p`
+  margin: auto;
+  font-size: ${({ min }) => `${min}px`};
+  @media (min-width: 960px) {
+    font-size: ${({ max }) => `${max}px`};
+  }
+  @media (min-width: 300px) and (max-width: 960px) {
+    font-size: ${({ min, max }) => `calc(${min}px + ${max - min} * (100vw - 300px) / (960-300))`};
+  }
+  max-width: 80%;
+  @media (orientation: landscape) {
+    max-width: 70%;
+  }
+`;
+
 export const ModalContainer = styled.div`
   margin: auto;
   padding: 0 10px 10px 10px;
