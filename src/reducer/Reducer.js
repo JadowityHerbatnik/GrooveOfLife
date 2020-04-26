@@ -117,6 +117,8 @@ export default function reducer(state, action) {
       return { ...state, progressionMode: action.type };
     case action_types.TOGGLE_SETTINGS:
       return { ...state, showSettings: !state.showSettings };
+    case action_types.SHOW_TUTORIAL:
+      return { ...state, showTutorial: action.payload };
     case action_types.IS_MOUSEDOWN:
       return { ...state, isMouseDown: action.payload };
     case action_types.SET_SCALE:

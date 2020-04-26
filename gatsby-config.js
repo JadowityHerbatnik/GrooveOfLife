@@ -16,6 +16,8 @@ module.exports = {
           "@common": "src/components/common",
           "@pages": "src/pages",
           "@home": "src/components/home",
+          "@settings": "src/components/home/settings",
+          "@tutorial": "src/components/home/tutorial",
           "@about": "src/components/about",
           "@utils": "src/utils",
           "@styles": "src/styles",

@@ -1,43 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
-import styled, { css } from "styled-components";
-import { Keyboard } from "./Keyboard";
-import { StyledLabel, WrapperButton, SvgIcon } from "@common/Generic";
-import { FadeIn, FadeOut, SlideInUp } from "@styles/animations";
-import { RadioInput } from "@home/RadioInput";
+import React, { useContext } from "react";
+import styled from "styled-components";
+import { Keyboard } from "@settings/Keyboard";
+//prettier-ignore
+import { ModalContainer, DimmedBackground, StyledLabel, WrapperButton, SvgIcon, } from "@common/Generic";
+import { RadioInput } from "@settings/RadioInput";
 import { DispatchContext, StateContext } from "@home/Game";
 import { ThemeContext } from "@common/Layout";
 import { Clear } from "@styles/svg/Buttons";
-import { SelectProgression } from "@home/SelectProgression";
-import {
-  PLAY_ALL,
-  PLAY_COLUMN,
-  PLAY_PRESET,
-  PLAY_CUSTOM,
-  TOGGLE_SETTINGS,
-} from "@reducer/action-types";
+import { SelectProgression } from "@settings/SelectProgression";
+//prettier-ignore
+import { PLAY_ALL, PLAY_COLUMN, PLAY_PRESET, PLAY_CUSTOM, TOGGLE_SETTINGS, } from "@reducer/action-types";
+import { useRender } from "@hooks/useRender";
 
-const SettingsContainer = styled.div`
-  margin: auto;
-  padding: 0 10px 10px 10px;
-  border: ${({ colors }) => `2px solid ${colors.border}`};
-  background-color: ${({ colors }) => colors.background};
-  box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.75);
-  position: relative;
-  top: -100vh;
-  animation: ${() => css`0.5s ease ${SlideInUp}`};
-  transform: translateY(${({ showSettings }) => (showSettings ? "100vh" : "-100vh")});
-  transition: transform 1s;
-`;
-const BlurredBackground = styled.div`
-  animation: ${({ showSettings }) => css`0.2s ease ${showSettings ? FadeIn : FadeOut}`};
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  position: fixed;
-  left: 0;
-  top: 0;
-  background-color: ${({ color }) => `${color}cc`};
-`;
 const CloseSvg = styled(SvgIcon)`
   position: absolute;
   right: 10px;
@@ -47,20 +21,12 @@ const CloseSvg = styled(SvgIcon)`
 `;
 const Settings = () => {
   const { showSettings, playMode, progressionMode } = useContext(StateContext);
-  const [shouldRender, setRender] = useState(showSettings);
   const colors = useContext(ThemeContext);
   const dispatch = useContext(DispatchContext);
-
-  useEffect(() => {
-    if (showSettings) setRender(true);
-  }, [showSettings]);
-
-  const onAnimationEnd = () => {
-    if (!showSettings) setRender(false);
-  };
+  const [shouldRender, onAnimationEnd] = useRender(showSettings);
 
   return !shouldRender ? null : (
-    <BlurredBackground
+    <DimmedBackground
       color={colors.background}
       id="close"
       onClickCapture={(e) => {
@@ -70,9 +36,9 @@ const Settings = () => {
         dispatch({ type: TOGGLE_SETTINGS });
       }}
       onAnimationEnd={onAnimationEnd}
-      showSettings={showSettings}
+      show={showSettings}
     >
-      <SettingsContainer colors={colors} showSettings={showSettings}>
+      <ModalContainer colors={colors} show={showSettings}>
         <WrapperButton onClick={() => dispatch({ type: TOGGLE_SETTINGS })}>
           <CloseSvg svg={Clear} color={colors.grey} />
         </WrapperButton>
@@ -93,8 +59,8 @@ const Settings = () => {
             <SelectProgression />
           </>
         )}
-      </SettingsContainer>
-    </BlurredBackground>
+      </ModalContainer>
+    </DimmedBackground>
   );
 };
 export default Settings;

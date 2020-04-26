@@ -2,12 +2,12 @@ import styled from "styled-components";
 
 export const Paragraph = styled.article`
   margin: auto;
-  font-size: 13px;
+  font-size: 12px;
   @media (min-width: 960px) {
-    font-size: 22px;
+    font-size: 20px;
   }
   @media (min-width: 300px) and (max-width: 960px) {
-    font-size: calc(13px + 9 * (100vw - 300px) / (960 - 300));
+    font-size: calc(12px + 8 * (100vw - 300px) / (960 - 300));
   }
   max-width: 90%;
   @media (orientation: landscape) {

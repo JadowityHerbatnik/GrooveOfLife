@@ -18,6 +18,7 @@ const Wrapper = styled.header`
   justify-content: center;
 `;
 const H1 = styled.h1`
+  font-weight: bold;
   margin: 0.6em 0 0.4em 0;
   font-size: 40px;
   @media (min-width: 300px) and (max-width: 960px) {

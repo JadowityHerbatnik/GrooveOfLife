@@ -1,6 +1,6 @@
 import React from "react";
 import SEO from "@common/seo";
-import Game from "@home/Game.js";
+import { Game } from "@home/Game.js";
 
 const IndexPage = () => (
   <>

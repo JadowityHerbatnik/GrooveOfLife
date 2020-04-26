@@ -3,8 +3,9 @@ import styled from "styled-components";
 import ButtonBar from "@home/ButtonBar";
 import Board from "@home/Board.js";
 import { HeightContext } from "@common/Layout";
-import Settings from "@home/Settings";
+import Settings from "@settings/Settings";
 import reducer from "@reducer/Reducer";
+import { Tutorial } from "@tutorial/Tutorial";
 import { keybindings } from "@utils/keybindings";
 import { initialState } from "@reducer/initial-state";
 import { playSelectedColumn, playEntireBoard } from "@helpers/sound";
@@ -27,7 +28,7 @@ const GameWrapper = styled.div`
     flex-direction: row;
   }
 `;
-export default function Game() {
+export const Game = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   //prettier-ignore
   const { isPlaying, isSuspended, board, aliveCells, mute, beatsPerChord, speedms, playMode, progressionMode, userChord, progression, activeColumn,  chord} = state;
@@ -79,8 +80,9 @@ export default function Game() {
           <ButtonBar />
           <Board />
           <Settings />
+          <Tutorial />
         </GameWrapper>
       </StateContext.Provider>
     </DispatchContext.Provider>
   );
-}
+};
