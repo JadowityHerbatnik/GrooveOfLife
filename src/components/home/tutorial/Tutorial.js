@@ -9,6 +9,7 @@ import { SHOW_TUTORIAL } from "@reducer/action-types";
 import styled from "styled-components";
 import { SvgIcon } from "@common/Generic";
 import { Clear } from "@styles/svg/Buttons";
+import { tutorial_key } from "@utils/local-storage-keys";
 
 const StyledButton = styled(WrapperButton)`
   position: absolute;
@@ -31,7 +32,7 @@ export const Tutorial = () => {
   const isFirstVisit = typeof window === "undefined" ? true : window.previousPath === "";
 
   const discardAndClose = () => {
-    localStorage.setItem("showTutorial", false);
+    localStorage.setItem(tutorial_key, false);
     dispatch({ type: SHOW_TUTORIAL, payload: false });
   };
 

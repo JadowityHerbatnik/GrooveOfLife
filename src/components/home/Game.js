@@ -45,9 +45,9 @@ export const Game = () => {
     }
     const chordToPlay = progressionMode === PLAY_PRESET ? progression[chord] : userChord;
     if (playMode === PLAY_ALL) {
-      playEntireBoard(aliveCells, board, speedms, chordToPlay);
+      playEntireBoard(aliveCells, board.length, speedms, chordToPlay);
     } else {
-      playSelectedColumn(aliveCells, activeColumn, speedms, board, chordToPlay);
+      playSelectedColumn(aliveCells, activeColumn, speedms, board.length, chordToPlay);
     }
   });
 
