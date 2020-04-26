@@ -28,7 +28,7 @@ export const Tutorial = () => {
   const { showTutorial } = useContext(StateContext);
   const colors = useContext(ThemeContext);
   const [shouldRender, onAnimationEnd] = useRender(showTutorial);
-  const isFirstVisit = window.previousPath === "";
+  const isFirstVisit = typeof window === "undefined" ? true : window.previousPath === "";
 
   const discardAndClose = () => {
     localStorage.setItem("showTutorial", false);
