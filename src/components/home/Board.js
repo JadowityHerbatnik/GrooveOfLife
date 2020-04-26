@@ -20,7 +20,7 @@ const BoardWrapper = styled.div`
 const StyledTable = styled.table`
   margin: auto;
   opacity: 0.75;
-  border: ${({ isPlaying, colors }) => `3px solid ${isPlaying ? colors.green : colors.border}`};
+  border: ${({ colors }) => `3px solid ${colors.border}`};
   border-collapse: collapse;
   border-spacing: 0px;
   animation: 0.5s ease 0.7s 1 both ${SlideFromBottom};
@@ -30,7 +30,7 @@ const StyledTd = styled.td`
   width: ${({ cellSize }) => `${cellSize}px`};
   height: ${({ cellSize }) => `${cellSize}px`};
   box-sizing: border-box;
-  opacity: ${({ column, activeColumn }) => (column === activeColumn ? "0.6" : "1")};
+  opacity: ${({ column, activeColumn }) => (column === activeColumn ? "0.5" : "1")};
   background-color: ${({ ifActive, colors }) => (ifActive ? colors.border : colors.black)};
 `;
 
@@ -42,7 +42,6 @@ const GenerateCells = ({ rowIndex, numberOfCols }) => {
     <StyledTd
       colors={colors}
       cellSize={sizes.preferredCellSize}
-      isPlaying={isPlaying}
       key={`${rowIndex}x${columnIndex}`}
       cols={numberOfCols}
       column={columnIndex}
@@ -76,7 +75,7 @@ const GenerateTable = (numberOfRows, numberOfCols) =>
     </tr>
   ));
 const Board = () => {
-  const { board, isPlaying } = useContext(StateContext);
+  const { board } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
   const { innerHeight } = useContext(HeightContext);
   const colors = useContext(ThemeContext);
@@ -98,7 +97,7 @@ const Board = () => {
 
   return (
     <BoardWrapper ref={ref}>
-      <StyledTable colors={colors} isPlaying={isPlaying}>
+      <StyledTable colors={colors}>
         <tbody>{GenerateTable(numberOfRows, numberOfCols)}</tbody>
       </StyledTable>
     </BoardWrapper>
