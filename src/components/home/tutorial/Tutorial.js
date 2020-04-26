@@ -25,11 +25,14 @@ const StyledIcon = styled(SvgIcon)`
 `;
 
 const isFirstVisit = () => {
+  if (typeof window === "undefined") {
+    return false;
+  }
   const originUrl = window.location.origin;
   if (window.previousPath === undefined) {
     return false;
   } else {
-    return typeof window === "undefined" ? false : !window.previousPath.includes(originUrl);
+    return !window.previousPath.includes(originUrl);
   }
 };
 
