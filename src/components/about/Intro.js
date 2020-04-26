@@ -6,7 +6,7 @@ import { Layout } from "@about/Layout";
 import styled from "styled-components";
 import { ThemeContext } from "@common/Layout";
 const Img = styled.img`
-  max-height: 20vh;
+  max-height: 18vh;
 `;
 export const Introduction = () => {
   const colors = useContext(ThemeContext);
