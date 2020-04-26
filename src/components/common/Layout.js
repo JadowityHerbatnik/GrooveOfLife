@@ -7,6 +7,7 @@ import { solarized, gruvbox } from "@utils/constants.js";
 import Header from "@common/Header";
 import { createGlobalStyle } from "styled-components";
 import { useLocalStorageState } from "@hooks/UseLocalStorageState";
+import { theme_key } from "@utils/local-storage-keys";
 import { FlexBox } from "@common/Generic";
 import { AboutLink } from "@common/AboutLink";
 import { ThemeSwitch } from "@common/ThemeSwitch";
@@ -47,7 +48,7 @@ const BackgroundWrapper = styled.div`
 const Layout = (props) => {
   const [innerHeight, setInnerHeight] = useState(0);
   const [headerHeight, setHeaderHeight] = useState(0);
-  const [theme, setTheme] = useLocalStorageState("theme", "gruvbox");
+  const [theme, setTheme] = useLocalStorageState(theme_key, "gruvbox");
   const [themeColors, setThemeColors] = useState(gruvbox);
   const headerRef = useRef(null);
 
