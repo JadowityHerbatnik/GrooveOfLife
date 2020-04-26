@@ -10,10 +10,15 @@ import { useLocalStorageState } from "@hooks/UseLocalStorageState";
 import { FlexBox } from "@common/Generic";
 import { AboutLink } from "@common/AboutLink";
 import { ThemeSwitch } from "@common/ThemeSwitch";
+import "bootstrap/dist/css/bootstrap.min.css";
 export const ThemeContext = createContext(gruvbox);
+export const SwitchTheme = createContext();
 export const HeightContext = createContext();
 
 const GlobalStyle = createGlobalStyle`
+  .carousel-inner, .carousel-item {
+    height: 100%;
+  }
 	html, body, main {
 		box-sizing: border-box;
 		text-align: center;
@@ -21,7 +26,7 @@ const GlobalStyle = createGlobalStyle`
 		font-family: "Monospace", sans-serif;
   	margin: 0;
    	padding: 0;
-    background-color: ${({ colors }) => colors.background}
+    background-color: ${({ colors }) => colors.background};
 		color: ${({ colors }) => colors.grey};
 		height: 100%;
 	}
@@ -37,6 +42,7 @@ const TopBar = styled(FlexBox)`
 const BackgroundWrapper = styled.div`
   position: relative;
   min-height: ${({ minHeight }) => `${minHeight}px`};
+  background-color: ${({ colors }) => colors.background};
 `;
 const Layout = (props) => {
   const [innerHeight, setInnerHeight] = useState(0);
@@ -77,14 +83,16 @@ const Layout = (props) => {
       <GlobalStyle colors={themeColors} />
       <ThemeContext.Provider value={themeColors}>
         <HeightContext.Provider value={{ innerHeight: innerHeight, headerHeight: headerHeight }}>
-          <BackgroundWrapper minHeight={innerHeight} colors={themeColors}>
-            <TopBar justify="space-between">
-              <ThemeSwitch switchTheme={() => switchTheme()} />
-              <AboutLink />
-            </TopBar>
-            <Header ref={headerRef} siteTitle={data.site.siteMetadata.title} />
-            <main>{props.children}</main>
-          </BackgroundWrapper>
+          <SwitchTheme.Provider value={() => switchTheme()}>
+            <BackgroundWrapper minHeight={innerHeight} colors={themeColors}>
+              <TopBar justify="space-between">
+                <ThemeSwitch switchTheme={() => switchTheme()} />
+                <AboutLink />
+              </TopBar>
+              <Header ref={headerRef} siteTitle={data.site.siteMetadata.title} />
+              <main>{props.children}</main>
+            </BackgroundWrapper>
+          </SwitchTheme.Provider>
         </HeightContext.Provider>
       </ThemeContext.Provider>
     </>
