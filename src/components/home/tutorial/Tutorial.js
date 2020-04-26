@@ -24,19 +24,30 @@ const StyledIcon = styled(SvgIcon)`
   height: 80%;
 `;
 
+const isFirstVisit = () => {
+  if (typeof window === "undefined") {
+    return false;
+  }
+  const originUrl = window.location.origin;
+  if (window.previousPath === undefined) {
+    return false;
+  } else {
+    return !window.previousPath.includes(originUrl);
+  }
+};
+
 export const Tutorial = () => {
   const dispatch = useContext(DispatchContext);
   const { showTutorial } = useContext(StateContext);
   const colors = useContext(ThemeContext);
   const [shouldRender, onAnimationEnd] = useRender(showTutorial);
-  const isFirstVisit = typeof window === "undefined" ? true : window.previousPath === "";
 
   const discardAndClose = () => {
     localStorage.setItem(tutorial_key, false);
     dispatch({ type: SHOW_TUTORIAL, payload: false });
   };
 
-  return shouldRender && isFirstVisit ? (
+  return shouldRender && isFirstVisit() ? (
     <DimmedBackground color={colors.background} show={showTutorial} onAnimationEnd={onAnimationEnd}>
       <ModalContainer colors={colors} show={showTutorial}>
         <StyledButton
