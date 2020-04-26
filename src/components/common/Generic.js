@@ -37,6 +37,10 @@ export const Grid = styled.div`
 export const StyledLink = styled(AniLink)`
   text-decoration: none;
   color: ${({ color }) => color};
+  &:hover {
+    color: ${({ color }) => color};
+    text-decoration: none;
+  }
 `;
 export const StyledAnchor = styled.a`
   text-decoration: underline;
@@ -76,4 +80,5 @@ export const WrapperButton = styled.button`
   cursor: pointer;
   width: min-content;
   margin: auto;
+  color: inherit;
 `;
