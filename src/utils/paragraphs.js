@@ -1,24 +1,10 @@
 import React from "react";
 import { StyledAnchor } from "@common/Generic.js";
-import {
-  TOGGLE_PLAY,
-  RANDOM_BOARD,
-  CLEAR_BOARD,
-  MUTE_SOUND,
-  MAKE_STEP,
-} from "@reducer/action-types";
+//prettier-ignore
+import { TOGGLE_PLAY, RANDOM_BOARD, CLEAR_BOARD, MUTE_SOUND, MAKE_STEP, } from "@reducer/action-types";
 const wiki = "https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life";
 const tonejs = "https://tonejs.github.io/";
-// const WikiLink = (
-//   <StyledAnchor target="_blank" href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
-//     Wikipedia
-//   </StyledAnchor>
-// );
-// const TonejsLink = (
-//   <StyledAnchor target="_blank" href="https://tonejs.github.io/">
-//     Tone.js
-//   </StyledAnchor>
-// );
+
 const createLink = (name, url) => (
   <StyledAnchor target="_blank" href={url}>
     {name}
