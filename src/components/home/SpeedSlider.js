@@ -11,24 +11,28 @@ const SliderWrapper = styled.div`
   height: 2vh;
   width: 50vmin;
   margin: 2vh 0 2vh 0;
-  @media screen and (orientation: landscape) {
+  ${({ responsive }) =>
+    responsive &&
+    `@media screen and (orientation: landscape) {
     width: 2vh;
     height: 50vmin;
-  }
+    transform: translateY(50vmin) rotate(-90deg);
+    transform-origin: top left;
+  }`}
   .slider {
+    ${({ shadows }) =>
+      shadows &&
+      `box-shadow: 2px 2px 0 black;
+    @media screen and (orientation: landscape) {
+      box-shadow: -2px 2px 0 black;
+    }`}
     position: absolute;
     left: 0;
     top: 0;
-    @media screen and (orientation: landscape) {
-      transform: translateY(50vmin) rotate(-90deg);
-      transform-origin: top left;
-      box-shadow: -2px 2px 0 black;
-    }
     width: 50vmin;
     appearance: none;
     background: ${({ colors }) => colors.brblack};
     outline: none;
-    box-shadow: 2px 2px 0 black;
     &::-webkit-slider-thumb {
       transition: 0.3s;
       webkit-appearance: none;
@@ -40,7 +44,7 @@ const SliderWrapper = styled.div`
     }
   }
 `;
-export const SpeedSlider = () => {
+export const SpeedSlider = ({ responsive, shadows }) => {
   const colors = useContext(ThemeContext);
   const { beatsPerChord } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
@@ -50,7 +54,7 @@ export const SpeedSlider = () => {
   };
 
   return (
-    <SliderWrapper colors={colors}>
+    <SliderWrapper responsive={responsive} shadows={shadows} colors={colors}>
       <input
         className="slider"
         type="range"
