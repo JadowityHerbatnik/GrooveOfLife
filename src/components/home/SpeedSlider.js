@@ -42,6 +42,24 @@ const SliderWrapper = styled.div`
       background: ${({ colors }) => colors.border};
       border: none;
     }
+    &::-moz-range-thumb {
+      transition: 0.3s;
+      webkit-appearance: none;
+      appearance: none;
+      width: 4vh;
+      height: 2vh;
+      background: ${({ colors }) => colors.border};
+      border: none;
+    }
+    &::-ms-thumb {
+      transition: 0.3s;
+      webkit-appearance: none;
+      appearance: none;
+      width: 4vh;
+      height: 2vh;
+      background: ${({ colors }) => colors.border};
+      border: none;
+    }
   }
 `;
 export const SpeedSlider = ({ responsive, shadows }) => {
