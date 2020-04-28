@@ -14,7 +14,7 @@ const createLink = (name, url) => (
 export const intro = (
   <>
     Yeah, this is yet another implementation of the famous Game of Life... but this one uses{" "}
-    {createLink("Tonejs", tonejs)} library to add sound!
+    {createLink("Tone.js", tonejs)} library to add sound!
     <br />
     <br /> If you don't know, Game of Life is a cool cellular automata invented by John Conway. For
     a nice definition, here's a {createLink("Wikipedia", wiki)} link, I'm not gonna copypaste it.
