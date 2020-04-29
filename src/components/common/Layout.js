@@ -17,9 +17,6 @@ export const SwitchTheme = createContext();
 export const HeightContext = createContext();
 
 const GlobalStyle = createGlobalStyle`
-  .carousel-inner, .carousel-item {
-    height: 100%;
-  }
 	html, body, main {
 		box-sizing: border-box;
 		text-align: center;

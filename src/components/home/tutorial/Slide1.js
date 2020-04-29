@@ -9,12 +9,12 @@ const StyledSvg = styled(SvgIcon)`
   height: 1em;
 `;
 
-export const Slide1 = (props) => {
+export const Slide1 = () => {
   const colors = useContext(ThemeContext);
   return (
-    <div className="d-flex h-100 align-items-center justify-content-center">
-      <ScalableText min={12} max={20} as="div">
-        <ScalableText min={18} max={26}>
+    <article className="d-flex h-100 align-items-center justify-content-center">
+      <ScalableText min={12} max={18} as="div">
+        <ScalableText min={18} max={25}>
           Welcome to the Groove of Life!
         </ScalableText>
         <br />
@@ -33,6 +33,6 @@ export const Slide1 = (props) => {
         <br />
         <br />
       </ScalableText>
-    </div>
+    </article>
   );
 };
