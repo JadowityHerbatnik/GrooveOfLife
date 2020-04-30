@@ -27,6 +27,21 @@ module.exports = {
       },
     },
     `gatsby-plugin-react-helmet`,
+    `gatsby-transformer-sharp`,
+    `gatsby-plugin-sharp`,
+    `gatsby-plugin-styled-components`,
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: `The Game of Life`,
+        short_name: `The Game of Life`,
+        start_url: `/`,
+        background_color: `#3c3836`,
+        theme_color: `#3c3836`,
+        display: `standalone`,
+        icon: `src/images/note.png`, // This path is relative to the root of the site.
+      },
+    },
     {
       resolve: `gatsby-plugin-transition-link`,
       options: { layout: require.resolve(`./src/components/common/Layout.js`) },
@@ -38,8 +53,6 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
-    `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-plugin-google-fonts`,
       options: {
@@ -47,21 +60,6 @@ module.exports = {
         display: "swap",
       },
     },
-    {
-      resolve: `gatsby-plugin-manifest`,
-      options: {
-        name: `The Game of Life`,
-        short_name: `The Game of Life`,
-        start_url: `/`,
-        background_color: `#cc8125`,
-        theme_color: `#cc8125`,
-        display: `standalone`,
-        icon: `src/images/note.png`, // This path is relative to the root of the site.
-      },
-    },
-    `gatsby-plugin-styled-components`,
-    // this (optional) plugin enables Progressive Web App + Offline functionality
-    // To learn more, visit: https://gatsby.dev/offline
     `gatsby-plugin-offline`,
   ],
 };
