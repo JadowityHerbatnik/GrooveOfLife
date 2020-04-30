@@ -17,20 +17,6 @@ export const keyboard = {
   whiteHeight: "130px",
   keyMargin: "1px",
 };
-// export const gruvbox = {
-//   border: "#fabd27",
-//   brblack: "#665c54",
-//   black: "#282828",
-//   white: "#ebdbb2",
-//   green: "#b8bb26",
-//   red: "#fb4934",
-//   orange: "#fe8019",
-//   yellow: "#fabd27",
-//   blue: "#83a598",
-//   violet: "#d3869b",
-//   grey: "#d5c4a1",
-//   cyan: "#8ec07c",
-// };
 export const gruvbox = {
   opposite: "#073642",
   background: "#bdae93",

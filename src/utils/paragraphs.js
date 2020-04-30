@@ -44,34 +44,3 @@ export const keyDescription = new Map([
   ["S", { color: "", desc: MAKE_STEP }],
   ["\u2190 \u2191 \u2192 \u2193", { color: "", desc: "Change game speed" }],
 ]);
-// export const keybindings2 = (
-//   <>
-//     {/* <span className="key">Space</span> */}
-//     <div style={{ backgroundColor: "grey", width: "5em", height: "2em" }}>
-//       <span style={{ lineHeight: "2em" }}>Space</span>
-//     </div>
-//     <span className="green">Play/pause</span>
-//     <span className="key">R</span>
-//     <span className="yellow">random board</span>
-//     <span className="key">C</span>
-//     <span className="red">clean board</span>
-//     <span className="key">M</span>
-//     <span className="blue">mute sound</span>
-//     <span className="key">S</span>Make one step
-//     <div>
-//       <span className="key">
-//         <ArrowBackIcon />
-//       </span>
-//       <span className="key">
-//         <ArrowUpwardIcon />
-//       </span>
-//       <span className="key">
-//         <ArrowForwardIcon />
-//       </span>
-//       <span className="key">
-//         <ArrowDownwardIcon />
-//       </span>
-//     </div>
-//     change speed
-//   </>
-// );

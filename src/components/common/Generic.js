@@ -65,7 +65,6 @@ export const StyledIcon = styled.i`
   display: inline-block;
   font-size: 5vh;
   margin: 0 0.5vw 0 0.5vw;
-  // margin: 0.5vw;
   color: ${({ color }) => (color ? color : "white")};
   transition: color 0.2s;
 `;
