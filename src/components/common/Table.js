@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import React from "react";
-import { solarized } from "@utils/constants.js";
-const { white } = solarized;
+import { color_themes } from "@utils/constants.js";
+const { white } = color_themes.solarized;
 
 const StyledTable = styled.table`
   border-collapse: collapse;
@@ -23,7 +23,7 @@ const GenerateColumns = (numberOfCols, rowIndex, active, color) =>
   [...Array(numberOfCols).keys()].map((columnIndex) => {
     const cellNumber = rowIndex * numberOfCols + columnIndex;
     const ifActive = active.includes(cellNumber);
-    const cellColor = color.hasOwnProperty(cellNumber) ? color[`${cellNumber}`] : "";
+    const cellColor = color.hasOwnProperty(cellNumber) ? color[cellNumber] : "";
 
     return (
       <StyledTd

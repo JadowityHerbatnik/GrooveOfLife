@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { debounce } from "lodash";
 import { useStaticQuery, graphql } from "gatsby";
 import styled from "styled-components";
-import { solarized, gruvbox } from "@utils/constants.js";
+import { theme_names, color_themes } from "@utils/constants.js";
 import Header from "@common/Header";
 import { createGlobalStyle } from "styled-components";
 import { useLocalStorageState } from "@hooks/UseLocalStorageState";
@@ -12,9 +12,11 @@ import { FlexBox } from "@common/Generic";
 import { AboutLink } from "@common/AboutLink";
 import { ThemeSwitch } from "@common/ThemeSwitch";
 import "bootstrap/dist/css/bootstrap.min.css";
-export const ThemeContext = createContext(gruvbox);
+export const ThemeContext = createContext();
 export const SwitchTheme = createContext();
 export const HeightContext = createContext();
+
+const { gruvbox, solarized } = theme_names;
 
 const GlobalStyle = createGlobalStyle`
 	html, body, main {
@@ -45,15 +47,15 @@ const BackgroundWrapper = styled.div`
 const Layout = (props) => {
   const [innerHeight, setInnerHeight] = useState(0);
   const [headerHeight, setHeaderHeight] = useState(0);
-  const [theme, setTheme] = useLocalStorageState(theme_key, "gruvbox");
-  const [themeColors, setThemeColors] = useState(gruvbox);
+  const [themeName, setThemeName] = useLocalStorageState(theme_key, gruvbox);
+  const [themeColors, setThemeColors] = useState(color_themes[gruvbox]);
   const headerRef = useRef(null);
 
-  const switchTheme = () => setTheme(theme === "solarized" ? "gruvbox" : "solarized");
+  const switchTheme = () => setThemeName(themeName === solarized ? gruvbox : solarized);
 
   useEffect(() => {
-    setThemeColors(theme === "solarized" ? solarized : gruvbox);
-  }, [theme]);
+    setThemeColors(themeName === solarized ? color_themes[solarized] : color_themes[gruvbox]);
+  }, [themeName]);
 
   useEffect(() => {
     const recalculate = debounce(() => {
