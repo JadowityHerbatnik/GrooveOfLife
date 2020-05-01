@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import React from "react";
-import { solarized } from "@utils/constants.js";
-const { white } = solarized;
+import { color_themes } from "@utils/constants.js";
+const { white } = color_themes.solarized;
 
 const StyledTable = styled.table`
   border-collapse: collapse;
