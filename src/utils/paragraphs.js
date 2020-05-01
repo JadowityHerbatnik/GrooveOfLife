@@ -41,6 +41,6 @@ export const keyDescription = new Map([
   ["R", { color: "red", desc: RANDOM_BOARD }],
   ["C", { color: "yellow", desc: CLEAR_BOARD }],
   ["M", { color: "blue", desc: MUTE_SOUND }],
-  ["S", { color: "", desc: MAKE_STEP }],
+  ["S", { color: "white", desc: MAKE_STEP }],
   ["\u2190 \u2191 \u2192 \u2193", { color: "", desc: "Change game speed" }],
 ]);

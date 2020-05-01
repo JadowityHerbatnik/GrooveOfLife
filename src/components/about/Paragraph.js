@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { color_themes } from "@utils/constants.js";
+const { white } = color_themes.solarized;
 
 export const Paragraph = styled.article`
   margin: auto;
@@ -17,9 +19,6 @@ export const Paragraph = styled.article`
   & span.green {
     color: ${({ colors }) => colors.green};
   }
-  & span.white {
-    color: ${({ colors }) => colors.white};
-  }
   & span.blue {
     color: ${({ colors }) => colors.blue};
   }
@@ -28,5 +27,8 @@ export const Paragraph = styled.article`
   }
   & span.red {
     color: ${({ colors }) => colors.red};
+  }
+  & span.white {
+    color: ${white};
   }
 `;

@@ -23,7 +23,7 @@ const GenerateColumns = (numberOfCols, rowIndex, active, color) =>
   [...Array(numberOfCols).keys()].map((columnIndex) => {
     const cellNumber = rowIndex * numberOfCols + columnIndex;
     const ifActive = active.includes(cellNumber);
-    const cellColor = color.hasOwnProperty(cellNumber) ? color[`${cellNumber}`] : "";
+    const cellColor = color.hasOwnProperty(cellNumber) ? color[cellNumber] : "";
 
     return (
       <StyledTd
