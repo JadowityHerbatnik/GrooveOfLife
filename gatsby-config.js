@@ -33,8 +33,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `The Game of Life`,
-        short_name: `The Game of Life`,
+        name: `The Groove of Life`,
+        short_name: `The Groove of Life`,
         start_url: `/`,
         background_color: `#3c3836`,
         theme_color: `#3c3836`,
