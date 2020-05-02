@@ -7,6 +7,9 @@ import { ThemeContext } from "@common/Layout";
 const StyledCarousel = styled(Carousel)`
   width: 80vw;
   height: 50vh;
+  @media screen and (orientation: landscape) {
+    width: 60vw;
+  }
   .carousel-inner,
   .carousel-item {
     height: 100%;
