@@ -10,7 +10,6 @@ import styled from "styled-components";
 import { SvgIcon } from "@common/Generic";
 import { Clear } from "@styles/svg/Buttons";
 import { tutorial_key } from "@utils/local-storage-keys";
-import "nes.css/css/nes.min.css";
 
 const StyledButton = styled(WrapperButton)`
   position: absolute;
@@ -25,12 +24,6 @@ const StyledIcon = styled(SvgIcon)`
   height: 80%;
 `;
 
-const StyledModal = styled(ModalContainer)`
-  padding: 0 0 10px 0;
-  width: min-content;
-  height: min-content;
-`;
-
 const isFirstVisit = () => {
   if (typeof window === "undefined") {
     return false;
@@ -42,6 +35,9 @@ const isFirstVisit = () => {
     return !window.previousPath.includes(originUrl);
   }
 };
+const StyledModal = styled(ModalContainer)`
+  height: 60vh;
+`;
 
 export const Tutorial = () => {
   const dispatch = useContext(DispatchContext);
