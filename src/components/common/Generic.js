@@ -18,11 +18,9 @@ export const ScalableText = styled.p`
 `;
 
 export const ModalContainer = styled.div`
-  margin: auto;
-  padding: 0 10px 10px 10px;
+  margin: auto !important;
   border: ${({ colors }) => `2px solid ${colors.border}`};
   background-color: ${({ colors }) => colors.background};
-  box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.75);
   position: relative;
   top: -100vh;
   animation: ${() => css`0.5s ease ${SlideInUp}`};
@@ -69,8 +67,8 @@ export const StyledIcon = styled.i`
   transition: color 0.2s;
 `;
 export const StyledLabel = styled.p`
-  font-family: Geo;
-  font-size: 1.5em;
+  font-size: 1.2em;
+  font-weight: bold;
   color: ${({ color }) => color};
 `;
 export const FlexBox = styled.div`
@@ -91,7 +89,7 @@ export const WrapperButton = styled.button`
   border: none;
   outline: none;
   transition: opacity 0.3s;
-  cursor: pointer;
+  cursor: inherit !important;
   width: min-content;
   margin: auto;
   color: inherit;

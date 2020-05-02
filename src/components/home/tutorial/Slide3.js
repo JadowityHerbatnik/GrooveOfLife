@@ -7,7 +7,7 @@ export const Slide3 = () => {
   const switchTheme = useContext(SwitchTheme);
   return (
     <div className="d-flex h-100 align-items-center justify-content-center">
-      <ScalableText min={13} max={20}>
+      <ScalableText min={10} max={15}>
         You can change the color theme by clicking the button below or in the top left corner
         <br />
         <br />

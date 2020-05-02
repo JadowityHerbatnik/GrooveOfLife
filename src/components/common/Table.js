@@ -9,8 +9,8 @@ const StyledTable = styled.table`
   opacity: 0.7;
 `;
 const StyledTd = styled.td`
-  width: 1.5em;
-  height: 1.5em;
+  width: 2.5em;
+  height: 2.5em;
   @media (orientation: landscape) {
     width: 5vh;
     height: 5vh;

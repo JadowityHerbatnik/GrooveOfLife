@@ -33,6 +33,6 @@ const default_progression = [
 ];
 
 const default_chords = getChords(default_progression);
-export const giant_steps = getChords(giant_steps_progression);
+const giant_steps = getChords(giant_steps_progression);
 
 export const progressions = { GiantSteps: giant_steps, default: default_chords };

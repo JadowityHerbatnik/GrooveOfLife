@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { ModalContainer, DimmedBackground } from "@common/Generic";
+import { ModalContainer, DimmedBackground, ScalableText } from "@common/Generic";
 import { CarouselTutorial } from "@tutorial/Carousel";
 import { ThemeContext } from "@common/Layout";
 import { useRender } from "@hooks/useRender";
@@ -10,6 +10,7 @@ import styled from "styled-components";
 import { SvgIcon } from "@common/Generic";
 import { Clear } from "@styles/svg/Buttons";
 import { tutorial_key } from "@utils/local-storage-keys";
+import "nes.css/css/nes.min.css";
 
 const StyledButton = styled(WrapperButton)`
   position: absolute;
@@ -22,6 +23,12 @@ const StyledButton = styled(WrapperButton)`
 const StyledIcon = styled(SvgIcon)`
   width: 80%;
   height: 80%;
+`;
+
+const StyledModal = styled(ModalContainer)`
+  padding: 0 0 10px 0;
+  width: min-content;
+  height: min-content;
 `;
 
 const isFirstVisit = () => {
@@ -49,7 +56,7 @@ export const Tutorial = () => {
 
   return shouldRender && isFirstVisit() ? (
     <DimmedBackground color={colors.background} show={showTutorial} onAnimationEnd={onAnimationEnd}>
-      <ModalContainer colors={colors} show={showTutorial}>
+      <StyledModal colors={colors} show={showTutorial} className="nes-container is-rounded">
         <StyledButton
           aria-label="close tutorial"
           onClick={() => dispatch({ type: SHOW_TUTORIAL, payload: false })}
@@ -61,9 +68,11 @@ export const Tutorial = () => {
           style={{ width: "initial", textDecoration: "underline" }}
           onClick={() => discardAndClose()}
         >
-          Don't show this again
+          <ScalableText min={9} max={13} style={{ maxWidth: "100%" }}>
+            Don't show this again
+          </ScalableText>
         </WrapperButton>
-      </ModalContainer>
+      </StyledModal>
     </DimmedBackground>
   ) : null;
 };

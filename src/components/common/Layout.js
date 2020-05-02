@@ -22,8 +22,8 @@ const GlobalStyle = createGlobalStyle`
 	html, body, main {
 		box-sizing: border-box;
 		text-align: center;
-		font-size: 16px;
-		font-family: "Monospace", sans-serif;
+		font-size: 10px;
+		font-family: "Press Start 2P", cursive;
   	margin: 0;
    	padding: 0;
     background-color: ${({ colors }) => colors.background};
