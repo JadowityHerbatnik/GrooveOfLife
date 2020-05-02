@@ -4,12 +4,12 @@ const { white } = color_themes.solarized;
 
 export const Paragraph = styled.article`
   margin: auto;
-  font-size: 12px;
+  font-size: 10px;
   @media (min-width: 960px) {
-    font-size: 20px;
+    font-size: 16px;
   }
   @media (min-width: 300px) and (max-width: 960px) {
-    font-size: calc(12px + 8 * (100vw - 300px) / (960 - 300));
+    font-size: calc(10px + 6 * (100vw - 300px) / (960 - 300));
   }
   max-width: 90%;
   @media (orientation: landscape) {

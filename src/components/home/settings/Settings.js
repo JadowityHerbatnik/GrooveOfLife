@@ -38,7 +38,7 @@ const Settings = () => {
       onAnimationEnd={onAnimationEnd}
       show={showSettings}
     >
-      <ModalContainer colors={colors} show={showSettings}>
+      <ModalContainer colors={colors} show={showSettings} className="nes-container is-rounded">
         <WrapperButton onClick={() => dispatch({ type: TOGGLE_SETTINGS })}>
           <CloseSvg svg={Clear} color={colors.grey} />
         </WrapperButton>
@@ -47,11 +47,15 @@ const Settings = () => {
           <RadioInput dependency={playMode} name="playMode" value={PLAY_ALL} />
           <RadioInput dependency={playMode} name="playMode" value={PLAY_COLUMN} />
         </div>
+        <br />
+        <br />
         <StyledLabel color={colors.grey}>Chord progression mode:</StyledLabel>
         <div>
           <RadioInput dependency={progressionMode} name="progressionMode" value={PLAY_PRESET} />
           <RadioInput dependency={progressionMode} name="progressionMode" value={PLAY_CUSTOM} />
         </div>
+        <br />
+        <br />
         {progressionMode === PLAY_CUSTOM && <Keyboard />}
         {progressionMode === PLAY_PRESET && (
           <>

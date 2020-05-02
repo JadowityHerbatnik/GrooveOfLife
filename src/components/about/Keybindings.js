@@ -9,7 +9,7 @@ import { ThemeContext } from "@common/Layout";
 
 const KeyDiv = styled.div`
   background-color: ${({ colors }) => colors.brblack};
-  width: 5em;
+  width: 6em;
   height: 2em;
   margin: 5px;
   box-shadow: 2px 2px 0px black;
