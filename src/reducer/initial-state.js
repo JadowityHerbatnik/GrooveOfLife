@@ -1,4 +1,4 @@
-import { giant_steps } from "@utils/chord-progressions";
+import { progressions } from "@utils/chord-progressions";
 import { PLAY_ALL, PLAY_PRESET } from "@reducer/action-types";
 
 export const initialState = {
@@ -10,8 +10,8 @@ export const initialState = {
   // prettier-ignore
   scale: [ true, false, false, true, false, true, false, false, true, false, true, false, ],
   userChord: ["C", "D#", "F", "G#", "A#"],
-  progression: giant_steps,
-  progressionName: "GiantSteps",
+  progressionName: "default",
+  progression: progressions["default"],
   activeColumn: null,
   board: [[]],
   aliveCells: [],
