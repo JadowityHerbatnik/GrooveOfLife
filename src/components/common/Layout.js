@@ -10,7 +10,7 @@ import { useLocalStorageState } from "@hooks/UseLocalStorageState";
 import { theme_key } from "@utils/local-storage-keys";
 import { FlexBox } from "@common/Generic";
 import { AboutLink } from "@common/AboutLink";
-import { ThemeSwitch } from "@common/ThemeSwitch";
+import { ThemeSwitchBtn } from "@common/ThemeSwitch";
 import "bootstrap/dist/css/bootstrap.min.css";
 export const ThemeContext = createContext();
 export const SwitchTheme = createContext();
@@ -86,7 +86,7 @@ const Layout = (props) => {
           <SwitchTheme.Provider value={() => switchTheme()}>
             <BackgroundWrapper minHeight={innerHeight} colors={themeColors}>
               <TopBar justify="space-between">
-                <ThemeSwitch switchTheme={() => switchTheme()} />
+                <ThemeSwitchBtn />
                 <AboutLink />
               </TopBar>
               <Header ref={headerRef} siteTitle={data.site.siteMetadata.title} />

@@ -21,7 +21,7 @@ export const ModalContainer = styled.div`
   padding-left: 0 !important;
   padding-right: 0 !important;
   margin: auto !important;
-  background-color: ${({ colors }) => colors.background};
+  background-color: ${({ colors }) => colors.brblack};
   position: relative;
   top: -100vh;
   animation: ${() => css`0.5s ease ${SlideInUp}`};
@@ -36,7 +36,7 @@ export const DimmedBackground = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-  background-color: ${({ color }) => `${color}cc`};
+  background-color: ${({ color }) => `${color}ee`};
 `;
 export const SvgIcon = styled.div`
   background-color: ${({ color }) => color};
