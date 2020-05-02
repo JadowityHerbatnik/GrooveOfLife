@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { ThemeContext } from "@common/Layout";
+import { SwitchTheme, ThemeContext } from "@common/Layout";
 
 const ThemeButton = styled.button`
   background-color: ${({ colors }) => colors.opposite};
@@ -11,8 +11,9 @@ const ThemeButton = styled.button`
   outline: none;
   cursor: pointer;
 `;
-export const ThemeSwitch = ({ switchTheme }) => {
+export const ThemeSwitchBtn = () => {
   const colors = useContext(ThemeContext);
+  const switchTheme = useContext(SwitchTheme);
   return (
     <ThemeButton
       title="change theme"

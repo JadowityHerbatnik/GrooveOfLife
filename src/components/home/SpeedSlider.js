@@ -20,8 +20,8 @@ const SliderWrapper = styled.div`
     transform-origin: top left;
   }`}
   .slider {
-    ${({ shadows }) =>
-      shadows &&
+    ${({ boxShadows }) =>
+      boxShadows &&
       `box-shadow: 2px 2px 0 black;
     @media screen and (orientation: landscape) {
       box-shadow: -2px 2px 0 black;
@@ -31,7 +31,7 @@ const SliderWrapper = styled.div`
     top: 0;
     width: 50vmin;
     appearance: none;
-    background: ${({ colors }) => colors.brblack};
+    background: ${({ colors, dark }) => (dark ? colors.brblack : colors.background)};
     outline: none;
     &::-webkit-slider-thumb {
       transition: 0.3s;
@@ -63,7 +63,7 @@ const SliderWrapper = styled.div`
     }
   }
 `;
-export const SpeedSlider = ({ responsive, shadows }) => {
+export const SpeedSlider = ({ responsive, boxShadows, dark }) => {
   const colors = useContext(ThemeContext);
   const { beatsPerChord } = useContext(StateContext);
   const dispatch = useContext(DispatchContext);
@@ -73,7 +73,7 @@ export const SpeedSlider = ({ responsive, shadows }) => {
   };
 
   return (
-    <SliderWrapper responsive={responsive} shadows={shadows} colors={colors}>
+    <SliderWrapper responsive={responsive} boxShadows={boxShadows} dark={dark} colors={colors}>
       <input
         className="slider"
         type="range"

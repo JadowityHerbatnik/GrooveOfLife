@@ -8,6 +8,7 @@ export const Slide2 = () => {
       <ScalableText min={10} max={15} as="div">
         Use the slider to adjust game speed
         <FlexBox>
+          <br />
           <SpeedSlider />
         </FlexBox>
       </ScalableText>

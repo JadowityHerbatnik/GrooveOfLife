@@ -67,7 +67,7 @@ const Buttons = () => {
           <StyledSvg color={colors.grey} svg={Settings} />
         </WrapperButton>
       </ButtonWrapper>
-      <SpeedSlider responsive shadows />
+      <SpeedSlider dark responsive boxShadows />
     </Container>
   );
 };
