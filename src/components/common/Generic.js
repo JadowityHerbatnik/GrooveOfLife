@@ -18,8 +18,9 @@ export const ScalableText = styled.p`
 `;
 
 export const ModalContainer = styled.div`
+  padding-left: 0 !important;
+  padding-right: 0 !important;
   margin: auto !important;
-  border: ${({ colors }) => `2px solid ${colors.border}`};
   background-color: ${({ colors }) => colors.background};
   position: relative;
   top: -100vh;
